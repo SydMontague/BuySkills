@@ -49,8 +49,6 @@ public class CommandManager implements CommandExecutor
                         // sender.sendMessage("/exp rent <skill> - rent a skill");
                         // <-- not yet ;)
                         sender.sendMessage("/exp current - show your current skills");
-                        // sender.sendMessage("/exp skilltree - see your skilltree");
-                        // <-- not yet ;)
                         if (PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
                             sender.sendMessage("===== Admin Commands =====");
@@ -129,8 +127,6 @@ public class CommandManager implements CommandExecutor
                         // sender.sendMessage("/exp rent <skill> - rent a skill");
                         // <-- not yet ;)
                         sender.sendMessage("/exp current - show your current skills");
-                        // sender.sendMessage("/exp skilltree - see your skilltree");
-                        // <-- not yet ;)
                         if (PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
                             sender.sendMessage("===== Admin Commands =====");
@@ -152,11 +148,13 @@ public class CommandManager implements CommandExecutor
                             sender.sendMessage(ChatColor.RED + "player not found! (not existing/offline)");
                             return true;
                         }
+                        funcs.updatePlaytime(player);
 
                         sender.sendMessage(player.getName() + "'s Stats:");
                         sender.sendMessage("Experience: " + player.getTotalExperience() + " (" + funcs.getXpToUp(player) + " XP until LevelUp)");
                         sender.sendMessage("Level: " + funcs.getLevel(player));
                         sender.sendMessage("Skill Points: " + funcs.getSkillPoints(player));
+                        sender.sendMessage("Playtime: " + funcs.getPlaytime(player));
                         return true;
                     }
                     else
@@ -167,10 +165,12 @@ public class CommandManager implements CommandExecutor
                             return true;
                         }
 
+                        funcs.updatePlaytime(p);
                         sender.sendMessage(sender.getName() + "'s Stats:");
                         sender.sendMessage("Experience: " + p.getTotalExperience() + " (" + funcs.getXpToUp(p) + " XP until LevelUp)");
                         sender.sendMessage("Level: " + funcs.getLevel(p));
                         sender.sendMessage("Skill Points: " + funcs.getSkillPoints(p));
+                        sender.sendMessage("Playtime: " + funcs.getPlaytime(p));
                         return true;
                     }
                 }
@@ -204,16 +204,16 @@ public class CommandManager implements CommandExecutor
                             }
                             catch (NumberFormatException ex)
                             {
-                                sender.sendMessage("No valid argument!");
-                                return false;
+                                funcs.getList(1, args[1], p);
+                                return true;
                             }
 
-                            funcs.getList(page, p);
+                            funcs.getList(page, null, p);
                             return true;
                         }
                         else if (args.length == 1)
                         {
-                            funcs.getList(1, p);
+                            funcs.getList(1, null, p);
                             return true;
                         }
                         else
@@ -456,7 +456,7 @@ public class CommandManager implements CommandExecutor
                             if (args.length == 2)
                             {
                                 funcs.reset(player);
-                                sender.sendMessage(player.getName() + "'s skills were resetted!");
+                                sender.sendMessage(player.getName() + "'s skills were reset!");
                             }
                             else
                             {

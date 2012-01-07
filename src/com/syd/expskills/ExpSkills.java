@@ -162,6 +162,7 @@ public class ExpSkills extends JavaPlugin
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvent(Type.ENTITY_DEATH, entityListener, Event.Priority.High, this);
         pm.registerEvent(Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
+        pm.registerEvent(Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
         pm.registerEvent(Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
     }
 }

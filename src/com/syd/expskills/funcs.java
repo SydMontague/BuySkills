@@ -15,12 +15,11 @@ import org.bukkit.entity.Player;
 
 import com.nijikokun.register.payment.Method.MethodAccount;
 
-
 public class funcs
 {
     static ExpSkills plugin;
-static Economy vault = ExpSkills.economy;
-    
+    static Economy vault = ExpSkills.economy;
+
     public static Player getPlayer(String string)
     {
         Player player = ExpSkills.server.getPlayer(string);
@@ -245,6 +244,39 @@ static Economy vault = ExpSkills.economy;
         return 0;
     }
 
+    public static String getPlaytime(Player player)
+    {
+        YamlConfiguration pconfig = FileManager.loadPF(player);
+
+        long time = pconfig.getLong("onlinetime", 0) / 1000;
+        long h = time / 3600;
+        long min = (time - h * 3600) / 60;
+        long s = time - h * 3600 - min * 60;
+
+        return h + "h " + min + "min " + s + "s";
+    }
+
+    public static void updatePlaytime(Player player)
+    {
+        YamlConfiguration pconfig = FileManager.loadPF(player);
+
+        long online = pconfig.getLong("onlinetime", 0);
+        long time = pconfig.getLong("donotchange", 0);
+        online = online + (System.currentTimeMillis() - time);
+
+        pconfig.set("onlinetime", online);
+        pconfig.set("donotchange", System.currentTimeMillis());
+
+        try
+        {
+            pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public static double getSkillPoints(Player p)
     {
         double skillpoints = 0;
@@ -340,190 +372,90 @@ static Economy vault = ExpSkills.economy;
 
     public static String getSkillName(String skill)
     {
-        String skills = ExpSkills.config.getString("skills." + skill + ".name");
-        return skills;
+        return ExpSkills.config.getString("skills." + skill + ".name");
     }
 
     @SuppressWarnings("unchecked")
     public static void getInfo(String name, Player player)
     {
-
         int i = getSkillID(name);
         if (i == -1)
         {
             player.sendMessage("Skill not found!");
             return;
         }
-
         String costtype = ExpSkills.config.getString("skills.skill" + i + ".cost_type", "both");
         if (costtype.equalsIgnoreCase("skillpoints"))
         {
-            player.sendMessage(ChatColor.AQUA + "====================================");
             player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + " Skillpoints");
-            player.sendMessage(ChatColor.GOLD + ExpSkills.config.getString("skills.skill" + i + ".info"));
-            player.sendMessage(ChatColor.GOLD + "Needed Level: " + ExpSkills.config.getInt("skills.skill" + i + ".level_need", 0) + "|| Skilllevel: " + ExpSkills.config.getInt("skills.skill" + i + ".skill_level", 0));
-            if (ExpSkills.config.getBoolean("general.use_skilltree", false) == true)
-            {
-                YamlConfiguration skilltree = FileManager.loadSkilltree();
-                List<String> illegal = skilltree.getList("skilltree.skill" + i + ".skill_illegal", null);
-                List<String> possible = skilltree.getList("skilltree.skill" + i + ".skill_possible", null);
-                List<String> need = skilltree.getList("skilltree.skill" + i + ".skill_need", null);
-                String need_type = skilltree.getString("skilltree.skill" + i + ".skill_need_type", "all");
-
-                if (illegal != null)
-                {
-
-                    for (int a = 0; a < illegal.size(); a++)
-                    {
-                        String string = getSkillName(illegal.get(a));
-                        illegal.set(a, string);
-                    }
-                }
-                if (possible != null)
-                {
-                    for (int a = 0; a < possible.size(); a++)
-                    {
-                        String string = getSkillName(possible.get(a));
-                        possible.set(a, string);
-                    }
-                }
-                if (need != null)
-                {
-                    for (int a = 0; a < need.size(); a++)
-                    {
-                        String string = getSkillName(need.get(a));
-                        need.set(a, string);
-                    }
-                }
-
-                player.sendMessage(ChatColor.GOLD + "Blocked Skills: " + illegal);
-                player.sendMessage(ChatColor.GOLD + "Possible Skills: " + possible);
-                player.sendMessage(ChatColor.GOLD + "Needed Skills: " + need);
-                if (need_type.equalsIgnoreCase("all"))
-                {
-                    player.sendMessage(ChatColor.GOLD + "You need all needed Skill to buy this");
-                }
-                else if (need_type.equalsIgnoreCase("or"))
-                {
-                    player.sendMessage(ChatColor.GOLD + "You need one needes Skill to buy this");
-                }
-            }
         }
         else if (costtype.equalsIgnoreCase("money"))
         {
-            player.sendMessage(ChatColor.AQUA + "====================================");
             player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$"));
-            player.sendMessage(ChatColor.GOLD + ExpSkills.config.getString("skills.skill" + i + ".info"));
-            player.sendMessage(ChatColor.GOLD + "Needed Level: " + ExpSkills.config.getInt("skills.skill" + i + ".level_need", 0) + "|| Skilllevel: " + ExpSkills.config.getInt("skills.skill" + i + ".skill_level", 0));
-            if (ExpSkills.config.getBoolean("general.use_skilltree", false) == true)
-            {
-                YamlConfiguration skilltree = FileManager.loadSkilltree();
-                List<String> illegal = skilltree.getList("skilltree.skill" + i + ".skill_illegal", null);
-                List<String> possible = skilltree.getList("skilltree.skill" + i + ".skill_possible", null);
-                List<String> need = skilltree.getList("skilltree.skill" + i + ".skill_need", null);
-                String need_type = skilltree.getString("skilltree.skill" + i + ".skill_need_type", "all");
-
-                if (illegal != null)
-                {
-                    for (int a = 0; a < illegal.size(); a++)
-                    {
-                        String string = getSkillName(illegal.get(a));
-                        illegal.set(a, string);
-                    }
-                }
-                if (possible != null)
-                {
-                    for (int a = 0; a < possible.size(); a++)
-                    {
-                        String string = getSkillName(possible.get(a));
-                        possible.set(a, string);
-                    }
-                }
-                if (need != null)
-                {
-                    for (int a = 0; a < need.size(); a++)
-                    {
-                        String string = getSkillName(need.get(a));
-                        need.set(a, string);
-                    }
-                }
-
-                player.sendMessage(ChatColor.GOLD + "Blocked Skills: " + illegal);
-                player.sendMessage(ChatColor.GOLD + "Possible Skills: " + possible);
-                player.sendMessage(ChatColor.GOLD + "Needed Skills: " + need);
-                if (need_type.equalsIgnoreCase("all"))
-                {
-                    player.sendMessage(ChatColor.GOLD + "You need all needed Skill to buy this");
-                }
-                else if (need_type.equalsIgnoreCase("or"))
-                {
-                    player.sendMessage(ChatColor.GOLD + "You need one needes Skill to buy this");
-                }
-            }
         }
         else if (costtype.equalsIgnoreCase("both"))
         {
-            player.sendMessage(ChatColor.AQUA + "====================================");
             player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$") + " " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + " Skillpoints");
-            player.sendMessage(ChatColor.GOLD + ExpSkills.config.getString("skills.skill" + i + ".info"));
-            player.sendMessage(ChatColor.GOLD + "Needed Level: " + ExpSkills.config.getInt("skills.skill" + i + ".level_need", 0) + "|| Skilllevel: " + ExpSkills.config.getInt("skills.skill" + i + ".skill_level", 0));
-            if (ExpSkills.config.getBoolean("general.use_skilltree", false) == true)
-            {
-                YamlConfiguration skilltree = FileManager.loadSkilltree();
-                List<String> illegal = skilltree.getList("skilltree.skill" + i + ".skill_illegal", null);
-                List<String> possible = skilltree.getList("skilltree.skill" + i + ".skill_possible", null);
-                List<String> need = skilltree.getList("skilltree.skill" + i + ".skill_need", null);
-                String need_type = skilltree.getString("skilltree.skill" + i + ".skill_need_type", "all");
-
-                if (illegal != null)
-                {
-                    for (int a = 0; a < illegal.size(); a++)
-                    {
-                        String string = getSkillName(illegal.get(a));
-                        illegal.set(a, string);
-                    }
-                }
-                if (possible != null)
-                {
-                    for (int a = 0; a < possible.size(); a++)
-                    {
-                        String string = getSkillName(possible.get(a));
-                        possible.set(a, string);
-                    }
-                }
-                if (need != null)
-                {
-                    for (int a = 0; a < need.size(); a++)
-                    {
-                        String string = getSkillName(need.get(a));
-                        need.set(a, string);
-                    }
-                }
-
-                player.sendMessage(ChatColor.GOLD + "Blocked Skills: " + illegal);
-                player.sendMessage(ChatColor.GOLD + "Possible Skills: " + possible);
-                player.sendMessage(ChatColor.GOLD + "Needed Skills: " + need);
-                if (need_type.equalsIgnoreCase("all"))
-                {
-                    player.sendMessage(ChatColor.GOLD + "You need all needed Skill to buy this");
-                }
-                else if (need_type.equalsIgnoreCase("or"))
-                {
-                    player.sendMessage(ChatColor.GOLD + "You need one needes Skill to buy this");
-                }
-            }
         }
         else
         {
             player.sendMessage(ChatColor.RED + "Error in config! Please contact admin!");
-            player.sendMessage(ChatColor.AQUA + "====================================");
+        }
+        player.sendMessage(ChatColor.GOLD + ExpSkills.config.getString("skills.skill" + i + ".info"));
+        player.sendMessage(ChatColor.GOLD + "Needed Level: " + ExpSkills.config.getInt("skills.skill" + i + ".level_need", 0) + " || Skilllevel: " + ExpSkills.config.getInt("skills.skill" + i + ".skill_level", 0));
+
+        if (ExpSkills.config.getBoolean("general.use_skilltree", false) == true)
+        {
+            YamlConfiguration skilltree = FileManager.loadSkilltree();
+            List<String> illegal = skilltree.getList("skilltree.skill" + i + ".skill_illegal", null);
+            List<String> possible = skilltree.getList("skilltree.skill" + i + ".skill_possible", null);
+            List<String> need = skilltree.getList("skilltree.skill" + i + ".skill_need", null);
+            String need_type = skilltree.getString("skilltree.skill" + i + ".skill_need_type", "all");
+
+            if (illegal != null)
+            {
+
+                for (int a = 0; a < illegal.size(); a++)
+                {
+                    String string = getSkillName(illegal.get(a));
+                    illegal.set(a, string);
+                }
+            }
+            if (possible != null)
+            {
+                for (int a = 0; a < possible.size(); a++)
+                {
+                    String string = getSkillName(possible.get(a));
+                    possible.set(a, string);
+                }
+            }
+            if (need != null)
+            {
+                for (int a = 0; a < need.size(); a++)
+                {
+                    String string = getSkillName(need.get(a));
+                    need.set(a, string);
+                }
+            }
+
+            player.sendMessage(ChatColor.GOLD + "Blocked Skills: " + illegal);
+            player.sendMessage(ChatColor.GOLD + "Possible Skills: " + possible);
+            player.sendMessage(ChatColor.GOLD + "Needed Skills: " + need);
+            if (need_type.equalsIgnoreCase("all"))
+            {
+                player.sendMessage(ChatColor.GOLD + "You need all needed Skill to buy this");
+            }
+            else if (need_type.equalsIgnoreCase("or"))
+            {
+                player.sendMessage(ChatColor.GOLD + "You need one needes Skill to buy this");
+            }
         }
     }
 
     // add level_need check
     // add skill_level check
     @SuppressWarnings("unchecked")
-    public static String buySkill(String name, Player player)
+    public static void buySkill(String name, Player player)
     {
         World map = player.getWorld();
         String world = map.getName();
@@ -531,537 +463,239 @@ static Economy vault = ExpSkills.economy;
         if (id != -1)
         {
             List<String> earn = ExpSkills.config.getList("skills.skill" + id + ".permissions_earn", null);
-            List<String> need = ExpSkills.config.getList("skills.skill" + id + ".permissions_need", null);
-
             List<String> earngrp = ExpSkills.config.getList("skills.skill" + id + ".groups_earn", null);
             List<String> needgrp = ExpSkills.config.getList("skills.skill" + id + ".groups_need", null);
 
-            String costtype = ExpSkills.config.getString("skills.skill" + id + ".cost_type", "both");
-            YamlConfiguration skilltree = FileManager.loadSkilltree();
-            YamlConfiguration pconfig = FileManager.loadPF(player);
-            List<String> current = pconfig.getList("skills", null);
-            boolean skills = false;
-            int b = 0;
-            int c = 0;
+            // TO-DO Skilllevels!
 
-            if (ExpSkills.config.getBoolean("general.use_skilltree", false))
+            if (buyable(name, player, true))
             {
-                if (skilltree.getConfigurationSection("skilltree").getKeys(false).contains("skill" + id))
+                int skill = ExpSkills.config.getInt("skills.skill" + id + ".skillpoints", 0);
+                int costs = ExpSkills.config.getInt("skills.skill" + id + ".money", 0);
+
+                boolean money = true;
+                if (ExpSkills.method != null)
                 {
-                    int w = 0;
-                    List<String> needs = skilltree.getList("skilltree.skill" + id + ".skill_need", null);
-                    List<String> illegal = skilltree.getList("skilltree.skill" + id + ".skill_illegal", null);
-                    String type = skilltree.getString("skilltree.skill" + id + ".skill_need_type", "all");
+                    MethodAccount account = ExpSkills.method.getAccount(player.getName());
+                    if (!account.hasEnough(costs))
+                        money = false;
+                }
+                else if (vault != null)
+                {
+                    if (!vault.has(player.getName(), costs))
+                        money = false;
+                }
 
-                    skills = false;
-
-                    if (illegal != null && current != null)
+                if (getSkillPoints(player) >= skill && money)
+                {
+                    if (ExpSkills.method != null)
                     {
-                        for (int v = 0; v < illegal.size(); v++)
+                        MethodAccount account = ExpSkills.method.getAccount(player.getName());
+                        account.subtract(costs);
+                    }
+                    else if (vault != null)
+                    {
+                        vault.withdrawPlayer(player.getName(), costs);
+                    }
+
+                    addSkill(player, "skill" + id);
+
+                    if (earn != null)
+                    {
+                        for (String node : earn)
                         {
-                            if (current.contains(illegal.get(v)))
-                            {
-                                w++;
-                            }
+                            PermissionsSystem.addPermission(world, player.getName(), node);
                         }
                     }
-                    if (w == 0 && needs != null)
+                    if (earngrp != null)
                     {
-                        if (type.equalsIgnoreCase("or"))
+                        for (String group : earngrp)
                         {
-                            for (int d = 0; d < needs.size(); d++)
-                            {
-                                if (current.contains(needs.get(d)) && current != null)
-                                {
-                                    skills = true;
-                                }
-                            }
+                            PermissionsSystem.addGroup(world, player.getName(), group);
                         }
-                        else if (type.equalsIgnoreCase("all") && current != null)
+                    }
+                    if (needgrp != null && ExpSkills.config.getBoolean("skills.skill" + id + ".revoke_need_groups", false))
+                    {
+                        for (String group : needgrp)
                         {
-                            if (current.containsAll(needs))
+                            PermissionsSystem.removeGroup(world, player.getName(), group);
+                        }
+                    }
+
+                    player.sendMessage("Skill successfully bought!");
+                }
+
+                if (getSkillPoints(player) <= skill)
+                    player.sendMessage("You have not enought Skillpoints!");
+                if (money == false)
+                    player.sendMessage("You have not enought money!");
+
+                return;
+            }
+            else
+                return;
+        }
+        player.sendMessage("Skill is not existing!");
+        return;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static boolean buyable(String name, Player player, boolean msg)
+    {
+        String skill = "skill" + getSkillID(name);
+
+        ExpSkills.config.getList("skills." + skill + ".permissions_earn", null);
+        List<String> need = ExpSkills.config.getList("skills." + skill + ".permissions_need", null);
+
+        ExpSkills.config.getList("skills." + skill + ".groups_earn", null);
+        List<String> needgrp = ExpSkills.config.getList("skills." + skill + ".groups_need", null);
+
+        int neededtime = ExpSkills.config.getInt("skills." + skill + ".time", 0);
+
+        YamlConfiguration skilltree = FileManager.loadSkilltree();
+        YamlConfiguration pconfig = FileManager.loadPF(player);
+        List<String> current = pconfig.getList("skills", null);
+        boolean skills = true;
+
+        if (ExpSkills.config.getBoolean("general.use_skilltree", false))
+        {
+            if (skilltree.getConfigurationSection("skilltree").getKeys(false).contains(skill))
+            {
+                int w = 0;
+                List<String> needs = skilltree.getList("skilltree." + skill + ".skill_need", null);
+                List<String> illegal = skilltree.getList("skilltree." + skill + ".skill_illegal", null);
+                String type = skilltree.getString("skilltree." + skill + ".skill_need_type", "all");
+
+                skills = false;
+
+                // check if you own a illegal skill
+                if (illegal != null && current != null)
+                {
+                    for (String a : illegal)
+                    {
+                        if (current.contains(a))
+                        {
+                            w++;
+                        }
+                    }
+                }
+                // check if you own the needed skills
+                if (w == 0 && needs != null)
+                {
+                    if (type.equalsIgnoreCase("or"))
+                    {
+                        for (String a : needs)
+                        {
+                            if (current.contains(a) && current != null)
                             {
                                 skills = true;
                             }
                         }
                     }
-                    else if (w == 0)
+                    else if (type.equalsIgnoreCase("all") && current != null)
                     {
-                        skills = true;
+                        if (current.containsAll(needs))
+                        {
+                            skills = true;
+                        }
                     }
                 }
-                else if (!skilltree.getConfigurationSection("skilltree").getKeys(false).contains("skill" + id))
+
+                else if (w == 0)
                 {
                     skills = true;
                 }
             }
-            else
+            else if (!skilltree.getConfigurationSection("skilltree").getKeys(false).contains(skill))
+            {
                 skills = true;
-
-            if (skills == false)
-            {
-                player.sendMessage("You don't follow the skilltree!");
-                return null;
             }
-
-            if (ExpSkills.config.getInt("skills.skill" + id + ".level_need") > getLevel(player))
-            {
-                player.sendMessage("You need a higher level!");
-                return null;
-            }
-
-            if (ExpSkills.config.getInt("general.skill_cap", 0) != 0 && current != null)
-            {
-                if (ExpSkills.config.getInt("general.skill_cap", 0) <= (current.size() - pconfig.getInt("extra_skills", 0)))
-                {
-                    player.sendMessage("You have reached your skill cap");
-                    return null;
-                }
-            }
-            // TO-DO Skilllevels!
-
-            if (earn != null)
-            {
-                for (int i = 0; i <= earn.size() - 1; i++)
-                {
-                    if (PermissionsSystem.hasPermission(world, player.getName(), earn.get(i)))
-                    {
-                        b++;
-                    }
-                }
-            }
-            if (earngrp != null)
-            {
-                for (int i = 0; i <= earngrp.size() - 1; i++)
-                {
-                    if (PermissionsSystem.hasGroup(world, player.getName(), earngrp.get(i)))
-                    {
-                        c++;
-                    }
-                }
-            }
-
-            if ((earn == null || b != earn.size()) && (earngrp == null || c != earngrp.size()))
-            {
-                if (need != null)
-                {
-                    int size = need.size();
-                    for (int i = 0; i <= size - 1; i++)
-                    {
-
-                        if (PermissionsSystem.hasPermission(world, player.getName(), need.get(i)))
-                        {
-                        }
-                        else
-                        {
-                            player.sendMessage("Not enough permissions!");
-                            return null;
-                        }
-                    }
-                }
-                if (needgrp != null)
-                {
-                    int sizegrp = needgrp.size();
-                    for (int i = 0; i <= sizegrp - 1; i++)
-                    {
-                        if (PermissionsSystem.hasGroup(player.getName(), needgrp.get(i), world))
-                        {
-                        }
-                        else
-                        {
-                            player.sendMessage("Not enough permissions!");
-                            return null;
-                        }
-                    }
-                }
-
-                if (costtype.equalsIgnoreCase("skillpoints"))
-                {
-                    int skill = ExpSkills.config.getInt("skills.skill" + id + ".skillpoints", 0);
-                    
-                    if (getSkillPoints(player) >= skill)
-                    {
-                        addSkill(player, "skill" + id);
-                        player.sendMessage("Skill successfully bought!");
-                    }
-                    else
-                    {
-                        player.sendMessage("Not enough skillpoints!");
-                        return null;
-                    }
-                }
-                else if (costtype.equalsIgnoreCase("money"))
-                {
-                    int costs = ExpSkills.config.getInt("skills.skill" + id + ".money", 0);
-
-                    if (ExpSkills.method != null)
-                    {
-                        MethodAccount account = ExpSkills.method.getAccount(player.getName());
-                        if (account.hasEnough(costs))
-                        {
-                            account.subtract(costs);
-                            addSkill(player, "skill" + id);
-                            player.sendMessage("Skill successfully bought!");
-                        }
-                        else
-                        {
-                            player.sendMessage("Not enough money!");
-                            return null;
-                        }
-                    }                    
-                    else if (vault != null)
-                    {
-                        if (vault.has(player.getName(), costs))
-                        {
-                            vault.withdrawPlayer(player.getName(), costs);
-                            addSkill(player, "skill" + id);
-                            player.sendMessage("Skill successfully bought!");
-                        }
-                        else
-                        {
-                            player.sendMessage("Not enough money!");
-                            return null;
-                        }
-                    }
-                    else
-                    {
-                        ExpSkills.log.warning("You need Register and a supported Economy plugin in order to use economy features!");
-                    }
-
-                }
-                else if (costtype.equalsIgnoreCase("both"))
-                {
-                    int money = ExpSkills.config.getInt("skills.skill" + id + ".money", 0);
-                    int skill = ExpSkills.config.getInt("skills.skill" + id + ".skillpoints", 0);
-
-                    if (ExpSkills.method != null)
-                    {
-                        MethodAccount account = null;
-                        account = ExpSkills.method.getAccount(player.getName());
-                        if (account.hasEnough(money) && getSkillPoints(player) >= skill)
-                        {
-                            account.subtract(money);
-                            addSkill(player, "skill" + id);
-                            player.sendMessage("Skill successfully bought!");
-                        }
-                        else
-                        {
-                            if (!account.hasEnough(money))
-                            {
-                                player.sendMessage("Not enough money!");
-                                return null;
-                            }
-                            if (getSkillPoints(player) < skill)
-                            {
-                                player.sendMessage("Not enough skillpoints!");
-                                return null;
-                            }
-                        }
-                    }
-                    if (vault != null)
-                    {
-                        if (vault.has(player.getName(), money) && getSkillPoints(player) >= skill)
-                        {
-                            vault.withdrawPlayer(player.getName(), money);
-                            addSkill(player, "skill" + id);
-                            player.sendMessage("Skill successfully bought!");
-                        }
-                        else
-                        {
-                            if (!vault.has(player.getName(), money))
-                            {
-                                player.sendMessage("Not enough money!");
-                                return null;
-                            }
-                            if (getSkillPoints(player) < skill)
-                            {
-                                player.sendMessage("Not enough skillpoints!");
-                                return null;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        ExpSkills.log.warning("You need Register and a supported Economy plugin in order to use economy features!");
-                    }
-                }
-
-                if (earn != null)
-                {
-                    int size2 = earn.size();
-                    for (int i = 0; i - 1 < size2 - 1; i++)
-                    {
-                        PermissionsSystem.addPermission(world, player.getName(), earn.get(i));
-                    }
-                }
-                if (earngrp != null)
-                {
-                    int size3 = earngrp.size();
-                    for (int i = 0; i - 1 < size3 - 1; i++)
-                    {
-                        PermissionsSystem.addGroup(world, player.getName(), earngrp.get(i));
-                    }
-                }
-                if (needgrp != null && ExpSkills.config.getBoolean("skills.skill" + id + ".revoke_need_groups", false))
-                {
-                    int size3 = needgrp.size();
-                    for (int i = 0; i - 1 < size3 - 1; i++)
-                    {
-                        PermissionsSystem.removeGroup(world, player.getName(), needgrp.get(i));
-                    }
-                }
-
-                return null;
-            }
-            else
-                player.sendMessage("You already own this right!");
-            return null;
         }
-        player.sendMessage("Skill is not existing!");
-        return null;
+
+        // perm check
+        if (need != null)
+        {
+            for (String node : need)
+            {
+                if (!PermissionsSystem.hasPermission(player.getWorld().getName(), player.getName(), node))
+                {
+                    if (msg)
+                        player.sendMessage("You have not the needed Permissions");
+                    return false;
+                }
+            }
+        }
+
+        if (needgrp != null)
+        {
+            for (String group : needgrp)
+            {
+                if (!PermissionsSystem.hasGroup(player.getName(), group, player.getWorld().getName()))
+                {
+                    if (msg)
+                        player.sendMessage("You are not in the needed group!");
+                    return false;
+                }
+            }
+        }
+
+        if (skills == false)
+        {
+            if (msg)
+                player.sendMessage("You don't follow the skilltree!");
+            return false;
+        }
+
+        if (neededtime > pconfig.getInt("onlineTime", 0))
+        {
+            if (msg)
+                player.sendMessage("You haven't played long enough on this Server!");
+            return false;
+        }
+
+        if (ExpSkills.config.getInt("skills." + skill + ".level_need") > getLevel(player))
+        {
+            if (msg)
+                player.sendMessage("You need a higher level!");
+            return false;
+        }
+
+        if (ExpSkills.config.getInt("general.skill_cap", 0) != 0 && current != null)
+        {
+            if (ExpSkills.config.getInt("general.skill_cap", 0) <= (current.size() - pconfig.getInt("extra_skills", 0)))
+            {
+                if (msg)
+                    player.sendMessage("You have reached your skill cap");
+                return false;
+            }
+        }
+
+        if (current != null && current.contains(skill))
+        {
+            if (msg)
+                player.sendMessage("You already own this skill!");
+            return false;
+        }
+
+        return true;
     }
 
     @SuppressWarnings("unchecked")
     public static void getList(int page, String filter, Player player)
     {
         int num = getNumSkills();
-        boolean perm = true;
-        boolean skill = false;
         int a = 0;
         int b = 0;
-        YamlConfiguration pconfig = FileManager.loadPF(player);
-        List<String> current = pconfig.getList("skills", null);
-        YamlConfiguration skilltree = FileManager.loadSkilltree();
+
         player.sendMessage(ChatColor.AQUA + "====================================");
 
         for (int i = 0; i <= num; i++)
         {
             List<String> list = ExpSkills.config.getList("skills.skill" + i + ".categories", null);
-            if (list != null)
+
+            if ((list != null && list.contains(filter)) || filter == null)
             {
-                if (list.contains(filter))
-                {
-                    if (ExpSkills.config.getBoolean("general.use_skilltree", false))
-                    {
-                        if (skilltree.getConfigurationSection("skilltree").getKeys(false).contains("skill" + i))
-                        {
-                            int w = 0;
-                            List<String> need = skilltree.getList("skilltree.skill" + i + ".skill_need");
-                            List<String> illegal = skilltree.getList("skilltree.skill" + i + ".skill_illegal");
-                            String type = skilltree.getString("skilltree.skill" + i + ".skill_need_type", "all");
-                            skill = false;
-
-                            if (illegal != null && current != null)
-                            {
-                                for (int v = 0; v < illegal.size(); v++)
-                                {
-                                    if (current.contains(illegal.get(v)))
-                                    {
-                                        w++;
-                                    }
-                                }
-                            }
-                            if (w == 0 && need != null && current != null)
-                            {
-                                if (type.equalsIgnoreCase("or"))
-                                {
-                                    for (int d = 0; d < need.size(); d++)
-                                    {
-                                        if (current.contains(need.get(d)))
-                                        {
-                                            skill = true;
-                                        }
-                                    }
-                                }
-                                else if (type.equalsIgnoreCase("all"))
-                                {
-                                    if (current.containsAll(need))
-                                    {
-                                        skill = true;
-                                    }
-                                }
-                            }
-                            else if (need == null)
-                            {
-                                skill = true;
-                            }
-                        }
-                        else if (!skilltree.getConfigurationSection("skilltree").getKeys(false).contains("skill" + i))
-                        {
-                            skill = true;
-                        }
-                        else
-                            skill = true;
-                    }
-                    else
-                        skill = true;
-
-                    if (current == null || !current.contains("skill" + i))
-                    {
-                        List<String> need = ExpSkills.config.getList("skills.skill" + i + ".permissions_need", null);
-                        if (need != null)
-                        {
-                            int size = need.size();
-
-                            for (int o = 0; o < size - 1; o++)
-                            {
-                                if (PermissionsSystem.hasPermission(player.getWorld().getName(), player.getName(), need.get(o)))
-                                {
-                                }
-                                else
-                                {
-                                    perm = false;
-                                }
-                            }
-                        }
-
-                        if (perm == true && skill == true)
-                        {
-                            if (b >= (page - 1) * 5 && a < 5)
-                            {
-                                String costtype = ExpSkills.config.getString("skills.skill" + i + ".cost_type", "both");
-                                if (costtype.equalsIgnoreCase("skillpoints"))
-                                {
-                                    player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + " Skillpoints");
-                                    player.sendMessage(ChatColor.GOLD + "Description: " + ExpSkills.config.getString("skills.skill" + i + ".description", null)); // description
-                                    // player.sendMessage(ChatColor.GOLD +
-                                    // "Needed Level: " +
-                                    // ExpSkills.config.getInt("skills.skill" +
-                                    // i + ".level_need", 0) + "|| Skilllevel: "
-                                    // + ExpSkills.config.getInt("skills.skill"
-                                    // + i + ".skill_level", 0));
-                                    player.sendMessage(ChatColor.AQUA + "====================================");
-                                }
-                                else if (costtype.equalsIgnoreCase("money"))
-                                {
-                                    player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$"));
-                                    player.sendMessage(ChatColor.GOLD + "Description: " + ExpSkills.config.getString("skills.skill" + i + ".description", null)); // description
-                                    // player.sendMessage(ChatColor.GOLD +
-                                    // "Needed Level: " +
-                                    // ExpSkills.config.getInt("skills.skill" +
-                                    // i + ".level_need", 0) + "|| Skilllevel: "
-                                    // + ExpSkills.config.getInt("skills.skill"
-                                    // + i + ".skill_level", 0));
-                                    player.sendMessage(ChatColor.AQUA + "====================================");
-                                }
-                                else if (costtype.equalsIgnoreCase("both"))
-                                {
-                                    player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$") + " " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + " Skillpoints");
-                                    player.sendMessage(ChatColor.GOLD + "Description: " + ExpSkills.config.getString("skills.skill" + i + ".description", null)); // description
-                                    // player.sendMessage(ChatColor.GOLD +
-                                    // "Needed Level: " +
-                                    // ExpSkills.config.getInt("skills.skill" +
-                                    // i + ".level_need", 0) + "|| Skilllevel: "
-                                    // + ExpSkills.config.getInt("skills.skill"
-                                    // + i + ".skill_level", 0));
-                                    player.sendMessage(ChatColor.AQUA + "====================================");
-                                }
-                                else
-                                {
-                                    player.sendMessage(ChatColor.RED + "Error in config. Please contact admin!");
-                                    player.sendMessage(ChatColor.AQUA + "====================================");
-                                }
-                                a++;
-                            }
-                            b++;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static void getList(int page, Player player)
-    {
-        int num = getNumSkills();
-        boolean perm = true;
-        boolean skill = false;
-        int b = 0;
-        int a = 0;
-        YamlConfiguration pconfig = FileManager.loadPF(player);
-        YamlConfiguration skilltree = FileManager.loadSkilltree();
-        List<String> current = pconfig.getList("skills", null);
-
-        player.sendMessage(ChatColor.AQUA + "====================================");
-
-        for (int i = 0; i <= num; i++)
-        {
-            if (ExpSkills.config.getBoolean("general.use_skilltree", false))
-            {
-                if (skilltree.getConfigurationSection("skilltree").getKeys(false).contains("skill" + i))
-                {
-                    int w = 0;
-                    List<String> need = skilltree.getList("skilltree.skill" + i + ".skill_need");
-                    List<String> illegal = skilltree.getList("skilltree.skill" + i + ".skill_illegal");
-                    String type = skilltree.getString("skilltree.skill" + i + ".skill_need_type", "all");
-                    skill = false;
-
-                    if (illegal != null && current != null)
-                    {
-                        for (int v = 0; v < illegal.size(); v++)
-                        {
-                            if (current.contains(illegal.get(v)))
-                            {
-                                w++;
-                            }
-                        }
-                    }
-                    if (w == 0 && need != null && current != null)
-                    {
-                        if (type.equalsIgnoreCase("or"))
-                        {
-                            for (int d = 0; d < need.size(); d++)
-                            {
-                                if (current.contains(need.get(d)))
-                                {
-                                    skill = true;
-                                }
-                            }
-                        }
-                        else if (type.equalsIgnoreCase("all"))
-                        {
-                            if (current.containsAll(need))
-                            {
-                                skill = true;
-                            }
-                        }
-                    }
-                    else if (need == null)
-                    {
-                        skill = true;
-                    }
-                }
-                else if (!skilltree.getConfigurationSection("skilltree").getKeys(false).contains("skill" + i))
-                {
-                    skill = true;
-                }
-                else
-                    skill = true;
-            }
-            else
-                skill = true;
-
-            if (current == null || !current.contains("skill" + i))
-            {
-                List<String> need = ExpSkills.config.getList("skills.skill" + i + ".permissions_need", null);
-                if (need != null)
-                {
-                    int size = need.size();
-
-                    for (int o = 0; o < size - 1; o++)
-                    {
-                        if (PermissionsSystem.hasPermission(player.getWorld().getName(), player.getName(), need.get(o)))
-                        {
-                        }
-                        else
-                        {
-                            perm = false;
-                        }
-                    }
-                }
-
-                if (perm == true && skill == true)
+                if (buyable(getSkillName(i), player, false))
                 {
                     if (b >= (page - 1) * 5 && a < 5)
                     {
@@ -1069,44 +703,22 @@ static Economy vault = ExpSkills.economy;
                         if (costtype.equalsIgnoreCase("skillpoints"))
                         {
                             player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + " Skillpoints");
-                            player.sendMessage(ChatColor.GOLD + "Description: " + ExpSkills.config.getString("skills.skill" + i + ".description", null)); // description
-                            // player.sendMessage(ChatColor.GOLD +
-                            // "Needed Level: " +
-                            // ExpSkills.config.getInt("skills.skill" + i +
-                            // ".level_need", 0) + "|| Skilllevel: " +
-                            // ExpSkills.config.getInt("skills.skill" + i +
-                            // ".skill_level", 0));
-                            player.sendMessage(ChatColor.AQUA + "====================================");
                         }
                         else if (costtype.equalsIgnoreCase("money"))
                         {
                             player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$"));
-                            player.sendMessage(ChatColor.GOLD + "Description: " + ExpSkills.config.getString("skills.skill" + i + ".description", null)); // description
-                            // player.sendMessage(ChatColor.GOLD +
-                            // "Needed Level: " +
-                            // ExpSkills.config.getInt("skills.skill" + i +
-                            // ".level_need", 0) + "|| Skilllevel: " +
-                            // ExpSkills.config.getInt("skills.skill" + i +
-                            // ".skill_level", 0));
-                            player.sendMessage(ChatColor.AQUA + "====================================");
                         }
                         else if (costtype.equalsIgnoreCase("both"))
                         {
                             player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$") + " " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + " Skillpoints");
-                            player.sendMessage(ChatColor.GOLD + "Description: " + ExpSkills.config.getString("skills.skill" + i + ".description", null)); // description
-                            // player.sendMessage(ChatColor.GOLD +
-                            // "Needed Level: " +
-                            // ExpSkills.config.getInt("skills.skill" + i +
-                            // ".level_need", 0) + "|| Skilllevel: " +
-                            // ExpSkills.config.getInt("skills.skill" + i +
-                            // ".skill_level", 0));
-                            player.sendMessage(ChatColor.AQUA + "====================================");
                         }
                         else
                         {
                             player.sendMessage(ChatColor.RED + "Error in config. Please contact admin!");
                             player.sendMessage(ChatColor.AQUA + "====================================");
                         }
+                        player.sendMessage(ChatColor.GOLD + "Description: " + ExpSkills.config.getString("skills.skill" + i + ".description", null)); // description
+                        player.sendMessage(ChatColor.AQUA + "====================================");
                         a++;
                     }
                     b++;
@@ -1231,7 +843,7 @@ static Economy vault = ExpSkills.economy;
             ExpSkills.log.info("Skill does not exist!");
             return false;
         }
-        
+
         if (charge == true)
         {
             int costs = ExpSkills.config.getInt("skills.skill" + id + ".money", 0);
@@ -1342,7 +954,7 @@ static Economy vault = ExpSkills.economy;
                 }
             }
 
-            p.sendMessage("Your skills were resetted!");
+            p.sendMessage("Your skills were reset!");
 
             pconfig.set("skills", null);
 

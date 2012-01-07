@@ -59,6 +59,16 @@ public class ServerPlayerListener extends PlayerListener
                 }
             }
         }
+
+        pfile.set("donotchange", System.currentTimeMillis());
+        try
+        {
+            pfile.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     // Workaround Bukkit-155
@@ -82,6 +92,9 @@ public class ServerPlayerListener extends PlayerListener
     {
         Player player = event.getPlayer();
         YamlConfiguration pconfig = FileManager.loadPF(player);
+        
+        funcs.updatePlaytime(player);
+
         try
         {
             pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
