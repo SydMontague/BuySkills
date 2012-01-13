@@ -95,14 +95,7 @@ public class ServerPlayerListener extends PlayerListener
         
         funcs.updatePlaytime(player);
 
-        try
-        {
-            pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        FileManager.savePF(player, pconfig);
 
     }
 }

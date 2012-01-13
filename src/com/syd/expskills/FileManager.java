@@ -47,7 +47,14 @@ public class FileManager
     
     public static void savePF(Player player, YamlConfiguration pconfig)
     {
-        FileManager.savePF(player, pconfig);
+        try
+        {
+            pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public static YamlConfiguration loadSkilltree()
