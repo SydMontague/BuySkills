@@ -27,7 +27,7 @@ public class CommandManager implements CommandExecutor
         if (sender instanceof Player)
         {
             p = (Player) sender;
-        }
+        }        
 
         if (p == null || PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.use") || PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
         {
@@ -46,8 +46,7 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage("/exp list <page> <filter> - list avaible skills");
                         sender.sendMessage("/exp info <skill> - get information to a specific skill");
                         sender.sendMessage("/exp buy <skill> - buy a skill");
-                        // sender.sendMessage("/exp rent <skill> - rent a skill");
-                        // <-- not yet ;)
+                        sender.sendMessage("/exp rent <skill> - rent a skill");
                         sender.sendMessage("/exp current - show your current skills");
                         if (PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
@@ -56,6 +55,7 @@ public class CommandManager implements CommandExecutor
                             sender.sendMessage("/exp <set/add> <player> <xp/level/skill> <amount> - modify player's stats");
                             sender.sendMessage("/exp <grant/revoke> <player> <skill> [charged/payout](true/false) - grant/revoke a skill");
                             sender.sendMessage("/exp current <player> - get current skills of a player");
+                            sender.sendMessage("/exp reset <player> - reset all skills");
                         }
                         return true;
                     }
@@ -95,11 +95,6 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage("Shows you all bought and rented skills");
                         return true;
                     }
-                    else if (args[1].equalsIgnoreCase("skilltree"))
-                    {
-                        sender.sendMessage("Shows you the skilltree");
-                        return true;
-                    }
                     if (p == null || PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                     {
                         if (args[1].equalsIgnoreCase("set") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
@@ -110,9 +105,21 @@ public class CommandManager implements CommandExecutor
                         else if (args[1].equalsIgnoreCase("add") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
                             sender.sendMessage("Add or substract XP/Level/Skillpoints of a player");
-                            sender.sendMessage("NOTE: substract means you add -<amount>");
-                            sender.sendMessage("NOTE: avoid to use totalXP and Level and preferer XP");
-                            sender.sendMessage("If you do so the Stats are maybe unsynced. (to much/less total XP for this Level)");
+                            return true;
+                        }
+                        else if (args[1].equalsIgnoreCase("revoke") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                        {
+                            sender.sendMessage("Revokes a skill");
+                            return true;
+                        }
+                        else if (args[1].equalsIgnoreCase("grant") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                        {
+                            sender.sendMessage("Grants a skill");
+                            return true;
+                        }
+                        else if (args[1].equalsIgnoreCase("reset") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                        {
+                            sender.sendMessage("Reset a player's skills");
                             return true;
                         }
                     }
@@ -124,8 +131,7 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage("/exp list <page> <filter> - list avaible skills");
                         sender.sendMessage("/exp info <skill> - get information to a specific skill");
                         sender.sendMessage("/exp buy <skill> - buy a skill");
-                        // sender.sendMessage("/exp rent <skill> - rent a skill");
-                        // <-- not yet ;)
+                        sender.sendMessage("/exp rent <skill> - rent a skill");
                         sender.sendMessage("/exp current - show your current skills");
                         if (PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
@@ -134,6 +140,7 @@ public class CommandManager implements CommandExecutor
                             sender.sendMessage("/exp <set/add> <player> <xp/totalxp/level/skill> <amount> - modify player's stats");
                             sender.sendMessage("/exp <grant/revoke> <player> <skill> [charged/payout](true/false) - grant/revoke a skill");
                             sender.sendMessage("/exp current <player> - get current skills of a player");
+                            sender.sendMessage("/exp reset <player> - reset all skills");
                         }
                     }
                     return true;
@@ -222,7 +229,7 @@ public class CommandManager implements CommandExecutor
                             return true;
                         }
                     }
-                    sender.sendMessage("You are no player!");
+                    sender.sendMessage("You are not a player!");
                     return true;
                 }
                 if (args[0].equalsIgnoreCase("info"))
@@ -248,7 +255,11 @@ public class CommandManager implements CommandExecutor
                     {
                         if (args.length == 2)
                         {
-                            funcs.buySkill(args[1], p);
+                            if (funcs.buySkill(args[1], p))
+                            {
+                                funcs.addSkill(p, funcs.getSkillKey(args[1]));
+                                p.sendMessage("Skill successfully bought!");
+                            }
                             return true;
                         }
                         else
@@ -259,13 +270,35 @@ public class CommandManager implements CommandExecutor
                     }
                     else
                     {
-                        sender.sendMessage("The Console cant buy skills!");
+                        sender.sendMessage("The Console can't buy skills!");
                         return true;
                     }
                 }
-                /*
-                 * if (args[0].equalsIgnoreCase("rent")) { return true; }
-                 */
+                if (args[0].equalsIgnoreCase("rent"))
+                {
+                    if (p != null)
+                    {
+                        if (args.length == 2)
+                        {
+                            if (RentingManager.rentSkill(args[1], p))
+                            {
+                                p.sendMessage("Skill successfully rented!");
+                            }
+                            return true;
+                        }
+                        else
+                        {
+                            p.sendMessage("Too much/less arguments!");
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        sender.sendMessage("The Console can't rent skills!");
+                        return true;
+                    }
+                }
+
                 if (args[0].equalsIgnoreCase("current"))
                 {
                     if (args.length == 1)
@@ -417,21 +450,13 @@ public class CommandManager implements CommandExecutor
                     }
                     if (args[0].equalsIgnoreCase("revoke"))
                     {
-                        boolean payout = false;
                         if (args.length > 2 && args.length < 5)
                         {
                             Player player = funcs.getPlayer(args[1]);
 
-                            if (args.length == 4)
-                            {
-                                if (args[3].equalsIgnoreCase("true"))
-                                {
-                                    payout = true;
-                                }
-                            }
                             if (player != null)
                             {
-                                if (funcs.revokeSkill(player, payout, args[2]))
+                                if (funcs.revokeSkill(player, args[2]))
                                     sender.sendMessage("Skill revoked!");
                                 else
                                     sender.sendMessage("Skill is not existing!");

@@ -1,6 +1,5 @@
 package com.syd.expskills;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -35,14 +34,8 @@ public class funcs
         int newxp = player.getTotalExperience() - getXpatLevel(funcs.getLevel(player) - 1);
 
         pconfig.set("experience", newxp);
-        try
-        {
-            pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+
+        FileManager.savePF(player, pconfig);
     }
 
     public static void setXP(Player player, int exp)
@@ -53,14 +46,8 @@ public class funcs
         int newxp = player.getTotalExperience() - getXpatLevel(funcs.getLevel(player) - 1);
 
         pconfig.set("experience", newxp);
-        try
-        {
-            pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+
+        FileManager.savePF(player, pconfig);
     }
 
     public static void setLevel(Player player, int level)
@@ -72,14 +59,7 @@ public class funcs
         int newxp = player.getTotalExperience();
 
         pconfig.set("experience", newxp);
-        try
-        {
-            pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        FileManager.savePF(player, pconfig);
     }
 
     public static void addLevel(Player player, int level)
@@ -91,20 +71,13 @@ public class funcs
         int newxp = player.getTotalExperience();
 
         pconfig.set("experience", newxp);
-        try
-        {
-            pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        FileManager.savePF(player, pconfig);
     }
 
     public static int getLevel(Player player)
     {
         int exp = player.getTotalExperience() + 1;
-        int formula = ExpSkills.config.getInt("general.formula", 0);
+        int formula = ExpSkills.config.getInt("general.formula", 2);
 
         int level = 0;
 
@@ -166,7 +139,7 @@ public class funcs
     {
         int level = getLevel(player) + 1;
         int exp = player.getTotalExperience();
-        int formula = ExpSkills.config.getInt("general.formula", 0);
+        int formula = ExpSkills.config.getInt("general.formula", 2);
 
         double value = 0;
 
@@ -206,7 +179,7 @@ public class funcs
 
     public static int getXpatLevel(int level)
     {
-        int formula = ExpSkills.config.getInt("general.formula", 0);
+        int formula = ExpSkills.config.getInt("general.formula", 2);
 
         double value = 0;
 
@@ -267,14 +240,7 @@ public class funcs
         pconfig.set("onlinetime", online);
         pconfig.set("donotchange", System.currentTimeMillis());
 
-        try
-        {
-            pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        FileManager.savePF(player, pconfig);
     }
 
     public static double getSkillPoints(Player p)
@@ -313,28 +279,14 @@ public class funcs
         double atm = pconfig.getInt("skillpoints", 0);
 
         pconfig.set("skillpoints", atm + amount);
-        try
-        {
-            pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        FileManager.savePF(player, pconfig);
     }
 
     public static void setSkillPoints(Player player, int amount)
     {
         YamlConfiguration pconfig = FileManager.loadPF(player);
         pconfig.set("skillpoints", amount);
-        try
-        {
-            pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        FileManager.savePF(player, pconfig);
     }
 
     public static int getNumSkills()
@@ -350,6 +302,7 @@ public class funcs
         return list;
     }
 
+    @Deprecated
     public static int getSkillID(String name)
     {
         List<String> array = getSkills();
@@ -363,6 +316,20 @@ public class funcs
             }
         }
         return -1;
+    }
+
+    public static String getSkillKey(String name)
+    {
+        Set<String> keys = ExpSkills.config.getConfigurationSection("skills").getKeys(false);
+
+        for (String skill : keys)
+        {
+            if (ExpSkills.config.getString("skills." + skill + ".name").contains(name))
+            {
+                return skill;
+            }
+        }
+        return null;
     }
 
     public static String getSkillName(int id)
@@ -455,23 +422,24 @@ public class funcs
     // add level_need check
     // add skill_level check
     @SuppressWarnings("unchecked")
-    public static void buySkill(String name, Player player)
+    public static boolean buySkill(String name, Player player)
     {
         World map = player.getWorld();
         String world = map.getName();
-        int id = getSkillID(name);
-        if (id != -1)
+        String key = getSkillKey(name);
+        
+        if (key != null)
         {
-            List<String> earn = ExpSkills.config.getList("skills.skill" + id + ".permissions_earn", null);
-            List<String> earngrp = ExpSkills.config.getList("skills.skill" + id + ".groups_earn", null);
-            List<String> needgrp = ExpSkills.config.getList("skills.skill" + id + ".groups_need", null);
+            List<String> earn = ExpSkills.config.getList("skills." + key + ".permissions_earn", null);
+            List<String> earngrp = ExpSkills.config.getList("skills." + key + ".groups_earn", null);
+            List<String> needgrp = ExpSkills.config.getList("skills." + key + ".groups_need", null);
 
             // TO-DO Skilllevels!
 
             if (buyable(name, player, true))
             {
-                int skill = ExpSkills.config.getInt("skills.skill" + id + ".skillpoints", 0);
-                int costs = ExpSkills.config.getInt("skills.skill" + id + ".money", 0);
+                int skill = ExpSkills.config.getInt("skills." + key + ".skillpoints", 0);
+                int costs = ExpSkills.config.getInt("skills." + key + ".money", 0);
 
                 boolean money = true;
                 if (ExpSkills.method != null)
@@ -498,8 +466,6 @@ public class funcs
                         vault.withdrawPlayer(player.getName(), costs);
                     }
 
-                    addSkill(player, "skill" + id);
-
                     if (earn != null)
                     {
                         for (String node : earn)
@@ -514,7 +480,7 @@ public class funcs
                             PermissionsSystem.addGroup(world, player.getName(), group);
                         }
                     }
-                    if (needgrp != null && ExpSkills.config.getBoolean("skills.skill" + id + ".revoke_need_groups", false))
+                    if (needgrp != null && ExpSkills.config.getBoolean("skills." + key + ".revoke_need_groups", false))
                     {
                         for (String group : needgrp)
                         {
@@ -522,7 +488,7 @@ public class funcs
                         }
                     }
 
-                    player.sendMessage("Skill successfully bought!");
+                    return true;
                 }
 
                 if (getSkillPoints(player) <= skill)
@@ -530,19 +496,19 @@ public class funcs
                 if (money == false)
                     player.sendMessage("You have not enought money!");
 
-                return;
+                return false;
             }
             else
-                return;
+                return false;
         }
         player.sendMessage("Skill is not existing!");
-        return;
+        return false;
     }
 
     @SuppressWarnings("unchecked")
-    private static boolean buyable(String name, Player player, boolean msg)
+    public static boolean buyable(String name, Player player, boolean msg)
     {
-        String skill = "skill" + getSkillID(name);
+        String skill = getSkillKey(name);
 
         ExpSkills.config.getList("skills." + skill + ".permissions_earn", null);
         List<String> need = ExpSkills.config.getList("skills." + skill + ".permissions_need", null);
@@ -570,46 +536,29 @@ public class funcs
 
                 // check if you own a illegal skill
                 if (illegal != null && current != null)
-                {
                     for (String a : illegal)
-                    {
                         if (current.contains(a))
-                        {
                             w++;
-                        }
-                    }
-                }
+
                 // check if you own the needed skills
                 if (w == 0 && needs != null)
                 {
                     if (type.equalsIgnoreCase("or"))
                     {
                         for (String a : needs)
-                        {
                             if (current.contains(a) && current != null)
-                            {
                                 skills = true;
-                            }
-                        }
                     }
                     else if (type.equalsIgnoreCase("all") && current != null)
-                    {
                         if (current.containsAll(needs))
-                        {
                             skills = true;
-                        }
-                    }
                 }
 
                 else if (w == 0)
-                {
                     skills = true;
-                }
             }
             else if (!skilltree.getConfigurationSection("skilltree").getKeys(false).contains(skill))
-            {
                 skills = true;
-            }
         }
 
         // perm check
@@ -625,7 +574,6 @@ public class funcs
                 }
             }
         }
-
         if (needgrp != null)
         {
             for (String group : needgrp)
@@ -638,28 +586,24 @@ public class funcs
                 }
             }
         }
-
         if (skills == false)
         {
             if (msg)
                 player.sendMessage("You don't follow the skilltree!");
             return false;
         }
-
         if (neededtime > pconfig.getInt("onlineTime", 0))
         {
             if (msg)
                 player.sendMessage("You haven't played long enough on this Server!");
             return false;
         }
-
         if (ExpSkills.config.getInt("skills." + skill + ".level_need") > getLevel(player))
         {
             if (msg)
                 player.sendMessage("You need a higher level!");
             return false;
         }
-
         if (ExpSkills.config.getInt("general.skill_cap", 0) != 0 && current != null)
         {
             if (ExpSkills.config.getInt("general.skill_cap", 0) <= (current.size() - pconfig.getInt("extra_skills", 0)))
@@ -669,14 +613,12 @@ public class funcs
                 return false;
             }
         }
-
         if (current != null && current.contains(skill))
         {
             if (msg)
                 player.sendMessage("You already own this skill!");
             return false;
         }
-
         return true;
     }
 
@@ -856,18 +798,16 @@ public class funcs
 
         if (earn != null)
         {
-            int size2 = earn.size();
-            for (int i = 0; i - 1 < size2 - 1; i++)
+            for (String node : earn)
             {
-                PermissionsSystem.addPermission(player.getWorld().getName(), player.getName(), earn.get(i));
+                PermissionsSystem.addPermission(player.getWorld().getName(), player.getName(), node);
             }
         }
         if (earngrp != null)
         {
-            int size3 = earngrp.size();
-            for (int i = 0; i - 1 < size3 - 1; i++)
+            for (String group : earngrp)
             {
-                PermissionsSystem.addGroup(player.getWorld().getName(), player.getName(), earngrp.get(i));
+                PermissionsSystem.addGroup(player.getWorld().getName(), player.getName(), group);
             }
         }
 
@@ -876,7 +816,7 @@ public class funcs
     }
 
     @SuppressWarnings("unchecked")
-    public static boolean revokeSkill(Player player, boolean payout, String skill)
+    public static boolean revokeSkill(Player player, String skill)
     {
         int id = getSkillID(skill);
         if (id == -1)
@@ -884,27 +824,21 @@ public class funcs
             ExpSkills.log.info("Skill does not exist!");
             return false;
         }
-        if (payout == true)
-        {
-            int costs = ExpSkills.config.getInt("skills.skill" + id + ".money", 0);
-            MethodAccount account = ExpSkills.method.getAccount(player.getName());
-            account.add(costs);
-        }
 
         List<String> earn = ExpSkills.config.getList("skills.skill" + id + ".permissions_earn");
         List<String> earngrp = ExpSkills.config.getList("skills.skill" + id + ".groups_earn");
         if (earn != null)
         {
-            for (int i = 0; i - 1 < earn.size() - 1; i++)
+            for (String node : earn)
             {
-                PermissionsSystem.removePermission(player.getWorld().getName(), player.getName(), earn.get(i));
+                PermissionsSystem.removePermission(player.getWorld().getName(), player.getName(), node);
             }
         }
         if (earngrp != null)
         {
-            for (int i = 0; i - 1 < earngrp.size() - 1; i++)
+            for (String group : earngrp)
             {
-                PermissionsSystem.removeGroup(player.getWorld().getName(), player.getName(), earngrp.get(i));
+                PermissionsSystem.removeGroup(player.getWorld().getName(), player.getName(), group);
             }
         }
 
@@ -928,45 +862,37 @@ public class funcs
                 List<String> perm = ExpSkills.config.getList("skills." + skills.get(i) + ".permissions_earn", null);
                 if (perm != null)
                 {
-                    for (int a = 0; a < perm.size(); a++)
+                    for (String node : perm)
                     {
-                        perms.add(perm.get(a));
-                    }
-
-                    for (int s = 0; s < perms.size(); s++)
-                    {
-                        PermissionsSystem.removePermission(p.getWorld().getName(), p.getName(), perms.get(s));
+                        perms.add(node);
                     }
                 }
 
                 List<String> group = ExpSkills.config.getList("skills." + skills.get(i) + ".groups_earn", null);
                 if (group != null)
                 {
-                    for (int b = 0; b < group.size(); b++)
+                    for (String node : group)
                     {
-                        groups.add(group.get(b));
-                    }
-
-                    for (int t = 0; t < groups.size(); t++)
-                    {
-                        PermissionsSystem.removeGroup(p.getWorld().getName(), p.getName(), groups.get(t));
+                        groups.add(node);
                     }
                 }
+            }
+
+            for (String node : perms)
+            {
+                PermissionsSystem.removePermission(p.getWorld().getName(), p.getName(), node);
+            }
+
+            for (String node : groups)
+            {
+                PermissionsSystem.removeGroup(p.getWorld().getName(), p.getName(), node);
             }
 
             p.sendMessage("Your skills were reset!");
 
             pconfig.set("skills", null);
 
-            try
-            {
-                pconfig.save("plugins/ExpSkills/player/" + p.getName() + ".yml");
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-
+            FileManager.savePF(p, pconfig);
         }
     }
 
@@ -987,14 +913,7 @@ public class funcs
         }
 
         pconfig.set("skills", skills);
-        try
-        {
-            pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        FileManager.savePF(player, pconfig);
     }
 
     @SuppressWarnings("unchecked")
@@ -1007,14 +926,7 @@ public class funcs
         skills.remove("skill" + id);
 
         pconfig.set("skills", skills);
-        try
-        {
-            pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        
 
     }
 

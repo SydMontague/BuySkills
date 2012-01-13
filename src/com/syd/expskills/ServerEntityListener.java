@@ -1,7 +1,5 @@
 package com.syd.expskills;
 
-import java.io.IOException;
-
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -40,14 +38,7 @@ public class ServerEntityListener extends EntityListener
             }
 
             pconfig.set("experience", newxp);
-            try
-            {
-                pconfig.save("plugins/ExpSkills/player/"+p.getName()+".yml");
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+            FileManager.savePF(p, pconfig);
 
             //default usage of EXP Drop - add dynamic method with config usage
             event.setDroppedExp(xp);

@@ -41,7 +41,7 @@ public class ExpSkills extends JavaPlugin
 
         // initializing config.yml
         config = getConfig();
-
+        
         String version = config.getString("version");
         if (version != "0.7.0_RC2")
         {
@@ -52,6 +52,7 @@ public class ExpSkills extends JavaPlugin
                 config.addDefault("general.currency", "Dollar");
                 config.addDefault("general.use_skilltree", false);
                 config.addDefault("general.use_economy", false);
+                config.addDefault("general.updatetime", 6000);
                 config.addDefault("general.formula", 0);
                 config.addDefault("general.formula_a", 0);
                 config.addDefault("general.formula_b", 0);
@@ -87,7 +88,11 @@ public class ExpSkills extends JavaPlugin
             }
             else if (version != "0.7.0_RC2")
             {
-                if (version.equals("0.6.4"))
+                if (version.equals("0.7.0_RC2"))
+                {
+                    config.addDefault("general.updatetime", 6000);
+                }
+                else if (version.equals("0.6.4"))
                 {
                     config.addDefault("general.formula", 0);
                     config.addDefault("general.formula_a", 0);
@@ -106,28 +111,42 @@ public class ExpSkills extends JavaPlugin
         }
         // end of config.yml
 
+        // start skilltree
         if (config.getBoolean("general.use_skilltree", false) == true)
         {
             skilltree = FileManager.loadSkilltree();
         }
 
+        // start rented
+        long delay = config.getLong("general.updatetime", 6000);
+
+        server.getScheduler().scheduleAsyncRepeatingTask(this, new Runnable()
+        {
+            public void run()
+            {
+                RentingManager.update();
+            }
+        }, 0, delay);
+        
+        // initialize events and commands
         getCommand("exp").setExecutor(command);
         registerEvent();
 
-        log.info("[ExpSkills] " + pdffile.getName() + " " + pdffile.getVersion() + " enabled");
-
+        // start permissions section
         permSys.start();
 
+        // start economy section
         if ((config.getBoolean("general.use_economy", false)))
         {
             if (ExpSkills.server.getPluginManager().getPlugin("Vault") != null)
             {
-                    RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-                    if (economyProvider != null) {
-                        economy = economyProvider.getProvider();
+                RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+                if (economyProvider != null)
+                {
+                    economy = economyProvider.getProvider();
 
-                        log.info("[ExpSkills] " + economy.getName() + " hooked");
-                    }
+                    log.info("[ExpSkills] " + economy.getName() + " hooked");
+                }
             }
             if (ExpSkills.server.getPluginManager().getPlugin("Register") != null)
             {
@@ -149,7 +168,9 @@ public class ExpSkills extends JavaPlugin
 
         }
 
+        log.info("[ExpSkills] " + pdffile.getName() + " " + pdffile.getVersion() + " enabled");
     }
+    
 
     public void onDisable()
     {

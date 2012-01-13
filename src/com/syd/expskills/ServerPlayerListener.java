@@ -35,7 +35,7 @@ public class ServerPlayerListener extends PlayerListener
             player.setTotalExperience(pfile.getInt("experience", 0));
         }
 
-        if (PermissionsSystem.permBukkit == true)
+        if (PermissionsSystem.GM == false && PermissionsSystem.permBukkit == false && PermissionsSystem.bPerm == null && PermissionsSystem.perm == null && PermissionsSystem.permEX == null)
         {
             @SuppressWarnings("unchecked")
             List<String> skills = pfile.getList("skills", null);

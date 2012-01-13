@@ -23,6 +23,7 @@ public class PermissionsSystem
     public static PermissionManager permEX = null;
     public static WorldPermissionsManager bPerm = null;
     public static boolean permBukkit = false;
+    public static boolean GM = false;
     static CommandSender sender;
 
     public PermissionsSystem(ExpSkills plugin)
@@ -31,17 +32,18 @@ public class PermissionsSystem
 
     public void start()
     {
+        //add GroupManager
         // check for PEX since it's not emulated and will work fine
         if (ExpSkills.server.getPluginManager().getPlugin("PermissionsEx") != null)
         {
             permEX = PermissionsEx.getPermissionManager();
             ExpSkills.log.info("[ExpSkills] " + "PermissionsEX detected");
         }
-        // check for PermissionBukkit since it's not emulated
+        // check for PermissionBukkit
         else if (ExpSkills.server.getPluginManager().getPlugin("PermissionsBukkit") != null)
         {
-            ExpSkills.log.warning("[ExpSkills] PermissionsBukkit is NOT supported (yet)");
-            ExpSkills.log.warning("[ExpSkills] Trying to use Bukkit built-in Permissions (not supported yet)");
+            ExpSkills.log.warning("[ExpSkills] PermissionsBukkit detected");
+            ExpSkills.log.warning("[ExpSkills] usage of groups_need node is not possible!");
             permBukkit = true;
             sender = ExpSkills.server.getConsoleSender();
         }
@@ -53,8 +55,9 @@ public class PermissionsSystem
             // Check if SuperpermBridge is used (should never be called)
             if (ExpSkills.server.getPluginManager().getPlugin("PermissionsBukkit") != null)
             {
-                ExpSkills.log.warning("[ExpSkills] " + "PermissionsBukkit is NOT supported!");
-                ExpSkills.log.warning("[ExpSkills] " + "You can't add/remove Skills");
+                ExpSkills.log.warning("[ExpSkills] PermissionsBukkit detected");
+                ExpSkills.log.warning("[ExpSkills] usage of groups_need node is not possible!");
+                permBukkit =  true;
             }
             Permissions permissions = (Permissions) ExpSkills.server.getPluginManager().getPlugin("Permissions");
             perm = permissions.getHandler();
@@ -91,7 +94,7 @@ public class PermissionsSystem
         }
         else if (permBukkit == true)
         {            
-            ExpSkills.server.dispatchCommand(sender, "permissions setperm " + node);
+            ExpSkills.server.dispatchCommand(sender, "permissions player setperm " + player + " " + node);
         }
         else
         {
@@ -117,7 +120,7 @@ public class PermissionsSystem
         }
         else if (permBukkit == true)
         {
-            ExpSkills.server.dispatchCommand(sender, "permissions unsetperm " + node);
+            ExpSkills.server.dispatchCommand(sender, "permissions player unsetperm " + player + " " + node);
         }
         else
         {
@@ -165,7 +168,8 @@ public class PermissionsSystem
         }
         else if (permBukkit == true)
         {
-            ExpSkills.server.dispatchCommand(sender, "permissions addgroup " + group);
+            ExpSkills.server.dispatchCommand(sender, "permissions player addgroup " + player + " " + group);
+            ExpSkills.log.info("permissions addgroup " + player + " " + group);
         }
     }
 
@@ -186,7 +190,7 @@ public class PermissionsSystem
         else if (permBukkit == true)
         {
 
-            ExpSkills.server.dispatchCommand(sender, "permissions removegroup " + group);
+            ExpSkills.server.dispatchCommand(sender, "permissions player removegroup " + player + " " + group);
         }
     }
 
