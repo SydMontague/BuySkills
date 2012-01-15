@@ -348,28 +348,37 @@ public class funcs
         int i = getSkillID(name);
         if (i == -1)
         {
-            player.sendMessage("Skill not found!");
+            player.sendMessage(plugin.lang.getString("error.skillnotfound", "Skill not found"));
             return;
         }
         String costtype = ExpSkills.config.getString("skills.skill" + i + ".cost_type", "both");
+        String costs = plugin.lang.getString("general.costs", "Costs");
+        String skillpoints = plugin.lang.getString("general.skillpoints", "Skillpoints");
+        String Name = plugin.lang.getString("general.name", "Name");
+        String skilllevel = plugin.lang.getString("general.skilllevel", "Skilllevel");
+        String neededlevel = plugin.lang.getString("general.neededlevel", "Needed Level");
+        String blockedskills = plugin.lang.getString("general.blockedskills", "Blocked Skills");
+        String neededskills = plugin.lang.getString("general.neededskills", "Needed Skills");
+        String possibleskills = plugin.lang.getString("general.possibleskills", "Possible Skills");
+
         if (costtype.equalsIgnoreCase("skillpoints"))
         {
-            player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + " Skillpoints");
+            player.sendMessage(ChatColor.GOLD + Name + ": " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || " + costs + ": " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + skillpoints);
         }
         else if (costtype.equalsIgnoreCase("money"))
         {
-            player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$"));
+            player.sendMessage(ChatColor.GOLD + Name + ": " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || " + costs + ": " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$"));
         }
         else if (costtype.equalsIgnoreCase("both"))
         {
-            player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$") + " " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + " Skillpoints");
+            player.sendMessage(ChatColor.GOLD + Name + ": " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || " + costs + ": " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$") + " " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + skillpoints);
         }
         else
         {
-            player.sendMessage(ChatColor.RED + "Error in config! Please contact admin!");
+            player.sendMessage(ChatColor.RED + plugin.lang.getString("error.error", "Error! Please contact Admin!"));
         }
         player.sendMessage(ChatColor.GOLD + ExpSkills.config.getString("skills.skill" + i + ".info"));
-        player.sendMessage(ChatColor.GOLD + "Needed Level: " + ExpSkills.config.getInt("skills.skill" + i + ".level_need", 0) + " || Skilllevel: " + ExpSkills.config.getInt("skills.skill" + i + ".skill_level", 0));
+        player.sendMessage(ChatColor.GOLD + neededlevel + ": " + ExpSkills.config.getInt("skills.skill" + i + ".level_need", 0) + " || " + skilllevel + ": " + ExpSkills.config.getInt("skills.skill" + i + ".skill_level", 0));
 
         if (ExpSkills.config.getBoolean("general.use_skilltree", false) == true)
         {
@@ -381,7 +390,6 @@ public class funcs
 
             if (illegal != null)
             {
-
                 for (int a = 0; a < illegal.size(); a++)
                 {
                     String string = getSkillName(illegal.get(a));
@@ -405,29 +413,27 @@ public class funcs
                 }
             }
 
-            player.sendMessage(ChatColor.GOLD + "Blocked Skills: " + illegal);
-            player.sendMessage(ChatColor.GOLD + "Possible Skills: " + possible);
-            player.sendMessage(ChatColor.GOLD + "Needed Skills: " + need);
+            player.sendMessage(ChatColor.GOLD + blockedskills + ": " + illegal);
+            player.sendMessage(ChatColor.GOLD + possibleskills + ": " + possible);
+            player.sendMessage(ChatColor.GOLD + neededskills + ": " + need);
             if (need_type.equalsIgnoreCase("all"))
             {
-                player.sendMessage(ChatColor.GOLD + "You need all needed Skill to buy this");
+                player.sendMessage(ChatColor.GOLD + plugin.lang.getString("general.allneed", "You need all of this Skills"));
             }
             else if (need_type.equalsIgnoreCase("or"))
             {
-                player.sendMessage(ChatColor.GOLD + "You need one needes Skill to buy this");
+                player.sendMessage(ChatColor.GOLD + plugin.lang.getString("general.oneneeded", "You need only one of this Skills"));
             }
         }
     }
 
-    // add level_need check
-    // add skill_level check
     @SuppressWarnings("unchecked")
     public static boolean buySkill(String name, Player player)
     {
         World map = player.getWorld();
         String world = map.getName();
         String key = getSkillKey(name);
-        
+
         if (key != null)
         {
             List<String> earn = ExpSkills.config.getList("skills." + key + ".permissions_earn", null);
@@ -492,16 +498,16 @@ public class funcs
                 }
 
                 if (getSkillPoints(player) <= skill)
-                    player.sendMessage("You have not enought Skillpoints!");
+                    player.sendMessage(plugin.lang.getString("error.notenoughtskillpoints", "You dont have enought skillpoints"));
                 if (money == false)
-                    player.sendMessage("You have not enought money!");
+                    player.sendMessage(plugin.lang.getString("error.notenoughtmoney", "You dont have enought money"));
 
                 return false;
             }
             else
                 return false;
         }
-        player.sendMessage("Skill is not existing!");
+        player.sendMessage(plugin.lang.getString("error.skillnotfound", "Skill not found"));
         return false;
     }
 
@@ -569,7 +575,7 @@ public class funcs
                 if (!PermissionsSystem.hasPermission(player.getWorld().getName(), player.getName(), node))
                 {
                     if (msg)
-                        player.sendMessage("You have not the needed Permissions");
+                        player.sendMessage(plugin.lang.getString("error.permissions", "You don't have the needed permissions"));
                     return false;
                 }
             }
@@ -581,7 +587,7 @@ public class funcs
                 if (!PermissionsSystem.hasGroup(player.getName(), group, player.getWorld().getName()))
                 {
                     if (msg)
-                        player.sendMessage("You are not in the needed group!");
+                        player.sendMessage(plugin.lang.getString("error.group", "You don't have the needed group"));
                     return false;
                 }
             }
@@ -589,19 +595,19 @@ public class funcs
         if (skills == false)
         {
             if (msg)
-                player.sendMessage("You don't follow the skilltree!");
+                player.sendMessage(plugin.lang.getString("error.skilltree", "You dont follow the skilltree!"));
             return false;
         }
         if (neededtime > pconfig.getInt("onlineTime", 0))
         {
             if (msg)
-                player.sendMessage("You haven't played long enough on this Server!");
+                player.sendMessage(plugin.lang.getString("error.playtime", "You have not enought playtime"));
             return false;
         }
         if (ExpSkills.config.getInt("skills." + skill + ".level_need") > getLevel(player))
         {
             if (msg)
-                player.sendMessage("You need a higher level!");
+                player.sendMessage(plugin.lang.getString("error.level", "You need a higher level"));
             return false;
         }
         if (ExpSkills.config.getInt("general.skill_cap", 0) != 0 && current != null)
@@ -609,14 +615,14 @@ public class funcs
             if (ExpSkills.config.getInt("general.skill_cap", 0) <= (current.size() - pconfig.getInt("extra_skills", 0)))
             {
                 if (msg)
-                    player.sendMessage("You have reached your skill cap");
+                    player.sendMessage(plugin.lang.getString("error.skillcap", "You have reached the skillcap"));
                 return false;
             }
         }
         if (current != null && current.contains(skill))
         {
             if (msg)
-                player.sendMessage("You already own this skill!");
+                player.sendMessage(plugin.lang.getString("error.alreadyown", "You already own this skill!"));
             return false;
         }
         return true;
@@ -628,6 +634,11 @@ public class funcs
         int num = getNumSkills();
         int a = 0;
         int b = 0;
+
+        String costs = plugin.lang.getString("general.costs", "Costs");
+        String skillpoints = plugin.lang.getString("general.skillpoints", "Skillpoints");
+        String Name = plugin.lang.getString("general.name", "Name");
+        String desc = plugin.lang.getString("general.description", "Description");
 
         player.sendMessage(ChatColor.AQUA + "====================================");
 
@@ -644,22 +655,22 @@ public class funcs
                         String costtype = ExpSkills.config.getString("skills.skill" + i + ".cost_type", "both");
                         if (costtype.equalsIgnoreCase("skillpoints"))
                         {
-                            player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + " Skillpoints");
+                            player.sendMessage(ChatColor.GOLD + Name + ": " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || " + costs + ": " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + skillpoints);
                         }
                         else if (costtype.equalsIgnoreCase("money"))
                         {
-                            player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$"));
+                            player.sendMessage(ChatColor.GOLD + Name + ": " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || " + costs + ": " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$"));
                         }
                         else if (costtype.equalsIgnoreCase("both"))
                         {
-                            player.sendMessage(ChatColor.GOLD + "Name: " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || Costs: " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$") + " " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + " Skillpoints");
+                            player.sendMessage(ChatColor.GOLD + Name + ": " + ExpSkills.config.getString("skills.skill" + i + ".name", null) + " || " + costs + ": " + ExpSkills.config.getInt("skills.skill" + i + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$") + " " + ExpSkills.config.getInt("skills.skill" + i + ".skillpoints", 0) + skillpoints);
                         }
                         else
                         {
-                            player.sendMessage(ChatColor.RED + "Error in config. Please contact admin!");
+                            player.sendMessage(ChatColor.RED + plugin.lang.getString("error.error", "Error! Please contact Admin!"));
                             player.sendMessage(ChatColor.AQUA + "====================================");
                         }
-                        player.sendMessage(ChatColor.GOLD + "Description: " + ExpSkills.config.getString("skills.skill" + i + ".description", null)); // description
+                        player.sendMessage(ChatColor.GOLD + desc + ": " + ExpSkills.config.getString("skills.skill" + i + ".description", null));
                         player.sendMessage(ChatColor.AQUA + "====================================");
                         a++;
                     }
@@ -676,7 +687,7 @@ public class funcs
         @SuppressWarnings("unchecked")
         List<String> skills = pconfig.getList("skills", null);
 
-        player.sendMessage("Owned skills:");
+        player.sendMessage(plugin.lang.getString("general.ownedskills", "Owned skills") + ":");
         if (skills != null)
         {
             int a = skills.size();
@@ -704,7 +715,7 @@ public class funcs
         }
         else
         {
-            player.sendMessage("You dont own any skill!");
+            player.sendMessage(plugin.lang.getString("error.notanyskillyou", "You dont own any skill"));
         }
     }
 
@@ -715,7 +726,7 @@ public class funcs
         @SuppressWarnings("unchecked")
         List<String> skills = pconfig.getList("skills", null);
 
-        sender.sendMessage(player.getName() + "'s skills:");
+        sender.sendMessage(player.getName() + "'s " + plugin.lang.getString("general.skills", "skills") + ":");
         if (skills != null)
         {
             int a = skills.size();
@@ -744,7 +755,7 @@ public class funcs
         }
         else
         {
-            sender.sendMessage("This player dont own any skill!");
+            sender.sendMessage(plugin.lang.getString("error.notanyskillhe", "This player dont own any skill"));
         }
     }
 
@@ -767,9 +778,6 @@ public class funcs
                     {
                         cats.add(lists.get(a));
                     }
-                    else
-                    {
-                    }
                 }
             }
         }
@@ -782,7 +790,7 @@ public class funcs
         int id = getSkillID(name);
         if (id == -1)
         {
-            ExpSkills.log.info("Skill does not exist!");
+            ExpSkills.log.info(plugin.lang.getString("error.skillnotfound", "Skill not found"));
             return false;
         }
 
@@ -821,7 +829,7 @@ public class funcs
         int id = getSkillID(skill);
         if (id == -1)
         {
-            ExpSkills.log.info("Skill does not exist!");
+            ExpSkills.log.info(plugin.lang.getString("error.skillnotfound", "Skill not found"));
             return false;
         }
 
@@ -888,7 +896,7 @@ public class funcs
                 PermissionsSystem.removeGroup(p.getWorld().getName(), p.getName(), node);
             }
 
-            p.sendMessage("Your skills were reset!");
+            p.sendMessage(plugin.lang.getString("success.skillreset", "Your skills were reset"));
 
             pconfig.set("skills", null);
 
@@ -926,7 +934,6 @@ public class funcs
         skills.remove("skill" + id);
 
         pconfig.set("skills", skills);
-        
 
     }
 

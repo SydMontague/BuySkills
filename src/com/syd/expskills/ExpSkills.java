@@ -1,5 +1,6 @@
 package com.syd.expskills;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -25,6 +26,7 @@ public class ExpSkills extends JavaPlugin
     public static ExpSkills plugin;
     public static FileConfiguration config;
     public static YamlConfiguration skilltree;
+    public YamlConfiguration lang;
     public final static Logger log = Logger.getLogger("Minecraft");
     public final ServerEntityListener entityListener = new ServerEntityListener(this);
     public final ServerPlayerListener playerListener = new ServerPlayerListener(this);
@@ -41,7 +43,7 @@ public class ExpSkills extends JavaPlugin
 
         // initializing config.yml
         config = getConfig();
-        
+                      
         String version = config.getString("version");
         if (version != "0.7.0_RC2")
         {
@@ -111,6 +113,9 @@ public class ExpSkills extends JavaPlugin
         }
         // end of config.yml
 
+        //start of lang.yml
+        lang = YamlConfiguration.loadConfiguration(new File(this.getDataFolder() + File.pathSeparator + "lang.yml"));        
+        
         // start skilltree
         if (config.getBoolean("general.use_skilltree", false) == true)
         {
