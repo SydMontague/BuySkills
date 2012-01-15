@@ -1,6 +1,7 @@
 package com.syd.expskills;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -43,7 +44,7 @@ public class ExpSkills extends JavaPlugin
 
         // initializing config.yml
         config = getConfig();
-                      
+
         String version = config.getString("version");
         if (version != "0.7.0_RC2")
         {
@@ -113,9 +114,25 @@ public class ExpSkills extends JavaPlugin
         }
         // end of config.yml
 
-        //start of lang.yml
-        lang = YamlConfiguration.loadConfiguration(new File(this.getDataFolder() + File.pathSeparator + "lang.yml"));        
-        
+        // start of lang.yml
+        File langfile = new File(this.getDataFolder() + File.separator + "lang.yml");
+
+        if (!langfile.exists())
+        {
+
+            lang = YamlConfiguration.loadConfiguration(getResource("lang.yml"));
+            try
+            {
+                lang.save(langfile);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+            lang = YamlConfiguration.loadConfiguration(langfile);
+
         // start skilltree
         if (config.getBoolean("general.use_skilltree", false) == true)
         {
@@ -132,7 +149,7 @@ public class ExpSkills extends JavaPlugin
                 RentingManager.update();
             }
         }, 0, delay);
-        
+
         // initialize events and commands
         getCommand("exp").setExecutor(command);
         registerEvent();
@@ -175,7 +192,6 @@ public class ExpSkills extends JavaPlugin
 
         log.info("[ExpSkills] " + pdffile.getName() + " " + pdffile.getVersion() + " enabled");
     }
-    
 
     public void onDisable()
     {

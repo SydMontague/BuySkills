@@ -42,9 +42,9 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage("/exp help [command] - " + plugin.lang.getString("command.help", "get help!"));
                         sender.sendMessage("/exp stats - " + plugin.lang.getString("command.stats", "show's your stats"));
                         sender.sendMessage("/exp list <page> <filter> - " + plugin.lang.getString("command.list", "list avaible skills"));
-                        sender.sendMessage("/exp info <skill> - " + plugin.lang.getString("command.help", "get information about a skill!"));
+                        sender.sendMessage("/exp info <skill> - " + plugin.lang.getString("command.info", "get information about a skill!"));
                         sender.sendMessage("/exp buy <skill> - " + plugin.lang.getString("command.buy", "buy a skill"));
-                        sender.sendMessage("/exp rent <skill> - " + plugin.lang.getString("command.buy", "rent a skill"));
+                        sender.sendMessage("/exp rent <skill> - " + plugin.lang.getString("command.rent", "rent a skill"));
                         sender.sendMessage("/exp current - " + plugin.lang.getString("command.current", "show's your current skills"));
                         if (PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
@@ -127,9 +127,9 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage("/exp help [command] - " + plugin.lang.getString("command.help", "get help!"));
                         sender.sendMessage("/exp stats - " + plugin.lang.getString("command.stats", "show's your stats"));
                         sender.sendMessage("/exp list <page> <filter> - " + plugin.lang.getString("command.list", "list avaible skills"));
-                        sender.sendMessage("/exp info <skill> - " + plugin.lang.getString("command.help", "get information about a skill!"));
+                        sender.sendMessage("/exp info <skill> - " + plugin.lang.getString("command.info", "get information about a skill!"));
                         sender.sendMessage("/exp buy <skill> - " + plugin.lang.getString("command.buy", "buy a skill"));
-                        sender.sendMessage("/exp rent <skill> - " + plugin.lang.getString("command.buy", "rent a skill"));
+                        sender.sendMessage("/exp rent <skill> - " + plugin.lang.getString("command.rent", "rent a skill"));
                         sender.sendMessage("/exp current - " + plugin.lang.getString("command.current", "show's your current skills"));
                         if (PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
