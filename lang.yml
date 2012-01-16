@@ -66,5 +66,5 @@ success:
     granted: "Skill successfully granted"
     revoked: "Skill successfully revokes"
     reset: "skills were reset"
-    rentalexpired: "You rental of %skill has expired"
-    skillreset: "You skills were reset!"
+    rentalexpired: "Your rental of %skill has expired"
+    skillreset: "Your skills were reset!"

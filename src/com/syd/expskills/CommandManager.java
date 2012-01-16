@@ -39,34 +39,34 @@ public class CommandManager implements CommandExecutor
                 {
                     if (args.length == 1)
                     {
-                        sender.sendMessage("/exp help [command] - " + plugin.lang.getString("command.help", "get help!"));
-                        sender.sendMessage("/exp stats - " + plugin.lang.getString("command.stats", "show's your stats"));
-                        sender.sendMessage("/exp list <page> <filter> - " + plugin.lang.getString("command.list", "list avaible skills"));
-                        sender.sendMessage("/exp info <skill> - " + plugin.lang.getString("command.info", "get information about a skill!"));
-                        sender.sendMessage("/exp buy <skill> - " + plugin.lang.getString("command.buy", "buy a skill"));
-                        sender.sendMessage("/exp rent <skill> - " + plugin.lang.getString("command.rent", "rent a skill"));
-                        sender.sendMessage("/exp current - " + plugin.lang.getString("command.current", "show's your current skills"));
+                        sender.sendMessage("/exp help [command] - " + ExpSkills.lang.getString("command.help", "get help!"));
+                        sender.sendMessage("/exp stats - " + ExpSkills.lang.getString("command.stats", "show's your stats"));
+                        sender.sendMessage("/exp list <page> <filter> - " + ExpSkills.lang.getString("command.list", "list avaible skills"));
+                        sender.sendMessage("/exp info <skill> - " + ExpSkills.lang.getString("command.info", "get information about a skill!"));
+                        sender.sendMessage("/exp buy <skill> - " + ExpSkills.lang.getString("command.buy", "buy a skill"));
+                        sender.sendMessage("/exp rent <skill> - " + ExpSkills.lang.getString("command.rent", "rent a skill"));
+                        sender.sendMessage("/exp current - " + ExpSkills.lang.getString("command.current", "show's your current skills"));
                         if (PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
                             sender.sendMessage("===== Admin Commands =====");
-                            sender.sendMessage("/exp stats - " + plugin.lang.getString("command.stats", "show's your stats"));
-                            sender.sendMessage("/exp <set/add> <player> <xp/level/skill> <amount> - " + plugin.lang.getString("command.setadd", "modify a player's stats"));
-                            sender.sendMessage("/exp <grant/revoke> <player> <skill> - " + plugin.lang.getString("command.grantrevoke", "grant/revoke a skill"));
-                            sender.sendMessage("/exp current <player> - " + plugin.lang.getString("command.current", "show's your current skills"));
-                            sender.sendMessage("/exp reset <player> - " + plugin.lang.getString("command.reset", "resets all skills of a player"));
+                            sender.sendMessage("/exp stats - " + ExpSkills.lang.getString("command.stats", "show's your stats"));
+                            sender.sendMessage("/exp <set/add> <player> <xp/level/skill> <amount> - " + ExpSkills.lang.getString("command.setadd", "modify a player's stats"));
+                            sender.sendMessage("/exp <grant/revoke> <player> <skill> - " + ExpSkills.lang.getString("command.grantrevoke", "grant/revoke a skill"));
+                            sender.sendMessage("/exp current <player> - " + ExpSkills.lang.getString("command.current", "show's your current skills"));
+                            sender.sendMessage("/exp reset <player> - " + ExpSkills.lang.getString("command.reset", "resets all skills of a player"));
                         }
                         return true;
                     }
                     else if (args[1].equalsIgnoreCase("stats"))
                     {
-                        sender.sendMessage(plugin.lang.getString("help.stats", "show's your current Level, XP, Skillpoints and playtime"));
+                        sender.sendMessage(ExpSkills.lang.getString("help.stats", "show's your current Level, XP, Skillpoints and playtime"));
                         return true;
                     }
                     else if (args[1].equalsIgnoreCase("list"))
                     {
                         List<String> cats = funcs.getCats();
-                        sender.sendMessage(plugin.lang.getString("help.list", "List all avaible skills."));
-                        sender.sendMessage(plugin.lang.getString("help.listfilter", "Possible filter:"));
+                        sender.sendMessage(ExpSkills.lang.getString("help.list", "List all avaible skills."));
+                        sender.sendMessage(ExpSkills.lang.getString("help.listfilter", "Possible filter:"));
                         for (String cat :  cats)
                         {
                             sender.sendMessage(cat);
@@ -75,70 +75,70 @@ public class CommandManager implements CommandExecutor
                     }
                     else if (args[1].equalsIgnoreCase("info"))
                     {
-                        sender.sendMessage(plugin.lang.getString("help.info", "Shows you more detailed infos about a skill"));
+                        sender.sendMessage(ExpSkills.lang.getString("help.info", "Shows you more detailed infos about a skill"));
                         return true;
                     }
                     else if (args[1].equalsIgnoreCase("buy"))
                     {
-                        sender.sendMessage(plugin.lang.getString("help.buy", "Buy this skill"));
+                        sender.sendMessage(ExpSkills.lang.getString("help.buy", "Buy this skill"));
                         return true;
                     }
                     else if (args[1].equalsIgnoreCase("rent"))
                     {
-                        sender.sendMessage(plugin.lang.getString("help.rent", "Rent this skill"));
+                        sender.sendMessage(ExpSkills.lang.getString("help.rent", "Rent this skill"));
                         return true;
                     }
                     else if (args[1].equalsIgnoreCase("current"))
                     {
-                        sender.sendMessage(plugin.lang.getString("help.current", "Show you all bought skills"));
+                        sender.sendMessage(ExpSkills.lang.getString("help.current", "Show you all bought skills"));
                         return true;
                     }
                     if (p == null || PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                     {
                         if (args[1].equalsIgnoreCase("set") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
-                            sender.sendMessage(plugin.lang.getString("help.set", "Set the stats off a player"));
+                            sender.sendMessage(ExpSkills.lang.getString("help.set", "Set the stats off a player"));
                             return true;
                         }
                         else if (args[1].equalsIgnoreCase("add") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
-                            sender.sendMessage(plugin.lang.getString("help.add", "Modify stats of a player"));
+                            sender.sendMessage(ExpSkills.lang.getString("help.add", "Modify stats of a player"));
                             return true;
                         }
                         else if (args[1].equalsIgnoreCase("revoke") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
-                            sender.sendMessage(plugin.lang.getString("help.revoke", "revokes a skill from a player"));
+                            sender.sendMessage(ExpSkills.lang.getString("help.revoke", "revokes a skill from a player"));
                             return true;
                         }
                         else if (args[1].equalsIgnoreCase("grant") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
-                            sender.sendMessage(plugin.lang.getString("help.grant", "grants a skill to a player"));
+                            sender.sendMessage(ExpSkills.lang.getString("help.grant", "grants a skill to a player"));
                             return true;
                         }
                         else if (args[1].equalsIgnoreCase("reset") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
-                            sender.sendMessage(plugin.lang.getString("help.reset", "resets a player's skills"));
+                            sender.sendMessage(ExpSkills.lang.getString("help.reset", "resets a player's skills"));
                             return true;
                         }
                     }
 
                     else
                     {
-                        sender.sendMessage("/exp help [command] - " + plugin.lang.getString("command.help", "get help!"));
-                        sender.sendMessage("/exp stats - " + plugin.lang.getString("command.stats", "show's your stats"));
-                        sender.sendMessage("/exp list <page> <filter> - " + plugin.lang.getString("command.list", "list avaible skills"));
-                        sender.sendMessage("/exp info <skill> - " + plugin.lang.getString("command.info", "get information about a skill!"));
-                        sender.sendMessage("/exp buy <skill> - " + plugin.lang.getString("command.buy", "buy a skill"));
-                        sender.sendMessage("/exp rent <skill> - " + plugin.lang.getString("command.rent", "rent a skill"));
-                        sender.sendMessage("/exp current - " + plugin.lang.getString("command.current", "show's your current skills"));
+                        sender.sendMessage("/exp help [command] - " + ExpSkills.lang.getString("command.help", "get help!"));
+                        sender.sendMessage("/exp stats - " + ExpSkills.lang.getString("command.stats", "show's your stats"));
+                        sender.sendMessage("/exp list <page> <filter> - " + ExpSkills.lang.getString("command.list", "list avaible skills"));
+                        sender.sendMessage("/exp info <skill> - " + ExpSkills.lang.getString("command.info", "get information about a skill!"));
+                        sender.sendMessage("/exp buy <skill> - " + ExpSkills.lang.getString("command.buy", "buy a skill"));
+                        sender.sendMessage("/exp rent <skill> - " + ExpSkills.lang.getString("command.rent", "rent a skill"));
+                        sender.sendMessage("/exp current - " + ExpSkills.lang.getString("command.current", "show's your current skills"));
                         if (PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
                             sender.sendMessage("===== Admin Commands =====");
-                            sender.sendMessage("/exp stats - " + plugin.lang.getString("command.stats", "show's your stats"));
-                            sender.sendMessage("/exp <set/add> <player> <xp/level/skill> <amount> - " + plugin.lang.getString("command.setadd", "modify a player's stats"));
-                            sender.sendMessage("/exp <grant/revoke> <player> <skill> - " + plugin.lang.getString("command.grantrevoke", "grant/revoke a skill"));
-                            sender.sendMessage("/exp current <player> - " + plugin.lang.getString("command.current", "show's your current skills"));
-                            sender.sendMessage("/exp reset <player> - " + plugin.lang.getString("command.reset", "resets all skills of a player"));
+                            sender.sendMessage("/exp stats - " + ExpSkills.lang.getString("command.stats", "show's your stats"));
+                            sender.sendMessage("/exp <set/add> <player> <xp/level/skill> <amount> - " + ExpSkills.lang.getString("command.setadd", "modify a player's stats"));
+                            sender.sendMessage("/exp <grant/revoke> <player> <skill> - " + ExpSkills.lang.getString("command.grantrevoke", "grant/revoke a skill"));
+                            sender.sendMessage("/exp current <player> - " + ExpSkills.lang.getString("command.current", "show's your current skills"));
+                            sender.sendMessage("/exp reset <player> - " + ExpSkills.lang.getString("command.reset", "resets all skills of a player"));
                         }
                     }
                     return true;
@@ -150,16 +150,16 @@ public class CommandManager implements CommandExecutor
                         Player player = funcs.getPlayer(args[1]);
                         if (player == null)
                         {
-                            sender.sendMessage(ChatColor.RED + plugin.lang.getString("error.pnotonline", "Player is not online"));
+                            sender.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.pnotonline", "Player is not online"));
                             return true;
                         }
                         
                         funcs.updatePlaytime(player);
                         sender.sendMessage(player.getName() + "'s Stats:");
-                        sender.sendMessage(plugin.lang.getString("general.experience", "Experience") + ": " + player.getTotalExperience() + " (" + funcs.getXpToUp(player) + " " + plugin.lang.getString("general.xptoup", "XP until LevelUp"));
-                        sender.sendMessage(plugin.lang.getString("general.level", "Level") + ": " + funcs.getLevel(player));
-                        sender.sendMessage(plugin.lang.getString("general.skillpoints", "Skillpoints")+ ": " + funcs.getSkillPoints(player));
-                        sender.sendMessage(plugin.lang.getString("general.playtime", "Playtime") + ": " + funcs.getPlaytime(player));
+                        sender.sendMessage(ExpSkills.lang.getString("general.experience", "Experience") + ": " + player.getTotalExperience() + " (" + funcs.getXpToUp(player) + " " + ExpSkills.lang.getString("general.xptoup", "XP until LevelUp"));
+                        sender.sendMessage(ExpSkills.lang.getString("general.level", "Level") + ": " + funcs.getLevel(player));
+                        sender.sendMessage(ExpSkills.lang.getString("general.skillpoints", "Skillpoints")+ ": " + funcs.getSkillPoints(player));
+                        sender.sendMessage(ExpSkills.lang.getString("general.playtime", "Playtime") + ": " + funcs.getPlaytime(player));
                         return true;
                     }
                     else
@@ -172,10 +172,10 @@ public class CommandManager implements CommandExecutor
 
                         funcs.updatePlaytime(p);
                         sender.sendMessage(sender.getName() + "'s Stats:");
-                        sender.sendMessage(plugin.lang.getString("general.experience", "Experience") + ": " + p.getTotalExperience() + " (" + funcs.getXpToUp(p) + " " + plugin.lang.getString("general.xptoup", "XP until LevelUp"));
-                        sender.sendMessage(plugin.lang.getString("general.level", "Level") + ": " + funcs.getLevel(p));
-                        sender.sendMessage(plugin.lang.getString("general.skillpoints", "Skillpoints")+ ": " + funcs.getSkillPoints(p));
-                        sender.sendMessage(plugin.lang.getString("general.playtime", "Playtime") + ": " + funcs.getPlaytime(p));
+                        sender.sendMessage(ExpSkills.lang.getString("general.experience", "Experience") + ": " + p.getTotalExperience() + " (" + funcs.getXpToUp(p) + " " + ExpSkills.lang.getString("general.xptoup", "XP until LevelUp"));
+                        sender.sendMessage(ExpSkills.lang.getString("general.level", "Level") + ": " + funcs.getLevel(p));
+                        sender.sendMessage(ExpSkills.lang.getString("general.skillpoints", "Skillpoints")+ ": " + funcs.getSkillPoints(p));
+                        sender.sendMessage(ExpSkills.lang.getString("general.playtime", "Playtime") + ": " + funcs.getPlaytime(p));
                         return true;
                     }
                 }
@@ -193,7 +193,7 @@ public class CommandManager implements CommandExecutor
                             }
                             catch (NumberFormatException ex)
                             {
-                                sender.sendMessage(plugin.lang.getString("error.notvalid", "No valid argument"));
+                                sender.sendMessage(ExpSkills.lang.getString("error.notvalid", "No valid argument"));
                                 return false;
                             }
                             String filter = args[2];
@@ -223,7 +223,7 @@ public class CommandManager implements CommandExecutor
                         }
                         else
                         {
-                            sender.sendMessage(plugin.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
+                            sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
                             return true;
                         }
                     }
@@ -243,7 +243,7 @@ public class CommandManager implements CommandExecutor
                     }
                     else
                     {
-                        sender.sendMessage(plugin.lang.getString("error.skillnotfound", "Skill not found!"));
+                        sender.sendMessage(ExpSkills.lang.getString("error.skillnotfound", "Skill not found!"));
                         return true;
                     }
                 }
@@ -256,13 +256,13 @@ public class CommandManager implements CommandExecutor
                             if (funcs.buySkill(args[1], p))
                             {
                                 funcs.addSkill(p, funcs.getSkillKey(args[1]));
-                                p.sendMessage(plugin.lang.getString("success.skillbought", "Skill successfully bought"));
+                                p.sendMessage(ExpSkills.lang.getString("success.skillbought", "Skill successfully bought"));
                             }
                             return true;
                         }
                         else
                         {
-                            p.sendMessage(plugin.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
+                            p.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
                             return true;
                         }
                     }
@@ -280,13 +280,13 @@ public class CommandManager implements CommandExecutor
                         {
                             if (RentingManager.rentSkill(args[1], p))
                             {
-                                p.sendMessage(plugin.lang.getString("success.skillrented", "Skill successfully rented"));
+                                p.sendMessage(ExpSkills.lang.getString("success.skillrented", "Skill successfully rented"));
                             }
                             return true;
                         }
                         else
                         {
-                            p.sendMessage(plugin.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
+                            p.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
                             return true;
                         }
                     }
@@ -317,7 +317,7 @@ public class CommandManager implements CommandExecutor
                         Player player = funcs.getPlayer(args[1]);
                         if (player == null)
                         {
-                            sender.sendMessage(plugin.lang.getString("error.pnotonline", "Player is not online"));
+                            sender.sendMessage(ExpSkills.lang.getString("error.pnotonline", "Player is not online"));
                         }
                         else
                             funcs.getCurrent(player, sender);
@@ -334,7 +334,7 @@ public class CommandManager implements CommandExecutor
                             Player player = funcs.getPlayer(args[1]);
                             if (player == null)
                             {
-                                sender.sendMessage(ChatColor.RED + plugin.lang.getString("error.pnotonline", "Player is not online"));
+                                sender.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.pnotonline", "Player is not online"));
                                 return true;
                             }
                             try
@@ -343,28 +343,28 @@ public class CommandManager implements CommandExecutor
                             }
                             catch (NumberFormatException ex)
                             {
-                                sender.sendMessage(plugin.lang.getString("error.notvalid", "No valid argument"));
+                                sender.sendMessage(ExpSkills.lang.getString("error.notvalid", "No valid argument"));
                                 return false;
                             }
                             if (args[2].equalsIgnoreCase("xp"))
                             {
                                 funcs.addXP(player, amount);
-                                sender.sendMessage(plugin.lang.getString("success.done", "Done"));
+                                sender.sendMessage(ExpSkills.lang.getString("success.done", "Done"));
                             }
                             else if (args[2].equalsIgnoreCase("level"))
                             {
                                 funcs.addLevel(player, amount);
-                                sender.sendMessage(plugin.lang.getString("success.done", "Done"));
+                                sender.sendMessage(ExpSkills.lang.getString("success.done", "Done"));
                             }
                             else if (args[2].equalsIgnoreCase("skill"))
                             {
                                 funcs.addSkillPoints(player, amount);
-                                sender.sendMessage(plugin.lang.getString("success.done", "Done"));
+                                sender.sendMessage(ExpSkills.lang.getString("success.done", "Done"));
                             }
                         }
                         else
                         {
-                            sender.sendMessage(plugin.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
+                            sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
                         }
                         return true;
                     }
@@ -380,28 +380,28 @@ public class CommandManager implements CommandExecutor
                             }
                             catch (NumberFormatException ex)
                             {
-                                sender.sendMessage(plugin.lang.getString("error.notvalid", "No valid argument"));
+                                sender.sendMessage(ExpSkills.lang.getString("error.notvalid", "No valid argument"));
                                 return false;
                             }
                             if (args[2].equalsIgnoreCase("xp"))
                             {
                                 funcs.setXP(player, amount);
-                                sender.sendMessage(plugin.lang.getString("success.done", "Done"));
+                                sender.sendMessage(ExpSkills.lang.getString("success.done", "Done"));
                             }
                             else if (args[2].equalsIgnoreCase("level"))
                             {
                                 funcs.setLevel(player, amount);
-                                sender.sendMessage(plugin.lang.getString("success.done", "Done"));
+                                sender.sendMessage(ExpSkills.lang.getString("success.done", "Done"));
                             }
                             else if (args[2].equalsIgnoreCase("skill"))
                             {
                                 funcs.setSkillPoints(player, amount);
-                                sender.sendMessage(plugin.lang.getString("success.done", "Done"));
+                                sender.sendMessage(ExpSkills.lang.getString("success.done", "Done"));
                             }
                         }
                         else
                         {
-                            sender.sendMessage(plugin.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
+                            sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
                         }
                         return true;
                     }
@@ -431,18 +431,18 @@ public class CommandManager implements CommandExecutor
                             if (player != null)
                             {
                                 if (funcs.grantSkill(player, charge, args[2]))
-                                    sender.sendMessage(plugin.lang.getString("success.granted", "Skill successfully granted"));
+                                    sender.sendMessage(ExpSkills.lang.getString("success.granted", "Skill successfully granted"));
                                 else
-                                    sender.sendMessage(plugin.lang.getString("error.skillnotfound", "Skill is not existing"));
+                                    sender.sendMessage(ExpSkills.lang.getString("error.skillnotfound", "Skill is not existing"));
                             }
                             else
                             {
-                                sender.sendMessage(ChatColor.RED + plugin.lang.getString("error.pnotonline", "Player is not online"));
+                                sender.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.pnotonline", "Player is not online"));
                             }
                         }
                         else
                         {
-                            sender.sendMessage(plugin.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
+                            sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
                         }
                         return true;
                     }
@@ -455,18 +455,18 @@ public class CommandManager implements CommandExecutor
                             if (player != null)
                             {
                                 if (funcs.revokeSkill(player, args[2]))
-                                    sender.sendMessage(plugin.lang.getString("success.revoked", "Skill successfully revoked"));
+                                    sender.sendMessage(ExpSkills.lang.getString("success.revoked", "Skill successfully revoked"));
                                 else
-                                    sender.sendMessage(plugin.lang.getString("error.skillnotfound", "Skill is not existing"));
+                                    sender.sendMessage(ExpSkills.lang.getString("error.skillnotfound", "Skill is not existing"));
                             }
                             else
                             {
-                                sender.sendMessage(ChatColor.RED + plugin.lang.getString("error.pnotonline", "Player is not online"));
+                                sender.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.pnotonline", "Player is not online"));
                             }
                         }
                         else
                         {
-                            sender.sendMessage(plugin.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
+                            sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
                         }
                         return true;
                     }
@@ -479,15 +479,15 @@ public class CommandManager implements CommandExecutor
                             if (args.length == 2)
                             {
                                 funcs.reset(player);
-                                sender.sendMessage(player.getName() + "'s "+ ChatColor.RED + plugin.lang.getString("success.reset", "skills were reset"));
+                                sender.sendMessage(player.getName() + "'s "+ ChatColor.RED + ExpSkills.lang.getString("success.reset", "skills were reset"));
                             }
                             else
                             {
-                                sender.sendMessage(plugin.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
+                                sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
                             }
                         }
                         else
-                            sender.sendMessage(ChatColor.RED + plugin.lang.getString("error.pnotfoundexact", "Player is not online. You need a exact match."));
+                            sender.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.pnotfoundexact", "Player is not online. You need a exact match."));
                     }
                 }
                 else
@@ -498,7 +498,7 @@ public class CommandManager implements CommandExecutor
             return true;
 
         }
-        sender.sendMessage(plugin.lang.getString("error.permissions", "You don't have the needed permissions"));
+        sender.sendMessage(ExpSkills.lang.getString("error.permissions", "You don't have the needed permissions"));
         return true;
     }
 }

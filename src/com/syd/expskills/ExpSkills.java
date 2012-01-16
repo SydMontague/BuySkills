@@ -27,7 +27,7 @@ public class ExpSkills extends JavaPlugin
     public static ExpSkills plugin;
     public static FileConfiguration config;
     public static YamlConfiguration skilltree;
-    public YamlConfiguration lang;
+    public static YamlConfiguration lang;
     public final static Logger log = Logger.getLogger("Minecraft");
     public final ServerEntityListener entityListener = new ServerEntityListener(this);
     public final ServerPlayerListener playerListener = new ServerPlayerListener(this);

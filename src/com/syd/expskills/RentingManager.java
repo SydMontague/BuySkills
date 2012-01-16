@@ -29,7 +29,9 @@ public class RentingManager
                     
                     rented.set(player + "." + skill, null);
                     
-                    p.sendMessage("You rental of " + funcs.getSkillName(skill) + " has expired!");
+                    String msg = ExpSkills.lang.getString("success.rentalexpired", "Your rental of %skill has expired!");
+                    msg.replace("%skill", funcs.getSkillName(skill));
+                    p.sendMessage(msg);
                     try
                     {
                         rented.save("plugins/ExpSkills/rented.yml");
