@@ -1,18 +1,19 @@
 package com.syd.expskills;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.permissions.PermissionAttachment;
 
-public class ServerPlayerListener extends PlayerListener
+public class ServerPlayerListener implements Listener
 {
     public static ExpSkills plugin;
 
@@ -21,7 +22,22 @@ public class ServerPlayerListener extends PlayerListener
         plugin = instance;
     }
 
-    // remodify ExpReset
+    @EventHandler
+    public void onPlayerEXPChance(PlayerExpChangeEvent event)
+    {
+        int exp = event.getPlayer().getTotalExperience() + event.getAmount();
+        Player player = event.getPlayer();
+
+        int levelold = funcs.getLevel(player);
+        int levelnew = funcs.getLevel(exp);
+        String msg = ExpSkills.lang.getString("general.levelup", "You are now level %level!");
+        msg = msg.replace("%level", String.valueOf(levelnew));
+
+        if (levelnew != levelold)
+            player.sendMessage(msg);
+    }
+
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
@@ -29,49 +45,34 @@ public class ServerPlayerListener extends PlayerListener
 
         YamlConfiguration pfile = FileManager.loadPF(player);
 
-        // Workaround for Bukkit Bug #1595
         if (player.getTotalExperience() < pfile.getInt("experience", 0))
-        {
             player.setTotalExperience(pfile.getInt("experience", 0));
-        }
 
         if (PermissionsSystem.GM == false && PermissionsSystem.permBukkit == false && PermissionsSystem.bPerm == null && PermissionsSystem.perm == null && PermissionsSystem.permEX == null)
         {
-            @SuppressWarnings("unchecked")
-            List<String> skills = pfile.getList("skills", null);
+            List<String> skills = pfile.getStringList("skills");
             List<String> perms = new ArrayList<String>();
 
             if (skills != null)
-            {
                 for (int i = 0; i < skills.size(); i++)
                 {
-                    @SuppressWarnings("unchecked")
-                    List<String> perm = ExpSkills.config.getList("skills." + skills.get(i) + ".permissions_earn", null);
+                    List<String> perm = ExpSkills.config.getStringList("skills." + skills.get(i) + ".permissions_earn");
                     for (int a = 0; a < perm.size(); a++)
-                    {
                         perms.add(perm.get(a));
-                    }
                 }
-                PermissionAttachment attachment = player.addAttachment(plugin);
-                for (int s = 0; s < perms.size(); s++)
-                {
-                    attachment.setPermission(perms.get(s), true);
-                }
-            }
+
+            PermissionAttachment attachment = player.addAttachment(plugin);
+
+            for (int s = 0; s < perms.size(); s++)
+                attachment.setPermission(perms.get(s), true);
         }
 
         pfile.set("donotchange", System.currentTimeMillis());
-        try
-        {
-            pfile.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+
+        FileManager.savePF(player, pfile);
     }
 
-    // Workaround Bukkit-155
+    @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event)
     {
         final Player p = event.getPlayer();
@@ -88,14 +89,14 @@ public class ServerPlayerListener extends PlayerListener
         }, 1L);
     }
 
+    @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event)
     {
         Player player = event.getPlayer();
         YamlConfiguration pconfig = FileManager.loadPF(player);
-        
+
         funcs.updatePlaytime(player);
 
         FileManager.savePF(player, pconfig);
-
     }
 }

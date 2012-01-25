@@ -11,8 +11,6 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -45,10 +43,10 @@ public class ExpSkills extends JavaPlugin
         // initializing config.yml
         config = getConfig();
 
-        String version = config.getString("version");
-        if (version != "0.7.0_RC2")
+        String configversion = config.getString("version");
+        String version = pdffile.getVersion();
+        if (!configversion.equalsIgnoreCase(version))
         {
-            // add level_need and skill_level
             if (config.get("version") == null)
             {
                 config.addDefault("general.skillpoint_modifier", 2.0);
@@ -89,13 +87,13 @@ public class ExpSkills extends JavaPlugin
                 config.addDefault("skills.skill0.categories", cat);
                 config.addDefault("skills.skill0.level_need", 0);
             }
-            else if (version != "0.7.0_RC2")
+            else if (configversion.equalsIgnoreCase(version))
             {
-                if (version.equals("0.7.0_RC2"))
+                if (configversion.equals("0.7.0_RC2"))
                 {
                     config.addDefault("general.updatetime", 6000);
                 }
-                else if (version.equals("0.6.4"))
+                else if (configversion.equals("0.6.4"))
                 {
                     config.addDefault("general.formula", 0);
                     config.addDefault("general.formula_a", 0);
@@ -104,11 +102,12 @@ public class ExpSkills extends JavaPlugin
                     config.addDefault("general.formula_d", 0);
                     config.addDefault("general.formula_e", 0);
                     config.addDefault("general.skill_cap", 0);
+                    config.addDefault("general.updatetime", 6000);
                 }
             }
 
-            config.addDefault("version", "0.7.0_RC2");
-            config.set("version", "0.7.0_RC2");
+            config.addDefault("version", pdffile.getVersion());
+            config.set("version", pdffile.getVersion());
             config.options().copyDefaults(true);
             saveConfig();
         }
@@ -119,7 +118,6 @@ public class ExpSkills extends JavaPlugin
 
         if (!langfile.exists())
         {
-
             lang = YamlConfiguration.loadConfiguration(getResource("lang.yml"));
             try
             {
@@ -135,9 +133,7 @@ public class ExpSkills extends JavaPlugin
 
         // start skilltree
         if (config.getBoolean("general.use_skilltree", false) == true)
-        {
             skilltree = FileManager.loadSkilltree();
-        }
 
         // start rented
         long delay = config.getLong("general.updatetime", 6000);
@@ -187,9 +183,7 @@ public class ExpSkills extends JavaPlugin
                     }
                 }, 0L);
             }
-
         }
-
         log.info("[ExpSkills] " + pdffile.getName() + " " + pdffile.getVersion() + " enabled");
     }
 
@@ -202,9 +196,7 @@ public class ExpSkills extends JavaPlugin
     private void registerEvent()
     {
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvent(Type.ENTITY_DEATH, entityListener, Event.Priority.High, this);
-        pm.registerEvent(Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
-        pm.registerEvent(Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
-        pm.registerEvent(Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
+        pm.registerEvents(playerListener, this);
+        pm.registerEvents(entityListener, this);
     }
 }

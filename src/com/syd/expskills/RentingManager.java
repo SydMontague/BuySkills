@@ -26,9 +26,9 @@ public class RentingManager
                 if (rented.getLong(player + "." + skill + ".time") <= System.currentTimeMillis())
                 {
                     funcs.revokeSkill(p, funcs.getSkillName(skill));
-                    
+
                     rented.set(player + "." + skill, null);
-                    
+
                     String msg = ExpSkills.lang.getString("success.rentalexpired", "Your rental of %skill has expired!");
                     msg.replace("%skill", funcs.getSkillName(skill));
                     p.sendMessage(msg);
@@ -45,15 +45,15 @@ public class RentingManager
         }
     }
 
-    //update buySkill to not use addSkill();
+    // update buySkill to not use addSkill();
     public static boolean rentSkill(String skill, Player player)
     {
         YamlConfiguration rented = FileManager.loadRented();
         String key = funcs.getSkillKey(skill);
         if (funcs.buySkill(skill, player))
         {
-            rented.set(player.getName() + "." + key + ".time", System.currentTimeMillis() + ExpSkills.config.getLong("skills." + key + ".renttime", 0)*1000);
-            
+            rented.set(player.getName() + "." + key + ".time", System.currentTimeMillis() + ExpSkills.config.getLong("skills." + key + ".renttime", 0) * 1000);
+
             try
             {
                 rented.save("plugins/ExpSkills/rented.yml");
@@ -62,7 +62,7 @@ public class RentingManager
             {
                 e.printStackTrace();
             }
-                                    
+
             return true;
         }
         return false;
