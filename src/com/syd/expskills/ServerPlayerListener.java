@@ -15,7 +15,7 @@ import org.bukkit.permissions.PermissionAttachment;
 
 public class ServerPlayerListener implements Listener
 {
-    public static ExpSkills plugin;
+    protected static ExpSkills plugin;
 
     public ServerPlayerListener(ExpSkills instance)
     {

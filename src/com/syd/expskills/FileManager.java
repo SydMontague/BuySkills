@@ -3,15 +3,11 @@ package com.syd.expskills;
 import java.io.File;
 import java.io.IOException;
 
-import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class FileManager
 {
-    Server server;
-    static ExpSkills plugin;
-
     public FileManager(ExpSkills plugin)
     {
     }
@@ -44,7 +40,7 @@ public class FileManager
 
         return prconfig;
     }
-    
+
     public static void savePF(Player player, YamlConfiguration pconfig)
     {
         try
@@ -79,12 +75,12 @@ public class FileManager
 
         return skilltree;
     }
-    
+
     public static YamlConfiguration loadRented()
     {
         final String dir = "plugins" + File.separator + "ExpSkills" + File.separator;
         final File rentfile = new File(dir + "rented.yml");
-        
+
         if (!rentfile.exists())
         {
             try
@@ -96,8 +92,8 @@ public class FileManager
                 e.printStackTrace();
             }
         }
-        YamlConfiguration rented =  YamlConfiguration.loadConfiguration(rentfile);
-        
+        YamlConfiguration rented = YamlConfiguration.loadConfiguration(rentfile);
+
         return rented;
     }
 }

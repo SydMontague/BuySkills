@@ -9,7 +9,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class ServerEntityListener implements Listener
 {
-    public static ExpSkills plugin;
+    ExpSkills plugin;
 
     public ServerEntityListener(ExpSkills instance)
     {

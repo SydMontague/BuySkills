@@ -1,6 +1,5 @@
 package com.syd.expskills;
 
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
@@ -16,14 +15,11 @@ import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 public class PermissionsSystem
 {
-
-    Server server;
-    ExpSkills plugin;
-    public static PermissionHandler perm = null;
-    public static PermissionManager permEX = null;
-    public static WorldPermissionsManager bPerm = null;
-    public static boolean permBukkit = false;
-    public static boolean GM = false;
+    protected static PermissionHandler perm = null;
+    protected static PermissionManager permEX = null;
+    protected static WorldPermissionsManager bPerm = null;
+    protected static boolean permBukkit = false;
+    protected static boolean GM = false;
     static CommandSender sender;
 
     public PermissionsSystem(ExpSkills plugin)
@@ -32,7 +28,7 @@ public class PermissionsSystem
 
     public void start()
     {
-        //add GroupManager
+        // add GroupManager
         // check for PEX since it's not emulated and will work fine
         if (ExpSkills.server.getPluginManager().getPlugin("PermissionsEx") != null)
         {
@@ -51,13 +47,13 @@ public class PermissionsSystem
         else if (ExpSkills.server.getPluginManager().getPlugin("Permissions") != null)
         {
             ExpSkills.log.info("[ExpSkills] " + "Permissions detected");
-            
+
             // Check if SuperpermBridge is used (should never be called)
             if (ExpSkills.server.getPluginManager().getPlugin("PermissionsBukkit") != null)
             {
                 ExpSkills.log.warning("[ExpSkills] PermissionsBukkit detected");
                 ExpSkills.log.warning("[ExpSkills] usage of groups_need node is not possible!");
-                permBukkit =  true;
+                permBukkit = true;
             }
             Permissions permissions = (Permissions) ExpSkills.server.getPluginManager().getPlugin("Permissions");
             perm = permissions.getHandler();
@@ -76,8 +72,8 @@ public class PermissionsSystem
         }
     }
 
-    //update Permission Methods for more function
-    
+    // update Permission Methods for more function
+
     public static void addPermission(String world, String player, String node)
     {
         if (permEX != null)
@@ -93,7 +89,7 @@ public class PermissionsSystem
             bPerm.getPermissionSet(world).addPlayerNode(node, player);
         }
         else if (permBukkit == true)
-        {            
+        {
             ExpSkills.server.dispatchCommand(sender, "permissions player setperm " + player + " " + node);
         }
         else

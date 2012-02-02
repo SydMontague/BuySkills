@@ -8,9 +8,6 @@ import org.bukkit.entity.Player;
 
 public class RentingManager
 {
-
-    public static ExpSkills plugin;
-
     public static void update()
     {
         YamlConfiguration rented = FileManager.loadRented();
@@ -30,7 +27,7 @@ public class RentingManager
                     rented.set(player + "." + skill, null);
 
                     String msg = ExpSkills.lang.getString("success.rentalexpired", "Your rental of %skill has expired!");
-                    msg.replace("%skill", funcs.getSkillName(skill));
+                    msg = msg.replace("%skill", funcs.getSkillName(skill));
                     p.sendMessage(msg);
                     try
                     {
@@ -45,7 +42,6 @@ public class RentingManager
         }
     }
 
-    // update buySkill to not use addSkill();
     public static boolean rentSkill(String skill, Player player)
     {
         YamlConfiguration rented = FileManager.loadRented();

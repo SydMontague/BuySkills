@@ -21,25 +21,24 @@ import com.nijikokun.register.payment.Methods;
 
 public class ExpSkills extends JavaPlugin
 {
-    public static Server server;
-    public static ExpSkills plugin;
-    public static FileConfiguration config;
-    public static YamlConfiguration skilltree;
-    public static YamlConfiguration lang;
-    public final static Logger log = Logger.getLogger("Minecraft");
+    protected static Server server;
+    protected static ExpSkills plugin;
+    protected static FileConfiguration config;
+    protected static YamlConfiguration skilltree;
+    protected static YamlConfiguration lang;
+    protected final static Logger log = Logger.getLogger("Minecraft");
     public final ServerEntityListener entityListener = new ServerEntityListener(this);
     public final ServerPlayerListener playerListener = new ServerPlayerListener(this);
     private CommandManager command = new CommandManager(this);
     public final PermissionsSystem permSys = new PermissionsSystem(this);
-    public static Method method;
-    public static Economy economy = null;
+    protected static Method method;
+    protected static Economy economy = null;
 
     public void onEnable()
     {
         PluginDescriptionFile pdffile = this.getDescription();
         server = getServer();
         command = new CommandManager(this);
-
         // initializing config.yml
         config = getConfig();
 
