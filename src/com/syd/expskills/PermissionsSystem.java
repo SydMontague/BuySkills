@@ -104,8 +104,13 @@ public class PermissionsSystem
             return permEX.getUser(player).has(node);
         else if (perm != null)
             return perm.has(world, player, node);
+<<<<<<< HEAD
 /*        else if (bPerm != null)
             return HasPermission.has(player, world, node);*/
+=======
+        else if (bPerm != null)
+            return HasPermission.has(player, world, node);
+>>>>>>> github/master
         else
             return ExpSkills.server.getPlayerExact(player).hasPermission(node);
     }
