@@ -38,6 +38,7 @@ general:
     neededskills: "Needed Skills"    
     description: "Description"
     ownedskills: "Owned Skills:"
+    rentedskills: "Rented Skills:"
     allneeded: "You need all of this Skills"
     oneneeded: "You need only one of this Skills"
     levelup: "You are now level %level!"
