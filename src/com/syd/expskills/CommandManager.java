@@ -1,5 +1,6 @@
 package com.syd.expskills;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -13,7 +14,7 @@ public class CommandManager implements CommandExecutor
     public CommandManager(ExpSkills instance)
     {
     }
-
+ 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
     {
@@ -293,7 +294,6 @@ public class CommandManager implements CommandExecutor
                         return true;
                     }
                 }
-
                 if (args[0].equalsIgnoreCase("current"))
                 {
                     List<String> current;
@@ -308,6 +308,7 @@ public class CommandManager implements CommandExecutor
                         return true;
                     }
 
+                    sender.sendMessage(ExpSkills.lang.getString("general.ownedskills", "Owned skills:"));
                     if (current != null)
                     {
                         int a = current.size();
@@ -326,6 +327,50 @@ public class CommandManager implements CommandExecutor
                             else if (a - i == 1)
                             {
                                 sender.sendMessage(ExpSkills.config.getString("skills." + current.get(i) + ".name"));
+                                i = a;
+                            }
+                        }
+                    }
+                    else
+                        sender.sendMessage(ExpSkills.lang.getString("error.notanyskillhe", "This player dont own any skill"));
+                }
+                if (args[0].equalsIgnoreCase("rented"))
+                {
+                    List<String> rented = new ArrayList<String>();
+
+                    if (p != null && args.length == 1)
+                        for(String skill : funcs.getRented(p))
+                            rented.add(skill);
+                    else if (args.length == 2)
+                        for(String skill : funcs.getRented((Player) funcs.getOfflinePlayer(args[1])))
+                            rented.add(skill);
+                                
+                    else
+                    {
+                        sender.sendMessage("Consoles dont have skills!");
+                        return true;
+                    }
+
+                    sender.sendMessage(ExpSkills.lang.getString("general.rentedskills", "Rented skills:"));
+                    if (rented.size() != 0)
+                    {
+                        int a = rented.size();
+                        for (int i = 0; i < a;)
+                        {
+                            if (a - i >= 3)
+                            {
+                                sender.sendMessage(ExpSkills.config.getString("skills." + rented.get(i) + ".name") + " " + ExpSkills.config.getString("skills." + rented.get(i + 1) + ".name") + " " + ExpSkills.config.getString("skills." + rented.get(i + 2) + ".name"));
+                                i = i + 3;
+                            }
+                            else if (a - i == 2)
+                            {
+                                sender.sendMessage(ExpSkills.config.getString("skills." + rented.get(i) + ".name") + " " + ExpSkills.config.getString("skills." + rented.get(i + 1) + ".name"));
+                                i = i + 2;
+                            }
+                            else if (a - i == 1)
+                            {
+                                sender.sendMessage(ExpSkills.config.getString("skills." + rented.get(i) + ".name"));
+                                i = a;
                             }
 
                         }

@@ -622,7 +622,7 @@ public class funcs
                         String skillname = ExpSkills.config.getString("skills." + skill + ".name", null);
                         int skillp = ExpSkills.config.getInt("skills." + skill + ".skillpoints", 0);
                         int money = ExpSkills.config.getInt("skills." + skill + ".money", 0);
-                        
+
                         if (costtype.equalsIgnoreCase("skillpoints"))
                             player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + skillp + skillpoints);
                         else if (costtype.equalsIgnoreCase("money"))
@@ -634,7 +634,7 @@ public class funcs
                             player.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.error", "Error! Please contact Admin!"));
                             player.sendMessage(ChatColor.AQUA + "====================================");
                         }
-                        
+ 
                         player.sendMessage(ChatColor.GOLD + desc + ": " + ExpSkills.config.getString("skills." + skill + ".description", null));
                         player.sendMessage(ChatColor.AQUA + "====================================");
                         a++;
@@ -646,7 +646,10 @@ public class funcs
 
     public static Set<String> getRented(Player player)
     {
-        return FileManager.loadRented().getConfigurationSection(player.getName()).getKeys(false);
+        if (FileManager.loadRented().getKeys(false).contains(player.getName()))
+            return FileManager.loadRented().getConfigurationSection(player.getName()).getKeys(false);
+        else 
+            return null;
     }
 
     public static List<String> getCurrent(Player player)
