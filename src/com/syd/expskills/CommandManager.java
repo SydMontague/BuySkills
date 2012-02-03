@@ -19,25 +19,23 @@ public class CommandManager implements CommandExecutor
     {
         // Console or Player check - loading player data
         Player p = null;
+
         if (sender instanceof Player)
-        {
             p = (Player) sender;
-        }
 
         if (p == null || PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.use") || PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
         {
             if (cmd.getName().equalsIgnoreCase("exp"))
             {
                 if (args.length == 0)
-                {
                     return false;
-                }
+
                 if (args[0].equalsIgnoreCase("help"))
                 {
                     if (args.length == 1)
                     {
                         sender.sendMessage("/exp help [command] - " + ExpSkills.lang.getString("command.help", "get help!"));
-                        sender.sendMessage("/exp stats - " + ExpSkills.lang.getString("command.stats", "show's your stats"));
+                        sender.sendMessage("/exp stats - " + ExpSkills.lang.getString("command.stats", "show's stats"));
                         sender.sendMessage("/exp list <page> <filter> - " + ExpSkills.lang.getString("command.list", "list avaible skills"));
                         sender.sendMessage("/exp info <skill> - " + ExpSkills.lang.getString("command.info", "get information about a skill!"));
                         sender.sendMessage("/exp buy <skill> - " + ExpSkills.lang.getString("command.buy", "buy a skill"));
@@ -46,7 +44,7 @@ public class CommandManager implements CommandExecutor
                         if (PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                         {
                             sender.sendMessage("===== Admin Commands =====");
-                            sender.sendMessage("/exp stats - " + ExpSkills.lang.getString("command.stats", "show's your stats"));
+                            sender.sendMessage("/exp stats <player> - " + ExpSkills.lang.getString("command.stats", "show's stats"));
                             sender.sendMessage("/exp <set/add> <player> <xp/level/skill> <amount> - " + ExpSkills.lang.getString("command.setadd", "modify a player's stats"));
                             sender.sendMessage("/exp <grant/revoke> <player> <skill> - " + ExpSkills.lang.getString("command.grantrevoke", "grant/revoke a skill"));
                             sender.sendMessage("/exp current <player> - " + ExpSkills.lang.getString("command.current", "show's your current skills"));
@@ -65,9 +63,8 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage(ExpSkills.lang.getString("help.list", "List all avaible skills."));
                         sender.sendMessage(ExpSkills.lang.getString("help.listfilter", "Possible filter:"));
                         for (String cat : cats)
-                        {
                             sender.sendMessage(cat);
-                        }
+
                         return true;
                     }
                     else if (args[1].equalsIgnoreCase("info"))
@@ -118,7 +115,6 @@ public class CommandManager implements CommandExecutor
                             return true;
                         }
                     }
-
                     else
                     {
                         sender.sendMessage("/exp help [command] - " + ExpSkills.lang.getString("command.help", "get help!"));
@@ -180,10 +176,8 @@ public class CommandManager implements CommandExecutor
                 {
                     int page;
                     if (p != null)
-                    {
                         if (args.length == 3)
                         {
-
                             try
                             {
                                 page = Integer.parseInt(args[1]);
@@ -223,7 +217,6 @@ public class CommandManager implements CommandExecutor
                             sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
                             return true;
                         }
-                    }
                     sender.sendMessage("You are not a player!");
                     return true;
                 }
@@ -232,6 +225,7 @@ public class CommandManager implements CommandExecutor
                     if (p == null)
                     {
                         sender.sendMessage("You are not a player!");
+                        return true;
                     }
                     else if (args.length == 2)
                     {
@@ -273,12 +267,18 @@ public class CommandManager implements CommandExecutor
                 {
                     if (p != null)
                     {
+                        if (args.length == 3)
+                        {
+                            if (RentingManager.rentSkill(args[1], p, Integer.parseInt(args[2])))
+                                p.sendMessage(ExpSkills.lang.getString("success.skillrented", "Skill successfully rented"));
+
+                            return true;
+                        }
                         if (args.length == 2)
                         {
-                            if (RentingManager.rentSkill(args[1], p))
-                            {
+                            if (RentingManager.rentSkill(args[1], p, -1))
                                 p.sendMessage(ExpSkills.lang.getString("success.skillrented", "Skill successfully rented"));
-                            }
+
                             return true;
                         }
                         else
@@ -296,30 +296,42 @@ public class CommandManager implements CommandExecutor
 
                 if (args[0].equalsIgnoreCase("current"))
                 {
-                    if (args.length == 1)
-                    {
+                    List<String> current;
 
-                        if (p != null)
-                        {
-                            funcs.getCurrent(p);
-                        }
-                        else
-                        {
-                            sender.sendMessage("Consoles dont have skills!");
-                        }
+                    if (p != null && args.length == 1)
+                        current = funcs.getCurrent(p);
+                    else if (args.length == 2)
+                        current = funcs.getCurrent((Player) funcs.getOfflinePlayer(args[1]));
+                    else
+                    {
+                        sender.sendMessage("Consoles dont have skills!");
                         return true;
                     }
-                    else if (args.length == 2 && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
-                    {
-                        Player player = funcs.getPlayer(args[1]);
-                        if (player == null)
-                        {
-                            sender.sendMessage(ExpSkills.lang.getString("error.pnotonline", "Player is not online"));
-                        }
-                        else
-                            funcs.getCurrent(player, sender);
-                    }
 
+                    if (current != null)
+                    {
+                        int a = current.size();
+                        for (int i = 0; i < a;)
+                        {
+                            if (a - i >= 3)
+                            {
+                                sender.sendMessage(ExpSkills.config.getString("skills." + current.get(i) + ".name") + " " + ExpSkills.config.getString("skills." + current.get(i + 1) + ".name") + " " + ExpSkills.config.getString("skills." + current.get(i + 2) + ".name"));
+                                i = i + 3;
+                            }
+                            else if (a - i == 2)
+                            {
+                                sender.sendMessage(ExpSkills.config.getString("skills." + current.get(i) + ".name") + " " + ExpSkills.config.getString("skills." + current.get(i + 1) + ".name"));
+                                i = i + 2;
+                            }
+                            else if (a - i == 1)
+                            {
+                                sender.sendMessage(ExpSkills.config.getString("skills." + current.get(i) + ".name"));
+                            }
+
+                        }
+                    }
+                    else
+                        sender.sendMessage(ExpSkills.lang.getString("error.notanyskillhe", "This player dont own any skill"));
                 }
                 if (p == null || PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
                 {
@@ -334,23 +346,17 @@ public class CommandManager implements CommandExecutor
                                 sender.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.pnotonline", "Player is not online"));
                                 return true;
                             }
-                            try
-                            {
-                                amount = Integer.parseInt(args[3]);
-                            }
-                            catch (NumberFormatException ex)
-                            {
-                                sender.sendMessage(ExpSkills.lang.getString("error.notvalid", "No valid argument"));
-                                return false;
-                            }
+
+                            amount = Integer.parseInt(args[3]);
+
                             if (args[2].equalsIgnoreCase("xp"))
                             {
-                                funcs.addXP(player, amount);
+                                funcs.setXP(player, player.getTotalExperience() + amount);
                                 sender.sendMessage(ExpSkills.lang.getString("success.done", "Done"));
                             }
                             else if (args[2].equalsIgnoreCase("level"))
                             {
-                                funcs.addLevel(player, amount);
+                                funcs.setLevel(player, funcs.getLevel(player) + amount);
                                 sender.sendMessage(ExpSkills.lang.getString("success.done", "Done"));
                             }
                             else if (args[2].equalsIgnoreCase("skill"))
@@ -371,15 +377,9 @@ public class CommandManager implements CommandExecutor
                         {
                             int amount;
                             Player player = funcs.getPlayer(args[1]);
-                            try
-                            {
+
                                 amount = Integer.parseInt(args[3]);
-                            }
-                            catch (NumberFormatException ex)
-                            {
-                                sender.sendMessage(ExpSkills.lang.getString("error.notvalid", "No valid argument"));
-                                return false;
-                            }
+                                
                             if (args[2].equalsIgnoreCase("xp"))
                             {
                                 funcs.setXP(player, amount);
@@ -397,13 +397,8 @@ public class CommandManager implements CommandExecutor
                             }
                         }
                         else
-                        {
                             sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
-                        }
-                        return true;
-                    }
-                    if (args[0].equalsIgnoreCase("reload"))
-                    {
+
                         return true;
                     }
                     if (args[0].equalsIgnoreCase("grant"))
@@ -420,14 +415,11 @@ public class CommandManager implements CommandExecutor
                                     sender.sendMessage(ExpSkills.lang.getString("error.skillnotfound", "Skill is not existing"));
                             }
                             else
-                            {
                                 sender.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.pnotonline", "Player is not online"));
-                            }
                         }
                         else
-                        {
                             sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
-                        }
+
                         return true;
                     }
                     if (args[0].equalsIgnoreCase("revoke"))
@@ -444,40 +436,39 @@ public class CommandManager implements CommandExecutor
                                     sender.sendMessage(ExpSkills.lang.getString("error.skillnotfound", "Skill is not existing"));
                             }
                             else
-                            {
                                 sender.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.pnotonline", "Player is not online"));
-                            }
                         }
                         else
-                        {
                             sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
-                        }
+                        
                         return true;
                     }
                     if (args[0].equalsIgnoreCase("reset"))
                     {
-
                         Player player = ExpSkills.server.getPlayerExact(args[1]);
                         if (player != null)
                         {
                             if (args.length == 2)
                             {
-                                funcs.reset(player);
+                                funcs.reset(player, "skill");
                                 sender.sendMessage(player.getName() + "'s " + ChatColor.RED + ExpSkills.lang.getString("success.reset", "skills were reset"));
                             }
-                            else
+                            else if (args.length == 3)
                             {
-                                sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
+                                if (args[2].equalsIgnoreCase("total") || args[2].equalsIgnoreCase("level"))
+                                    funcs.reset(player, args[2]);
+                                else
+                                    sender.sendMessage(ExpSkills.lang.getString("error.notvalid", "No valid argument"));
                             }
+                            else
+                                sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
                         }
                         else
                             sender.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.pnotfoundexact", "Player is not online. You need a exact match."));
                     }
                 }
                 else
-                {
                     return false;
-                }
             }
             return true;
 

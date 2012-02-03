@@ -7,8 +7,7 @@ import java.util.Set;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.ChatColor;
-import org.bukkit.World;
-import org.bukkit.command.CommandSender;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -20,21 +19,12 @@ public class funcs
 
     public static Player getPlayer(String string)
     {
-        Player player = ExpSkills.server.getPlayer(string);
-        return player;
+        return ExpSkills.server.getPlayer(string);
     }
 
-    public static void addXP(Player player, int exp)
+    public static OfflinePlayer getOfflinePlayer(String string)
     {
-        YamlConfiguration pconfig = FileManager.loadPF(player);
-        int i = player.getTotalExperience();
-        player.setTotalExperience(i + exp);
-
-        int newxp = player.getTotalExperience() - getXpatLevel(funcs.getLevel(player) - 1);
-
-        pconfig.set("experience", newxp);
-
-        FileManager.savePF(player, pconfig);
+        return ExpSkills.server.getOfflinePlayer(string);
     }
 
     public static void setXP(Player player, int exp)
@@ -52,18 +42,6 @@ public class funcs
     public static void setLevel(Player player, int level)
     {
         player.setTotalExperience(funcs.getXpatLevel(level));
-
-        YamlConfiguration pconfig = FileManager.loadPF(player);
-
-        int newxp = player.getTotalExperience();
-
-        pconfig.set("experience", newxp);
-        FileManager.savePF(player, pconfig);
-    }
-
-    public static void addLevel(Player player, int level)
-    {
-        player.setTotalExperience(funcs.getXpatLevel(funcs.getLevel(player) + level));
 
         YamlConfiguration pconfig = FileManager.loadPF(player);
 
@@ -94,7 +72,6 @@ public class funcs
 
             level = i - 1;
         }
-
         // default Formula 1.8.1
         if (formula == 1)
         {
@@ -155,7 +132,6 @@ public class funcs
 
             level = i - 1;
         }
-
         // default Formula 1.8.1
         if (formula == 1)
         {
@@ -209,7 +185,6 @@ public class funcs
             int xptoup = (int) value - exp;
             return xptoup;
         }
-
         if (formula == 1)
         {
             for (int i = 0; i <= level; i++)
@@ -247,7 +222,6 @@ public class funcs
             int xpatlevel = (int) value;
             return xpatlevel;
         }
-
         if (formula == 1)
         {
             for (int i = 0; i <= level; i++)
@@ -321,18 +295,18 @@ public class funcs
         return points;
     }
 
-    public static void addSkillPoints(Player player, double amount)
+    public static void addSkillPoints(Player player, int amount)
     {
         YamlConfiguration pconfig = FileManager.loadPF(player);
-        double atm = pconfig.getInt("skillpoints", 0);
 
-        pconfig.set("skillpoints", atm + amount);
+        pconfig.set("skillpoints", pconfig.getInt("skillpoints", 0) + amount);
         FileManager.savePF(player, pconfig);
     }
 
     public static void setSkillPoints(Player player, int amount)
     {
         YamlConfiguration pconfig = FileManager.loadPF(player);
+
         pconfig.set("skillpoints", amount);
         FileManager.savePF(player, pconfig);
     }
@@ -384,13 +358,18 @@ public class funcs
         String blockedskills = ExpSkills.lang.getString("general.blockedskills", "Blocked Skills");
         String neededskills = ExpSkills.lang.getString("general.neededskills", "Needed Skills");
         String possibleskills = ExpSkills.lang.getString("general.possibleskills", "Possible Skills");
+        int money = ExpSkills.config.getInt("skills." + key + ".money", 0);
+        int skillp = ExpSkills.config.getInt("skills." + key + ".skillpoints", 0);
+        String currency = ExpSkills.config.getString("general.currency", "$");
+
+        String skillname = ExpSkills.config.getString("skills." + key + ".name", null);
 
         if (costtype.equalsIgnoreCase("skillpoints"))
-            player.sendMessage(ChatColor.GOLD + Name + ": " + ExpSkills.config.getString("skills." + key + ".name", null) + " || " + costs + ": " + ExpSkills.config.getInt("skills." + key + ".skillpoints", 0) + skillpoints);
+            player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + skillp + skillpoints);
         else if (costtype.equalsIgnoreCase("money"))
-            player.sendMessage(ChatColor.GOLD + Name + ": " + ExpSkills.config.getString("skills." + key + ".name", null) + " || " + costs + ": " + ExpSkills.config.getInt("skills." + key + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$"));
+            player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + money + " " + currency);
         else if (costtype.equalsIgnoreCase("both"))
-            player.sendMessage(ChatColor.GOLD + Name + ": " + ExpSkills.config.getString("skills." + key + ".name", null) + " || " + costs + ": " + ExpSkills.config.getInt("skills." + key + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$") + " " + ExpSkills.config.getInt("skills." + key + ".skillpoints", 0) + skillpoints);
+            player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + money + " " + currency + " " + skillp);
         else
             player.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.error", "Error! Please contact Admin!"));
 
@@ -439,8 +418,7 @@ public class funcs
 
     public static boolean buySkill(String name, Player player)
     {
-        World map = player.getWorld();
-        String world = map.getName();
+        String world = player.getWorld().getName();
         String key = getSkillKey(name);
 
         if (key != null)
@@ -448,8 +426,6 @@ public class funcs
             List<String> earn = ExpSkills.config.getStringList("skills." + key + ".permissions_earn");
             List<String> earngrp = ExpSkills.config.getStringList("skills." + key + ".groups_earn");
             List<String> needgrp = ExpSkills.config.getStringList("skills." + key + ".groups_need");
-
-            // TO-DO Skilllevels!
 
             if (buyable(name, player, true))
             {
@@ -544,15 +520,13 @@ public class funcs
                 if (w == 0 && needs != null)
                 {
                     if (type.equalsIgnoreCase("or"))
-                    {
                         if (current != null)
                             for (String a : needs)
                                 if (current.contains(a))
                                     skills = true;
-                    }
-                    else if (type.equalsIgnoreCase("all") && current != null)
-                        if (current.containsAll(needs))
-                            skills = true;
+                                else if (type.equalsIgnoreCase("all") && current != null)
+                                    if (current.containsAll(needs))
+                                        skills = true;
                 }
 
                 else if (w == 0)
@@ -564,29 +538,22 @@ public class funcs
 
         // perm check
         if (need != null)
-        {
             for (String node : need)
-            {
                 if (!PermissionsSystem.hasPermission(player.getWorld().getName(), player.getName(), node))
                 {
                     if (msg)
                         player.sendMessage(ExpSkills.lang.getString("error.permissions", "You don't have the needed permissions"));
                     return false;
                 }
-            }
-        }
+
         if (needgrp != null)
-        {
             for (String group : needgrp)
-            {
                 if (!PermissionsSystem.hasGroup(player.getName(), group, player.getWorld().getName()))
                 {
                     if (msg)
                         player.sendMessage(ExpSkills.lang.getString("error.group", "You don't have the needed group"));
                     return false;
                 }
-            }
-        }
 
         if (skills == false)
         {
@@ -610,14 +577,12 @@ public class funcs
         }
         // skillcap check
         if (ExpSkills.config.getInt("general.skill_cap", 0) != 0 && current != null)
-        {
             if (ExpSkills.config.getInt("general.skill_cap", 0) <= (current.size() - pconfig.getInt("extra_skills", 0)))
             {
                 if (msg)
                     player.sendMessage(ExpSkills.lang.getString("error.skillcap", "You have reached the skillcap"));
                 return false;
             }
-        }
         // own check
         if ((rented != null && current != null) && (current.contains(skill) || rented.contains(skill)))
         {
@@ -638,132 +603,55 @@ public class funcs
         String skillpoints = ExpSkills.lang.getString("general.skillpoints", "Skillpoints");
         String Name = ExpSkills.lang.getString("general.name", "Name");
         String desc = ExpSkills.lang.getString("general.description", "Description");
+        String currency = ExpSkills.config.getString("general.currency", "$");
 
         player.sendMessage(ChatColor.AQUA + "====================================");
 
         Set<String> skills = getSkills();
 
-        for (String skill : skills)// int i = 0; i <= num; i++)
+        for (String skill : skills)
         {
             List<String> list = ExpSkills.config.getStringList("skills." + skill + ".categories");
 
             if ((list != null && (list.contains(filter)) || filter == null))
-            {
                 if (buyable(getSkillName(skill), player, false))
                 {
                     if (b >= (page - 1) * 5 && a < 5)
                     {
                         String costtype = ExpSkills.config.getString("skills." + skill + ".cost_type", "both");
+                        String skillname = ExpSkills.config.getString("skills." + skill + ".name", null);
+                        int skillp = ExpSkills.config.getInt("skills." + skill + ".skillpoints", 0);
+                        int money = ExpSkills.config.getInt("skills." + skill + ".money", 0);
+                        
                         if (costtype.equalsIgnoreCase("skillpoints"))
-                        {
-                            player.sendMessage(ChatColor.GOLD + Name + ": " + ExpSkills.config.getString("skills." + skill + ".name", null) + " || " + costs + ": " + ExpSkills.config.getInt("skills." + skill + ".skillpoints", 0) + skillpoints);
-                        }
+                            player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + skillp + skillpoints);
                         else if (costtype.equalsIgnoreCase("money"))
-                        {
-                            player.sendMessage(ChatColor.GOLD + Name + ": " + ExpSkills.config.getString("skills." + skill + ".name", null) + " || " + costs + ": " + ExpSkills.config.getInt("skills." + skill + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$"));
-                        }
+                            player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + money + " " + currency);
                         else if (costtype.equalsIgnoreCase("both"))
-                        {
-                            player.sendMessage(ChatColor.GOLD + Name + ": " + ExpSkills.config.getString("skills." + skill + ".name", null) + " || " + costs + ": " + ExpSkills.config.getInt("skills." + skill + ".money", 0) + " " + ExpSkills.config.getString("general.currency", "$") + " " + ExpSkills.config.getInt("skills." + skill + ".skillpoints", 0) + skillpoints);
-                        }
+                            player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + money + " " + currency + " " + skillp + skillpoints);
                         else
                         {
                             player.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.error", "Error! Please contact Admin!"));
                             player.sendMessage(ChatColor.AQUA + "====================================");
                         }
+                        
                         player.sendMessage(ChatColor.GOLD + desc + ": " + ExpSkills.config.getString("skills." + skill + ".description", null));
                         player.sendMessage(ChatColor.AQUA + "====================================");
                         a++;
                     }
                     b++;
                 }
-            }
-        }
-    }
-
-    public static void getCurrent(Player player)
-    {
-        YamlConfiguration pconfig = FileManager.loadPF(player);
-
-        List<String> skills = pconfig.getStringList("skills");
-
-        player.sendMessage(ExpSkills.lang.getString("general.ownedskills", "Owned skills") + ":");
-        if (skills != null)
-        {
-            int a = skills.size();
-            if (a >= 0)
-            {
-                for (int i = 0; i < a;)
-                {
-                    if (a - i >= 3)
-                    {
-                        player.sendMessage(ExpSkills.config.getString("skills." + skills.get(i) + ".name") + " " + ExpSkills.config.getString("skills." + skills.get(i + 1) + ".name") + " " + ExpSkills.config.getString("skills." + skills.get(i + 2) + ".name"));
-                        i = i + 3;
-                    }
-                    else if (a - i == 2)
-                    {
-                        player.sendMessage(ExpSkills.config.getString("skills." + skills.get(i) + ".name") + " " + ExpSkills.config.getString("skills." + skills.get(i + 1) + ".name"));
-                        i = i + 2;
-                    }
-                    else if (a - i == 1)
-                    {
-                        player.sendMessage(ExpSkills.config.getString("skills." + skills.get(i) + ".name"));
-                        return;
-                    }
-                }
-            }
-        }
-        else
-        {
-            player.sendMessage(ExpSkills.lang.getString("error.notanyskillyou", "You dont own any skill"));
         }
     }
 
     public static Set<String> getRented(Player player)
     {
-        YamlConfiguration rented = FileManager.loadRented();
-        Set<String> skills = rented.getConfigurationSection(player.getName()).getKeys(false);
-
-        return skills;
+        return FileManager.loadRented().getConfigurationSection(player.getName()).getKeys(false);
     }
 
-    public static void getCurrent(Player player, CommandSender sender)
+    public static List<String> getCurrent(Player player)
     {
-        YamlConfiguration pconfig = FileManager.loadPF(player);
-
-        List<String> skills = pconfig.getStringList("skills");
-
-        sender.sendMessage(player.getName() + "'s " + ExpSkills.lang.getString("general.skills", "skills") + ":");
-        if (skills != null)
-        {
-            int a = skills.size();
-            if (a >= 0)
-            {
-                for (int i = 0; i < a;)
-                {
-                    if (a - i >= 3)
-                    {
-                        sender.sendMessage(ExpSkills.config.getString("skills." + skills.get(i) + ".name") + " " + ExpSkills.config.getString("skills." + skills.get(i + 1) + ".name") + " " + ExpSkills.config.getString("skills." + skills.get(i + 2) + ".name"));
-                        i = i + 3;
-                    }
-                    else if (a - i == 2)
-                    {
-                        sender.sendMessage(ExpSkills.config.getString("skills." + skills.get(i) + ".name") + " " + ExpSkills.config.getString("skills." + skills.get(i + 1) + ".name"));
-                        i = i + 2;
-                    }
-                    else if (a - i == 1)
-                    {
-                        sender.sendMessage(ExpSkills.config.getString("skills." + skills.get(i) + ".name"));
-                        return;
-                    }
-                }
-
-            }
-        }
-        else
-        {
-            sender.sendMessage(ExpSkills.lang.getString("error.notanyskillhe", "This player dont own any skill"));
-        }
+        return FileManager.loadPF(player).getStringList("skills");
     }
 
     public static List<String> getCats()
@@ -831,7 +719,7 @@ public class funcs
         return true;
     }
 
-    public static void reset(Player p)
+    public static void reset(Player p, String mode)
     {
         YamlConfiguration pconfig = FileManager.loadPF(p);
 
@@ -839,7 +727,7 @@ public class funcs
         List<String> perms = new ArrayList<String>();
         List<String> groups = new ArrayList<String>();
 
-        if (skills != null)
+        if (skills != null && !mode.equalsIgnoreCase("level"))
         {
             for (int i = 0; i < skills.size(); i++)
             {
@@ -865,6 +753,13 @@ public class funcs
             pconfig.set("skills", null);
 
             FileManager.savePF(p, pconfig);
+        }
+
+        if (mode.equalsIgnoreCase("total") || mode.equalsIgnoreCase("level"))
+        {
+            setLevel(p, 0);
+            setSkillPoints(p, 0);
+            setXP(p, 0);
         }
     }
 

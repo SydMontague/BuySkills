@@ -1,6 +1,6 @@
 command:
     help: "get help!"
-    stats: "Show's your stats"
+    stats: "Show's stats"
     list: "list avaible skills"
     info: "get information about a skill"
     buy: "buy a skill"

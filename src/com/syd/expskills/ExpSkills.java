@@ -30,7 +30,7 @@ public class ExpSkills extends JavaPlugin
     public final ServerEntityListener entityListener = new ServerEntityListener(this);
     public final ServerPlayerListener playerListener = new ServerPlayerListener(this);
     private CommandManager command = new CommandManager(this);
-    public final PermissionsSystem permSys = new PermissionsSystem(this);
+    public final PermissionsSystem permSys = new PermissionsSystem();
     protected static Method method;
     protected static Economy economy = null;
 
@@ -38,7 +38,6 @@ public class ExpSkills extends JavaPlugin
     {
         PluginDescriptionFile pdffile = this.getDescription();
         server = getServer();
-        command = new CommandManager(this);
         // initializing config.yml
         config = getConfig();
 
