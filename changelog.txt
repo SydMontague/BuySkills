@@ -1,3 +1,8 @@
+Version 0.8_Beta2
+- further code cleanup and refactor
+- updated /exp reset to support 2 new params: total and level
+- added /exp rent <renttime> which can't be higher than renttime:
+
 Version 0.8_beta1
 - updated for CraftBukkit-1.1-R1 (#1818)
 - added message on levelup

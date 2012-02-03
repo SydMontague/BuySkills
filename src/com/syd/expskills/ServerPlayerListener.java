@@ -54,11 +54,11 @@ public class ServerPlayerListener implements Listener
             List<String> perms = new ArrayList<String>();
 
             if (skills != null)
-                for (int i = 0; i < skills.size(); i++)
+                for (String skill : skills)
                 {
-                    List<String> perm = ExpSkills.config.getStringList("skills." + skills.get(i) + ".permissions_earn");
-                    for (int a = 0; a < perm.size(); a++)
-                        perms.add(perm.get(a));
+                    List<String> perm = ExpSkills.config.getStringList("skills." + skill + ".permissions_earn");
+                    for (String node : perm)
+                        perms.add(node);
                 }
 
             PermissionAttachment attachment = player.addAttachment(plugin);

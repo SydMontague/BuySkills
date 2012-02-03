@@ -8,10 +8,6 @@ import org.bukkit.entity.Player;
 
 public class FileManager
 {
-    public FileManager(ExpSkills plugin)
-    {
-    }
-
     public static void createPlayerFile(Player player)
     {
         final String dir = "plugins" + File.separator + "ExpSkills" + File.separator + "player" + File.separator;
@@ -20,7 +16,6 @@ public class FileManager
         new File(dir).mkdir();
 
         if (!PlayerFile.exists())
-        {
             try
             {
                 PlayerFile.createNewFile();
@@ -29,7 +24,7 @@ public class FileManager
             {
                 e.printStackTrace();
             }
-        }
+
     }
 
     public static YamlConfiguration loadPF(Player player)
@@ -61,7 +56,6 @@ public class FileManager
         new File(dir).mkdir();
 
         if (!treefile.exists())
-        {
             try
             {
                 treefile.createNewFile();
@@ -70,7 +64,7 @@ public class FileManager
             {
                 e.printStackTrace();
             }
-        }
+        
         YamlConfiguration skilltree = YamlConfiguration.loadConfiguration(treefile);
 
         return skilltree;
@@ -82,7 +76,6 @@ public class FileManager
         final File rentfile = new File(dir + "rented.yml");
 
         if (!rentfile.exists())
-        {
             try
             {
                 rentfile.createNewFile();
@@ -91,7 +84,7 @@ public class FileManager
             {
                 e.printStackTrace();
             }
-        }
+
         YamlConfiguration rented = YamlConfiguration.loadConfiguration(rentfile);
 
         return rented;

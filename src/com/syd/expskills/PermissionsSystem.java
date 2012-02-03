@@ -13,6 +13,8 @@ import com.nijikokun.bukkit.Permissions.Permissions;
 import de.bananaco.permissions.worlds.HasPermission;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
+//REPLACE/EXTEND WITH VAULT
+
 public class PermissionsSystem
 {
     protected static PermissionHandler perm = null;
@@ -21,10 +23,6 @@ public class PermissionsSystem
     protected static boolean permBukkit = false;
     protected static boolean GM = false;
     static CommandSender sender;
-
-    public PermissionsSystem(ExpSkills plugin)
-    {
-    }
 
     public void start()
     {
@@ -43,18 +41,11 @@ public class PermissionsSystem
             permBukkit = true;
             sender = ExpSkills.server.getConsoleSender();
         }
-        // if there is no PEX/Permissions bukkit check for Permissions
+        // if there is no PEX/PermissionsBukkit check for Permissions
         else if (ExpSkills.server.getPluginManager().getPlugin("Permissions") != null)
         {
             ExpSkills.log.info("[ExpSkills] " + "Permissions detected");
 
-            // Check if SuperpermBridge is used (should never be called)
-            if (ExpSkills.server.getPluginManager().getPlugin("PermissionsBukkit") != null)
-            {
-                ExpSkills.log.warning("[ExpSkills] PermissionsBukkit detected");
-                ExpSkills.log.warning("[ExpSkills] usage of groups_need node is not possible!");
-                permBukkit = true;
-            }
             Permissions permissions = (Permissions) ExpSkills.server.getPluginManager().getPlugin("Permissions");
             perm = permissions.getHandler();
         }
@@ -72,26 +63,16 @@ public class PermissionsSystem
         }
     }
 
-    // update Permission Methods for more function
-
     public static void addPermission(String world, String player, String node)
     {
         if (permEX != null)
-        {
             permEX.getUser(player).addPermission(node);
-        }
         else if (perm != null)
-        {
             perm.addUserPermission(world, player, node);
-        }
         else if (bPerm != null)
-        {
             bPerm.getPermissionSet(world).addPlayerNode(node, player);
-        }
         else if (permBukkit == true)
-        {
             ExpSkills.server.dispatchCommand(sender, "permissions player setperm " + player + " " + node);
-        }
         else
         {
             Player p = ExpSkills.server.getPlayerExact(player);
@@ -103,21 +84,13 @@ public class PermissionsSystem
     public static void removePermission(String world, String player, String node)
     {
         if (permEX != null)
-        {
             permEX.getUser(player).removePermission(node);
-        }
         else if (perm != null)
-        {
             perm.removeUserPermission(world, player, node);
-        }
         else if (bPerm != null)
-        {
             bPerm.getPermissionSet(world).removePlayerNode(node, player);
-        }
         else if (permBukkit == true)
-        {
             ExpSkills.server.dispatchCommand(sender, "permissions player unsetperm " + player + " " + node);
-        }
         else
         {
             Player p = ExpSkills.server.getPlayerExact(player);
@@ -129,21 +102,11 @@ public class PermissionsSystem
     public static boolean hasPermission(String world, String player, String node)
     {
         if (permEX != null)
-        {
             return permEX.getUser(player).has(node);
-        }
         else if (perm != null)
-        {
             return perm.has(world, player, node);
-        }
         else if (bPerm != null)
-        {
             return HasPermission.has(player, world, node);
-        }
-        else if (permBukkit == true)
-        {
-            return ExpSkills.server.getPlayerExact(player).hasPermission(node);
-        }
         else
             return ExpSkills.server.getPlayerExact(player).hasPermission(node);
     }
@@ -151,59 +114,39 @@ public class PermissionsSystem
     public static void addGroup(String world, String player, String group)
     {
         if (permEX != null)
-        {
             permEX.getUser(player).addGroup(group);
-        }
         else if (perm != null)
-        {
             ExpSkills.log.info("Can't use groups of Permissions");
-        }
         else if (bPerm != null)
-        {
             bPerm.getPermissionSet(world).addGroup(player, group);
-        }
         else if (permBukkit == true)
-        {
             ExpSkills.server.dispatchCommand(sender, "permissions player addgroup " + player + " " + group);
-            ExpSkills.log.info("permissions addgroup " + player + " " + group);
-        }
+        else
+            ExpSkills.log.info("You don't use a group supported permissions plugin!");
     }
 
     public static void removeGroup(String world, String player, String group)
     {
         if (permEX != null)
-        {
             permEX.getUser(player).removeGroup(group);
-        }
         else if (perm != null)
-        {
             ExpSkills.log.info("Can't use groups of Permissions");
-        }
         else if (bPerm != null)
-        {
             bPerm.getPermissionSet(world).removeGroup(player, group);
-        }
         else if (permBukkit == true)
-        {
-
             ExpSkills.server.dispatchCommand(sender, "permissions player removegroup " + player + " " + group);
-        }
+        else
+            ExpSkills.log.info("You don't use a group supported permissions plugin!");
     }
 
     public static boolean hasGroup(String player, String group, String world)
     {
         if (permEX != null)
-        {
             return permEX.getUser(player).inGroup(group);
-        }
         else if (perm != null)
-        {
             return perm.inGroup(player, group);
-        }
         else if (bPerm != null)
-        {
             return bPerm.getPermissionSet(world).hasGroup(player, group);
-        }
         else if (permBukkit == true)
         {
             ExpSkills.log.info("Can't use groups of PermissionsBukkit");

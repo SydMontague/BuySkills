@@ -1,6 +1,6 @@
 name: ExpSkills
 main: com.syd.expskills.ExpSkills
-version: 0.8_beta1
+version: 0.8_beta2
 description: Buy Skills with XP, money and more!
 softdepend: [Vault, Register]
 commands:
