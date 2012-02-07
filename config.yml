@@ -1,0 +1,15 @@
+version: 0.8
+general:
+  skillpoint_modifier: 2.0
+  currency: Dollar
+  use_skilltree: false
+  use_economy: false
+  formula: 0
+  formula_a: 0
+  formula_b: 0
+  formula_c: 0
+  formula_d: 0
+  formula_e: 0
+  skill_cap: 1
+  updatetime: 300
+skills:

@@ -64,7 +64,7 @@ public class FileManager
             {
                 e.printStackTrace();
             }
-        
+
         YamlConfiguration skilltree = YamlConfiguration.loadConfiguration(treefile);
 
         return skilltree;

@@ -2,8 +2,6 @@ package com.syd.expskills;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
@@ -33,25 +31,26 @@ public class ExpSkills extends JavaPlugin
     public final PermissionsSystem permSys = new PermissionsSystem();
     protected static Method method;
     protected static Economy economy = null;
+    PluginDescriptionFile pdffile = this.getDescription();
 
     public void onEnable()
     {
-        PluginDescriptionFile pdffile = this.getDescription();
         server = getServer();
-        // initializing config.yml
+
+        // start of config.yml
         config = getConfig();
 
         String configversion = config.getString("version");
         String version = pdffile.getVersion();
-        if (!configversion.equalsIgnoreCase(version))
+
+        if (configversion.equalsIgnoreCase(version))
         {
-            if (config.get("version") == null)
+            if (configversion.equals("0.7.0_RC2"))
             {
-                config.addDefault("general.skillpoint_modifier", 2.0);
-                config.addDefault("general.currency", "Dollar");
-                config.addDefault("general.use_skilltree", false);
-                config.addDefault("general.use_economy", false);
                 config.addDefault("general.updatetime", 6000);
+            }
+            else if (configversion.equals("0.6.4"))
+            {
                 config.addDefault("general.formula", 0);
                 config.addDefault("general.formula_a", 0);
                 config.addDefault("general.formula_b", 0);
@@ -59,56 +58,14 @@ public class ExpSkills extends JavaPlugin
                 config.addDefault("general.formula_d", 0);
                 config.addDefault("general.formula_e", 0);
                 config.addDefault("general.skill_cap", 0);
-                config.addDefault("skills.skill0.name", "testskill");
-                config.addDefault("skills.skill0.description", "Just a example");
-                config.addDefault("skills.skill0.info", "This Skill was created to show Admins how to use this configfile!");
-                config.addDefault("skills.skill0.cost_type", "both");
-                config.addDefault("skills.skill0.skillpoints", 2);
-                config.addDefault("skills.skill0.money", 1000);
-                List<String> need = new ArrayList<String>();
-                need.add("foo.bar");
-                config.addDefault("skills.skill0.permissions_need", need);
-                List<String> earn = new ArrayList<String>();
-                earn.add("bar.foo");
-                earn.add("bar.bar");
-                config.addDefault("skills.skill0.permissions_earn", earn);
-                List<String> needgrp = new ArrayList<String>();
-                needgrp.add("builder");
-                config.addDefault("skills.skill0.groups_need", needgrp);
-                List<String> earngrp = new ArrayList<String>();
-                earngrp.add("mod");
-                earngrp.add("admin");
-                config.addDefault("skills.skill0.groups_earn", earngrp);
-                config.addDefault("skills.skill0.revoke_need_groups", false);
-                List<String> cat = new ArrayList<String>();
-                cat.add("exaple");
-                config.addDefault("skills.skill0.categories", cat);
-                config.addDefault("skills.skill0.level_need", 0);
+                config.addDefault("general.updatetime", 6000);
             }
-            else if (configversion.equalsIgnoreCase(version))
-            {
-                if (configversion.equals("0.7.0_RC2"))
-                {
-                    config.addDefault("general.updatetime", 6000);
-                }
-                else if (configversion.equals("0.6.4"))
-                {
-                    config.addDefault("general.formula", 0);
-                    config.addDefault("general.formula_a", 0);
-                    config.addDefault("general.formula_b", 0);
-                    config.addDefault("general.formula_c", 0);
-                    config.addDefault("general.formula_d", 0);
-                    config.addDefault("general.formula_e", 0);
-                    config.addDefault("general.skill_cap", 0);
-                    config.addDefault("general.updatetime", 6000);
-                }
-            }
-
-            config.addDefault("version", pdffile.getVersion());
-            config.set("version", pdffile.getVersion());
-            config.options().copyDefaults(true);
-            saveConfig();
         }
+
+        config.addDefault("version", pdffile.getVersion());
+        config.set("version", pdffile.getVersion());
+        config.options().copyDefaults(true);
+        saveConfig();
         // end of config.yml
 
         // start of lang.yml
@@ -128,12 +85,13 @@ public class ExpSkills extends JavaPlugin
         }
         else
             lang = YamlConfiguration.loadConfiguration(langfile);
+        // end of lang.yml
 
         // start skilltree
         if (config.getBoolean("general.use_skilltree", false) == true)
             skilltree = FileManager.loadSkilltree();
 
-        // start rented
+        // start rented timer
         long delay = config.getLong("general.updatetime", 6000);
 
         server.getScheduler().scheduleAsyncRepeatingTask(this, new Runnable()
@@ -146,7 +104,9 @@ public class ExpSkills extends JavaPlugin
 
         // initialize events and commands
         getCommand("exp").setExecutor(command);
-        registerEvent();
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(playerListener, this);
+        pm.registerEvents(entityListener, this);
 
         // start permissions section
         permSys.start();
@@ -166,6 +126,7 @@ public class ExpSkills extends JavaPlugin
             }
             if (ExpSkills.server.getPluginManager().getPlugin("Register") != null)
             {
+                // is a Runnable needed? Scheduled for removal!
                 this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable()
                 {
                     public void run()
@@ -182,19 +143,13 @@ public class ExpSkills extends JavaPlugin
                 }, 0L);
             }
         }
+        // end economy section
+
         log.info("[ExpSkills] " + pdffile.getName() + " " + pdffile.getVersion() + " enabled");
     }
 
     public void onDisable()
     {
-        PluginDescriptionFile pdfFile = this.getDescription();
-        log.info("[ExpSkills] " + pdfFile.getName() + " disabled");
-    }
-
-    private void registerEvent()
-    {
-        PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(playerListener, this);
-        pm.registerEvents(entityListener, this);
+        log.info("[ExpSkills] " + pdffile.getName() + " " + pdffile.getVersion() + " disabled");
     }
 }

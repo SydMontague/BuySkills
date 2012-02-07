@@ -561,7 +561,7 @@ public class funcs
                 player.sendMessage(ExpSkills.lang.getString("error.skilltree", "You dont follow the skilltree!"));
             return false;
         }
-        // playtime check        
+        // playtime check
         if (neededtime > pconfig.getInt("onlinetime", 0))
         {
             if (msg)
@@ -634,7 +634,7 @@ public class funcs
                             player.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.error", "Error! Please contact Admin!"));
                             player.sendMessage(ChatColor.AQUA + "====================================");
                         }
- 
+
                         player.sendMessage(ChatColor.GOLD + desc + ": " + ExpSkills.config.getString("skills." + skill + ".description", null));
                         player.sendMessage(ChatColor.AQUA + "====================================");
                         a++;
@@ -648,7 +648,7 @@ public class funcs
     {
         if (FileManager.loadRented().getKeys(false).contains(player.getName()))
             return FileManager.loadRented().getConfigurationSection(player.getName()).getKeys(false);
-        else 
+        else
             return null;
     }
 
