@@ -14,7 +14,7 @@ public class CommandManager implements CommandExecutor
     public CommandManager(ExpSkills instance)
     {
     }
- 
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
     {
@@ -177,7 +177,7 @@ public class CommandManager implements CommandExecutor
                 {
                     int page;
                     if (p != null)
-                        if (args.length == 3)
+                        if (args.length == 4)
                         {
                             try
                             {
@@ -190,7 +190,31 @@ public class CommandManager implements CommandExecutor
                             }
                             String filter = args[2];
 
-                            funcs.getList(page, filter, p);
+                            if (args[3].equalsIgnoreCase("all"))
+                                funcs.getList(page, filter, p, true);
+                            else
+                                funcs.getList(page, filter, p, false);
+
+                            return true;
+                        }
+                        else if (args.length == 3)
+                        {
+                            String filter;
+                            try
+                            {
+                                page = Integer.parseInt(args[1]);
+                                filter = args[2];
+                            }
+                            catch (NumberFormatException ex)
+                            {
+                                page = 1;
+                                filter = args[1];
+                            }
+
+                            if (args[2].equalsIgnoreCase("all"))
+                                funcs.getList(page, filter, p, true);
+                            else
+                                funcs.getList(page, filter, p, false);
                             return true;
                         }
                         else if (args.length == 2)
@@ -201,16 +225,16 @@ public class CommandManager implements CommandExecutor
                             }
                             catch (NumberFormatException ex)
                             {
-                                funcs.getList(1, args[1], p);
+                                funcs.getList(1, args[1], p, false);
                                 return true;
                             }
 
-                            funcs.getList(page, null, p);
+                            funcs.getList(page, null, p, false);
                             return true;
                         }
                         else if (args.length == 1)
                         {
-                            funcs.getList(1, null, p);
+                            funcs.getList(1, null, p, false);
                             return true;
                         }
                         else
@@ -296,12 +320,18 @@ public class CommandManager implements CommandExecutor
                 }
                 if (args[0].equalsIgnoreCase("current"))
                 {
-                    List<String> current;
+                    List<String> current = null;
 
                     if (p != null && args.length == 1)
                         current = funcs.getCurrent(p);
                     else if (args.length == 2)
-                        current = funcs.getCurrent((Player) funcs.getOfflinePlayer(args[1]));
+                    {
+                        Player player = funcs.getPlayer(args[1]);
+                        if (player != null)
+                            current = funcs.getCurrent(player);
+                        else
+                            sender.sendMessage("Player not online");
+                    }
                     else
                     {
                         sender.sendMessage("Consoles dont have skills!");
@@ -330,6 +360,7 @@ public class CommandManager implements CommandExecutor
                                 i = a;
                             }
                         }
+                        return true;
                     }
                     else
                         sender.sendMessage(ExpSkills.lang.getString("error.notanyskillhe", "This player dont own any skill"));
@@ -339,12 +370,12 @@ public class CommandManager implements CommandExecutor
                     List<String> rented = new ArrayList<String>();
 
                     if (p != null && args.length == 1)
-                        for(String skill : funcs.getRented(p))
+                        for (String skill : funcs.getRented(p))
                             rented.add(skill);
                     else if (args.length == 2)
-                        for(String skill : funcs.getRented((Player) funcs.getOfflinePlayer(args[1])))
+                        for (String skill : funcs.getRented((Player) funcs.getOfflinePlayer(args[1])))
                             rented.add(skill);
-                                
+
                     else
                     {
                         sender.sendMessage("Consoles dont have skills!");
@@ -423,8 +454,8 @@ public class CommandManager implements CommandExecutor
                             int amount;
                             Player player = funcs.getPlayer(args[1]);
 
-                                amount = Integer.parseInt(args[3]);
-                                
+                            amount = Integer.parseInt(args[3]);
+
                             if (args[2].equalsIgnoreCase("xp"))
                             {
                                 funcs.setXP(player, amount);
@@ -485,7 +516,7 @@ public class CommandManager implements CommandExecutor
                         }
                         else
                             sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
-                        
+
                         return true;
                     }
                     if (args[0].equalsIgnoreCase("reset"))

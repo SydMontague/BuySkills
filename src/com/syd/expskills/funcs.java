@@ -491,7 +491,7 @@ public class funcs
 
         Set<String> rented = getRented(player);
 
-        int neededtime = ExpSkills.config.getInt("skills." + skill + ".time", 0);
+        int neededtime = ExpSkills.config.getInt("skills." + skill + ".time", 0) * 1000;
 
         YamlConfiguration skilltree = FileManager.loadSkilltree();
         YamlConfiguration pconfig = FileManager.loadPF(player);
@@ -561,8 +561,8 @@ public class funcs
                 player.sendMessage(ExpSkills.lang.getString("error.skilltree", "You dont follow the skilltree!"));
             return false;
         }
-        // playtime check
-        if (neededtime > pconfig.getInt("onlineTime", 0))
+        // playtime check        
+        if (neededtime > pconfig.getInt("onlinetime", 0))
         {
             if (msg)
                 player.sendMessage(ExpSkills.lang.getString("error.playtime", "You have not enought playtime"));
@@ -577,7 +577,7 @@ public class funcs
         }
         // skillcap check
         if (ExpSkills.config.getInt("general.skill_cap", 0) != 0 && current != null)
-            if (ExpSkills.config.getInt("general.skill_cap", 0) <= (current.size() - pconfig.getInt("extra_skills", 0)))
+            if (ExpSkills.config.getInt("general.skill_cap", 0) < (current.size() - pconfig.getInt("extra_skills", 0) + 1))
             {
                 if (msg)
                     player.sendMessage(ExpSkills.lang.getString("error.skillcap", "You have reached the skillcap"));
@@ -594,7 +594,7 @@ public class funcs
         return true;
     }
 
-    public static void getList(int page, String filter, Player player)
+    public static void getList(int page, String filter, Player player, boolean all)
     {
         int a = 0;
         int b = 0;
@@ -613,8 +613,8 @@ public class funcs
         {
             List<String> list = ExpSkills.config.getStringList("skills." + skill + ".categories");
 
-            if ((list != null && (list.contains(filter)) || filter == null))
-                if (buyable(getSkillName(skill), player, false))
+            if ((list != null && ((list.contains(filter)) || filter == null || filter.equalsIgnoreCase("all"))))
+                if (buyable(getSkillName(skill), player, false) || all || (filter != null && filter.equalsIgnoreCase("all")))
                 {
                     if (b >= (page - 1) * 5 && a < 5)
                     {
@@ -624,11 +624,11 @@ public class funcs
                         int money = ExpSkills.config.getInt("skills." + skill + ".money", 0);
 
                         if (costtype.equalsIgnoreCase("skillpoints"))
-                            player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + skillp + skillpoints);
+                            player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + skillp + " " + skillpoints);
                         else if (costtype.equalsIgnoreCase("money"))
                             player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + money + " " + currency);
                         else if (costtype.equalsIgnoreCase("both"))
-                            player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + money + " " + currency + " " + skillp + skillpoints);
+                            player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + money + " " + currency + " " + skillp + " " + skillpoints);
                         else
                         {
                             player.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.error", "Error! Please contact Admin!"));
@@ -792,5 +792,6 @@ public class funcs
         skills.remove(key);
 
         pconfig.set("skills", skills);
+        FileManager.savePF(player, pconfig);
     }
 }
