@@ -31,10 +31,10 @@ public class ExpSkills extends JavaPlugin
     public final PermissionsSystem permSys = new PermissionsSystem();
     protected static Method method;
     protected static Economy economy = null;
-    PluginDescriptionFile pdffile = this.getDescription();
 
     public void onEnable()
     {
+        PluginDescriptionFile pdffile = getDescription();
         server = getServer();
 
         // start of config.yml
@@ -150,6 +150,7 @@ public class ExpSkills extends JavaPlugin
 
     public void onDisable()
     {
+        PluginDescriptionFile pdffile = getDescription();
         log.info("[ExpSkills] " + pdffile.getName() + " " + pdffile.getVersion() + " disabled");
     }
 }
