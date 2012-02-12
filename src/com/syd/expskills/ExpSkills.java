@@ -110,8 +110,8 @@ public class ExpSkills extends JavaPlugin
 
         // start permissions section
         permSys.start();
-
-        // start economy section
+        
+        // start economy section  
         if ((config.getBoolean("general.use_economy", false)))
         {
             if (ExpSkills.server.getPluginManager().getPlugin("Vault") != null)
@@ -124,7 +124,7 @@ public class ExpSkills extends JavaPlugin
                     log.info("[ExpSkills] " + economy.getName() + " hooked");
                 }
             }
-            if (ExpSkills.server.getPluginManager().getPlugin("Register") != null)
+            else if (ExpSkills.server.getPluginManager().getPlugin("Register") != null)
             {
                 // is a Runnable needed? Scheduled for removal!
                 this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable()

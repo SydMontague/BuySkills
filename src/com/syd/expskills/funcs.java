@@ -16,6 +16,7 @@ import com.nijikokun.register.payment.Method.MethodAccount;
 public class funcs
 {
     static Economy vault = ExpSkills.economy;
+    
 
     public static Player getPlayer(String string)
     {
@@ -584,7 +585,7 @@ public class funcs
                 return false;
             }
         // own check
-        if ((rented != null && current != null) && (current.contains(skill) || rented.contains(skill)))
+        if ((rented != null && rented.contains(skill)) || (current != null && current.contains(skill)))
         {
             if (msg)
                 player.sendMessage(ExpSkills.lang.getString("error.alreadyown", "You already own this skill!"));

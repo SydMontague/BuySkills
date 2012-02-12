@@ -1,22 +1,28 @@
-Version 0.8_Beta2
-- further code cleanup and refactor
-- updated /exp reset to support 2 new params: total and level
-- added /exp rent <renttime> which can't be higher than renttime:
+Version 0.9_beta1
+- added Vault Permission Support (untested)
+- fixed a possible conflict between Vault and Register
+- fixed error in "already own skill" check
 
-Version 0.8_beta1
-- updated for CraftBukkit-1.1-R1 (#1818)
+Version 0.8.1
+- fixed NPE on startup
+
+Version 0.8.0
+- updated to CraftBukkit-1.1-R3 (#1846)
+- general code cleanup and refactoring of source code
+- added Vault Economy Support
+- added playtime counter and playtime as requirement for skills
+- added rental of skills
+- added customizable languagefile
 - added message on levelup
-- added renting of skills
-- possibly fixed lag in /exp reset
-- added Playtime info to /exp stats
-- started to remove the skill0, skill1, skillx limitation
-- added time: node in skill config to allow skillpurchase only with a certain playtime
-- fixed /exp list
-- code cleanup
-- set default cost_type: to both
-- updated bPermissions  - it's now fully supported
-- updated PermissionsBukkit - only hasGroup is not supported by now
-- added Vault support
+- updated support for bPermissions - it should work with all features now!
+- updated support for PermissionsBukkit - only group_need is not supported as of now
+- updated /exp list -> "/exp list all" or "/exp list <filter>" all shows you all skills no matter if it's buyable for you
+- updated /exp reset -> "/exp reset level" resets only level and exp, "/exp reset total" resets exp and skills, "/exp reset" resets only skills
+- updated 'cost_type:', it does only matter for "/exp list" and "/exp info" anymore. It will now always take the amounts of money/skillpoints given in the config
+- removed the skill0, skill1, skillx limitation, you can now name you skills as you want
+- fixed /exp list to show only buyable skills now
+- fixed a bug in /exp reset which could cause lag
+- maybe a few more fixes due the cleanup
 
 Version 0.7
 - added choice between old, new or own Level formula

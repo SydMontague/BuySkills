@@ -1,8 +1,12 @@
 package com.syd.expskills;
 
+import net.milkbowl.vault.permission.Permission;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
@@ -22,12 +26,25 @@ public class PermissionsSystem
     protected static boolean permBukkit = false;
     protected static boolean GM = false;
     static CommandSender sender;
-
+    public static Permission permission = null;
+    
     public void start()
     {
+        
+
+        if (ExpSkills.server.getPluginManager().getPlugin("Vault") != null)
+        {
+            RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+            if (permissionProvider != null) {
+                permission = permissionProvider.getProvider();
+            }
+            
+            ExpSkills.log.info("[ExpSkills] " + permission.getName() + " hooked");
+        }
+        
         // add GroupManager
         // check for PEX since it's not emulated and will work fine
-        if (ExpSkills.server.getPluginManager().getPlugin("PermissionsEx") != null)
+        else if (ExpSkills.server.getPluginManager().getPlugin("PermissionsEx") != null)
         {
             permEX = PermissionsEx.getPermissionManager();
             ExpSkills.log.info("[ExpSkills] " + "PermissionsEX detected");
@@ -64,7 +81,11 @@ public class PermissionsSystem
 
     public static void addPermission(String world, String player, String node)
     {
-        if (permEX != null)
+        Player p = ExpSkills.server.getPlayerExact(player);
+        
+        if (permission != null)
+            permission.playerAdd(p, node);
+        else if (permEX != null)
             permEX.getUser(player).addPermission(node);
         else if (perm != null)
             perm.addUserPermission(world, player, node);
@@ -74,7 +95,6 @@ public class PermissionsSystem
             ExpSkills.server.dispatchCommand(sender, "permissions player setperm " + player + " " + node);
         else
         {
-            Player p = ExpSkills.server.getPlayerExact(player);
             PermissionAttachment attachment = p.addAttachment(ExpSkills.server.getPluginManager().getPlugin("ExpSkills"));
             attachment.setPermission(node, true);
         }
@@ -82,7 +102,10 @@ public class PermissionsSystem
 
     public static void removePermission(String world, String player, String node)
     {
-        if (permEX != null)
+        Player p = ExpSkills.server.getPlayerExact(player);
+        if (permission != null)
+            permission.playerRemove(p, node);
+        else if (permEX != null)
             permEX.getUser(player).removePermission(node);
         else if (perm != null)
             perm.removeUserPermission(world, player, node);
@@ -92,7 +115,6 @@ public class PermissionsSystem
             ExpSkills.server.dispatchCommand(sender, "permissions player unsetperm " + player + " " + node);
         else
         {
-            Player p = ExpSkills.server.getPlayerExact(player);
             PermissionAttachment attachment = p.addAttachment(ExpSkills.plugin);
             attachment.unsetPermission(node);
         }
@@ -100,20 +122,24 @@ public class PermissionsSystem
 
     public static boolean hasPermission(String world, String player, String node)
     {
-        if (permEX != null)
+        Player p = ExpSkills.server.getPlayerExact(player);
+        
+        if (permission != null)
+            return permission.has(p, node);        
+        else if (permEX != null)
             return permEX.getUser(player).has(node);
         else if (perm != null)
             return perm.has(world, player, node);
-        /*
-         * else if (bPerm != null) return HasPermission.has(player, world,
-         * node);
-         */
         else
-            return ExpSkills.server.getPlayerExact(player).hasPermission(node);
+            return p.hasPermission(node);
     }
 
     public static void addGroup(String world, String player, String group)
     {
+        Player p = ExpSkills.server.getPlayerExact(player);
+        
+        if (permission != null)
+            permission.playerAddGroup(p, group);
         if (permEX != null)
             permEX.getUser(player).addGroup(group);
         else if (perm != null)
@@ -128,6 +154,10 @@ public class PermissionsSystem
 
     public static void removeGroup(String world, String player, String group)
     {
+        Player p = ExpSkills.server.getPlayerExact(player);
+    
+        if (permission != null)
+            permission.playerRemoveGroup(p, group);
         if (permEX != null)
             permEX.getUser(player).removeGroup(group);
         else if (perm != null)
@@ -142,6 +172,10 @@ public class PermissionsSystem
 
     public static boolean hasGroup(String player, String group, String world)
     {
+        Player p = ExpSkills.server.getPlayerExact(player);
+        
+        if (permission != null)
+            return permission.playerInGroup(p, group);
         if (permEX != null)
             return permEX.getUser(player).inGroup(group);
         else if (perm != null)
