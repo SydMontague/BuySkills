@@ -20,7 +20,7 @@ public class ServerEntityListener implements Listener
     public void onEntityDeath(EntityDeathEvent event)
     {
         // modify ORB drop on player death
-        if (event.getEntity() instanceof Player)
+        if (event.getEntity() instanceof Player && ExpSkills.config.getBoolean("general.change_expdrop", false))
         {
             PlayerDeathEvent death = (PlayerDeathEvent) event;
             Player p = (Player) event.getEntity();

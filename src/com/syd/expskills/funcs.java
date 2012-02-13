@@ -16,7 +16,7 @@ import com.nijikokun.register.payment.Method.MethodAccount;
 public class funcs
 {
     static Economy vault = ExpSkills.economy;
-    
+    static boolean savexp = ExpSkills.config.getBoolean("general.change_expdrop");
 
     public static Player getPlayer(String string)
     {
@@ -30,26 +30,32 @@ public class funcs
 
     public static void setXP(Player player, int exp)
     {
-        YamlConfiguration pconfig = FileManager.loadPF(player);
         player.setTotalExperience(exp);
 
-        int newxp = player.getTotalExperience() - getXpatLevel(funcs.getLevel(player) - 1);
+        if (savexp)
+        {
+            YamlConfiguration pconfig = FileManager.loadPF(player);
+            int newxp = player.getTotalExperience() - getXpatLevel(funcs.getLevel(player) - 1);
 
-        pconfig.set("experience", newxp);
+            pconfig.set("experience", newxp);
 
-        FileManager.savePF(player, pconfig);
+            FileManager.savePF(player, pconfig);
+        }
     }
 
     public static void setLevel(Player player, int level)
     {
         player.setTotalExperience(funcs.getXpatLevel(level));
 
-        YamlConfiguration pconfig = FileManager.loadPF(player);
+        if (savexp)
+        {
+            YamlConfiguration pconfig = FileManager.loadPF(player);
 
-        int newxp = player.getTotalExperience();
+            int newxp = player.getTotalExperience();
 
-        pconfig.set("experience", newxp);
-        FileManager.savePF(player, pconfig);
+            pconfig.set("experience", newxp);
+            FileManager.savePF(player, pconfig);
+        }
     }
 
     public static int getLevel(Player player)

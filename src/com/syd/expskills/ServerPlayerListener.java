@@ -45,7 +45,7 @@ public class ServerPlayerListener implements Listener
 
         YamlConfiguration pfile = FileManager.loadPF(player);
 
-        if (player.getTotalExperience() < pfile.getInt("experience", 0))
+        if (player.getTotalExperience() < pfile.getInt("experience", 0) && ExpSkills.config.getBoolean("general.change_expdrop", false))
             player.setTotalExperience(pfile.getInt("experience", 0));
 
         if (PermissionsSystem.GM == false && PermissionsSystem.permBukkit == false && PermissionsSystem.bPerm == null && PermissionsSystem.perm == null && PermissionsSystem.permEX == null)
@@ -75,18 +75,21 @@ public class ServerPlayerListener implements Listener
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event)
     {
-        final Player p = event.getPlayer();
-        final YamlConfiguration pfile = FileManager.loadPF(p);
-        final int xp = pfile.getInt("experience");
-
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
+        if (ExpSkills.config.getBoolean("general.change_expdrop", false))
         {
-            public void run()
+            final Player p = event.getPlayer();
+            final YamlConfiguration pfile = FileManager.loadPF(p);
+            final int xp = pfile.getInt("experience");
+
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
             {
-                p.setTotalExperience(xp);
-                p.setLevel(0);
-            }
-        }, 1L);
+                public void run()
+                {
+                    p.setTotalExperience(xp);
+                    p.setLevel(0);
+                }
+            }, 1L);
+        }
     }
 
     @EventHandler

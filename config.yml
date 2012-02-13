@@ -1,4 +1,4 @@
-version: 0.8
+version: 0.9_beta3
 general:
   skillpoint_modifier: 2.0
   currency: Dollar
@@ -12,4 +12,5 @@ general:
   formula_e: 0
   skill_cap: 1
   updatetime: 300
+  change_expdrop: true
 skills:

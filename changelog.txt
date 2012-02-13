@@ -1,3 +1,6 @@
+Version 0.9_beta3
+- added change_expdrop: true/false value in configfile to disable the orbdrop and exp saving (compatibility)
+
 Version 0.9_beta2
 - added "/skill" and "/skills" alias for "/exp"
 
