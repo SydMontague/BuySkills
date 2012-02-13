@@ -1,3 +1,6 @@
+Version 0.9_beta2
+- added "/skill" and "/skills" alias for "/exp"
+
 Version 0.9_beta1
 - added Vault Permission Support (untested)
 - fixed a possible conflict between Vault and Register

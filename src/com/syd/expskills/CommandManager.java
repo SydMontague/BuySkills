@@ -11,8 +11,10 @@ import org.bukkit.entity.Player;
 
 public class CommandManager implements CommandExecutor
 {
+    ExpSkills plugin;
     public CommandManager(ExpSkills instance)
     {
+        plugin = instance;
     }
 
     @Override

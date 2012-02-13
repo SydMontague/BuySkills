@@ -1,11 +1,11 @@
 name: ExpSkills
 main: com.syd.expskills.ExpSkills
-version: 0.9_beta1
+version: 0.9_beta2
 description: Buy Skills with XP, money and more!
 softdepend: [Vault, Register]
 commands:
     exp:
-        description: Gives out XP and current Level
+        description: Gives out XP and current Level    
         usage: |
             /exp help [command] - get help for this plugin
             /exp stats - show your stats
@@ -15,6 +15,7 @@ commands:
             /exp rent <skill> <time> - rent a skill
             /exp current - show your bought skills
             /exp rented - show's your rented skills
+        aliases: [skills, skill]
 permissions:
   expskills.use:
     description: Use ExpSkills
