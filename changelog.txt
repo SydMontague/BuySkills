@@ -1,3 +1,7 @@
+Version 0.9_beta4
+- added worlds: <list> node for skills to buy skills only for special worlds
+- added rentcost, rentdiscount, rentcost_min and rentable/buyable nodes for skills
+
 Version 0.9_beta3
 - added change_expdrop: true/false value in configfile to disable the orbdrop and exp saving (compatibility)
 

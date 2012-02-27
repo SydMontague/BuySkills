@@ -1,5 +1,7 @@
 package com.syd.expskills;
 
+import java.util.List;
+
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
@@ -27,21 +29,21 @@ public class PermissionsSystem
     protected static boolean GM = false;
     static CommandSender sender;
     public static Permission permission = null;
-    
+
     public void start()
     {
-        
 
         if (ExpSkills.server.getPluginManager().getPlugin("Vault") != null)
         {
             RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-            if (permissionProvider != null) {
+            if (permissionProvider != null)
+            {
                 permission = permissionProvider.getProvider();
             }
-            
+
             ExpSkills.log.info("[ExpSkills] " + permission.getName() + " hooked");
         }
-        
+
         // add GroupManager
         // check for PEX since it's not emulated and will work fine
         else if (ExpSkills.server.getPluginManager().getPlugin("PermissionsEx") != null)
@@ -82,7 +84,7 @@ public class PermissionsSystem
     public static void addPermission(String world, String player, String node)
     {
         Player p = ExpSkills.server.getPlayerExact(player);
-        
+
         if (permission != null)
             permission.playerAdd(p, node);
         else if (permEX != null)
@@ -100,6 +102,15 @@ public class PermissionsSystem
         }
     }
 
+    public static void addPermission(List<String> worlds, String player, String node)
+    {
+        if (permission != null)
+            for (String world : worlds)
+                permission.playerAdd(ExpSkills.server.getWorld(world), player, node);
+        else
+            ExpSkills.log.info("This operation is only supported with Vault");
+    }
+    
     public static void removePermission(String world, String player, String node)
     {
         Player p = ExpSkills.server.getPlayerExact(player);
@@ -123,9 +134,9 @@ public class PermissionsSystem
     public static boolean hasPermission(String world, String player, String node)
     {
         Player p = ExpSkills.server.getPlayerExact(player);
-        
+
         if (permission != null)
-            return permission.has(p, node);        
+            return permission.has(p, node);
         else if (permEX != null)
             return permEX.getUser(player).has(node);
         else if (perm != null)
@@ -137,7 +148,7 @@ public class PermissionsSystem
     public static void addGroup(String world, String player, String group)
     {
         Player p = ExpSkills.server.getPlayerExact(player);
-        
+
         if (permission != null)
             permission.playerAddGroup(p, group);
         if (permEX != null)
@@ -152,13 +163,22 @@ public class PermissionsSystem
             ExpSkills.log.info("You don't use a group supported permissions plugin!");
     }
 
+    public static void addGroup(List<String> worlds, String player, String group)
+    {
+        if (permission != null)
+            for (String world : worlds)
+                permission.playerAddGroup(ExpSkills.server.getWorld(world), player, group);
+        else
+            ExpSkills.log.info("This operation is only supported with Vault");
+    }
+
     public static void removeGroup(String world, String player, String group)
     {
         Player p = ExpSkills.server.getPlayerExact(player);
-    
+
         if (permission != null)
             permission.playerRemoveGroup(p, group);
-        if (permEX != null)
+        else if (permEX != null)
             permEX.getUser(player).removeGroup(group);
         else if (perm != null)
             ExpSkills.log.info("Can't use groups of Permissions");
@@ -173,10 +193,10 @@ public class PermissionsSystem
     public static boolean hasGroup(String player, String group, String world)
     {
         Player p = ExpSkills.server.getPlayerExact(player);
-        
+
         if (permission != null)
             return permission.playerInGroup(p, group);
-        if (permEX != null)
+        else if (permEX != null)
             return permEX.getUser(player).inGroup(group);
         else if (perm != null)
             return perm.inGroup(player, group);

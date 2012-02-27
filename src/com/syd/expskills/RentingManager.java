@@ -49,7 +49,7 @@ public class RentingManager
         if (time == -1 || time > ExpSkills.config.getInt("skills." + key + ".renttime", 0))
             time = ExpSkills.config.getInt("skills." + key + ".renttime", 0);
 
-        if (funcs.buySkill(skill, player))
+        if (funcs.rentSkill(skill, player, time))
         {
             rented.set(player.getName() + "." + key + ".time", System.currentTimeMillis() + time * 1000);
 

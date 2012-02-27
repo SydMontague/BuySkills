@@ -47,6 +47,8 @@ error:
     notvalid: "No valid argument"
     toomuchlessarguments: "Too much/less arguments"
     skillnotfound: "Skill not found"
+    skillnotbuyable: "This skill can not be bought."
+    skillnotrentable: "This skill can not be rented."
     pnotfoundexact: "Player not found. You need a exact match."
     permissions: "You dont have the needed Permissions"    
     group: "You dont have the needed group"

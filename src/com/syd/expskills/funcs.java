@@ -423,67 +423,182 @@ public class funcs
         }
     }
 
-    public static boolean buySkill(String name, Player player)
+    public static boolean rentSkill(String name, Player player, double time)
     {
-        String world = player.getWorld().getName();
         String key = getSkillKey(name);
 
         if (key != null)
         {
-            List<String> earn = ExpSkills.config.getStringList("skills." + key + ".permissions_earn");
-            List<String> earngrp = ExpSkills.config.getStringList("skills." + key + ".groups_earn");
-            List<String> needgrp = ExpSkills.config.getStringList("skills." + key + ".groups_need");
-
-            if (buyable(name, player, true))
+            if (ExpSkills.config.getBoolean("skills." + key + ".rentable", true))
             {
-                int skill = ExpSkills.config.getInt("skills." + key + ".skillpoints", 0);
-                int costs = ExpSkills.config.getInt("skills." + key + ".money", 0);
-
-                boolean money = true;
-                if (ExpSkills.method != null)
+                if (buyable(name, player, true))
                 {
-                    MethodAccount account = ExpSkills.method.getAccount(player.getName());
-                    if (!account.hasEnough(costs))
-                        money = false;
-                }
-                else if (vault != null)
-                    if (!vault.has(player.getName(), costs))
-                        money = false;
+                    List<String> earn = ExpSkills.config.getStringList("skills." + key + ".permissions_earn");
+                    List<String> earngrp = ExpSkills.config.getStringList("skills." + key + ".groups_earn");
+                    List<String> needgrp = ExpSkills.config.getStringList("skills." + key + ".groups_need");
+                    List<String> worlds = ExpSkills.config.getStringList("skills." + key + ".worlds");
 
-                if (getSkillPoints(player) >= skill && money)
-                {
+                    int skill = ExpSkills.config.getInt("skills." + key + ".skillpoints", 0);
+                    double costs = ExpSkills.config.getInt("skills." + key + ".rentcost", 0);
+                    double mincosts = ExpSkills.config.getInt("skills." + key + ".rentcost_min", 0);
+                    double renttime = ExpSkills.config.getInt("skills." + key + ".renttime", 0);
+                    boolean discount = ExpSkills.config.getBoolean("skills." + key + ".rentdiscount", false);
+
+                    boolean money = true;
+
+                    if (discount)
+                    {
+                        costs = costs * (time / renttime);
+
+                        if (costs < mincosts)
+                            costs = mincosts;
+                    }
+
                     if (ExpSkills.method != null)
                     {
                         MethodAccount account = ExpSkills.method.getAccount(player.getName());
-                        account.subtract(costs);
+                        if (!account.hasEnough(costs))
+                            money = false;
                     }
                     else if (vault != null)
-                        vault.withdrawPlayer(player.getName(), costs);
+                        if (!vault.has(player.getName(), costs))
+                            money = false;
 
-                    if (earn != null)
-                        for (String node : earn)
-                            PermissionsSystem.addPermission(world, player.getName(), node);
+                    if (getSkillPoints(player) >= skill && money)
+                    {
+                        if (ExpSkills.method != null)
+                        {
+                            MethodAccount account = ExpSkills.method.getAccount(player.getName());
+                            account.subtract(costs);
+                        }
+                        else if (vault != null)
+                            vault.withdrawPlayer(player.getName(), costs);
 
-                    if (earngrp != null)
-                        for (String group : earngrp)
-                            PermissionsSystem.addGroup(world, player.getName(), group);
+                        if (worlds != null)
+                        {
+                            if (earn != null)
+                                for (String node : earn)
+                                    PermissionsSystem.addPermission(worlds, player.getName(), node);
 
-                    if (needgrp != null && ExpSkills.config.getBoolean("skills." + key + ".revoke_need_groups", false))
-                        for (String group : needgrp)
-                            PermissionsSystem.removeGroup(world, player.getName(), group);
+                            if (earngrp != null)
+                                for (String group : earngrp)
+                                    PermissionsSystem.addGroup(worlds, player.getName(), group);
+                        }
+                        else
+                        {
+                            String world = player.getWorld().getName();
+                            if (earn != null)
+                                for (String node : earn)
+                                    PermissionsSystem.addPermission(world, player.getName(), node);
 
-                    return true;
+                            if (earngrp != null)
+                                for (String group : earngrp)
+                                    PermissionsSystem.addGroup(world, player.getName(), group);
+                        }
+
+                        if (needgrp != null && ExpSkills.config.getBoolean("skills." + key + ".revoke_need_groups", false))
+                            for (String group : needgrp)
+                                PermissionsSystem.removeGroup(player.getWorld().getName(), player.getName(), group);
+
+                        return true;
+                    }
+
+                    if (getSkillPoints(player) <= skill)
+                        player.sendMessage(ExpSkills.lang.getString("error.notenoughtskillpoints", "You dont have enought skillpoints"));
+                    if (!money)
+                        player.sendMessage(ExpSkills.lang.getString("error.notenoughtmoney", "You dont have enought money"));
+
+                    return false;
                 }
-
-                if (getSkillPoints(player) <= skill)
-                    player.sendMessage(ExpSkills.lang.getString("error.notenoughtskillpoints", "You dont have enought skillpoints"));
-                if (!money)
-                    player.sendMessage(ExpSkills.lang.getString("error.notenoughtmoney", "You dont have enought money"));
-
                 return false;
             }
-            else
-                return false;
+            player.sendMessage(ExpSkills.lang.getString("error.skillnotrentable", "This skill can not be rented."));
+            return false;
+        }
+        player.sendMessage(ExpSkills.lang.getString("error.skillnotfound", "Skill not found"));
+        return false;
+    }
+
+    public static boolean buySkill(String name, Player player)
+    {
+        String key = getSkillKey(name);
+
+        if (key != null)
+        {
+            if (ExpSkills.config.getBoolean("skills." + key + ".buyable", true))
+            {
+                if (buyable(name, player, true))
+                {
+                    List<String> earn = ExpSkills.config.getStringList("skills." + key + ".permissions_earn");
+                    List<String> earngrp = ExpSkills.config.getStringList("skills." + key + ".groups_earn");
+                    List<String> needgrp = ExpSkills.config.getStringList("skills." + key + ".groups_need");
+                    List<String> worlds = ExpSkills.config.getStringList("skills." + key + ".worlds");
+
+                    int skill = ExpSkills.config.getInt("skills." + key + ".skillpoints", 0);
+                    int costs = ExpSkills.config.getInt("skills." + key + ".money", 0);
+
+                    boolean money = true;
+                    if (ExpSkills.method != null)
+                    {
+                        MethodAccount account = ExpSkills.method.getAccount(player.getName());
+                        if (!account.hasEnough(costs))
+                            money = false;
+                    }
+                    else if (vault != null)
+                        if (!vault.has(player.getName(), costs))
+                            money = false;
+
+                    if (getSkillPoints(player) >= skill && money)
+                    {
+                        if (ExpSkills.method != null)
+                        {
+                            MethodAccount account = ExpSkills.method.getAccount(player.getName());
+                            account.subtract(costs);
+                        }
+                        else if (vault != null)
+                            vault.withdrawPlayer(player.getName(), costs);
+
+                        if (worlds != null)
+                        {
+                            if (earn != null)
+                                for (String node : earn)
+                                    PermissionsSystem.addPermission(worlds, player.getName(), node);
+
+                            if (earngrp != null)
+                                for (String group : earngrp)
+                                    PermissionsSystem.addGroup(worlds, player.getName(), group);
+                        }
+                        else
+                        {
+                            String world = player.getWorld().getName();
+                            if (earn != null)
+                                for (String node : earn)
+                                    PermissionsSystem.addPermission(world, player.getName(), node);
+
+                            if (earngrp != null)
+                                for (String group : earngrp)
+                                    PermissionsSystem.addGroup(world, player.getName(), group);
+                        }
+
+                        if (needgrp != null && ExpSkills.config.getBoolean("skills." + key + ".revoke_need_groups", false))
+                            for (String group : needgrp)
+                                PermissionsSystem.removeGroup(player.getWorld().getName(), player.getName(), group);
+
+                        return true;
+                    }
+
+                    if (getSkillPoints(player) <= skill)
+                        player.sendMessage(ExpSkills.lang.getString("error.notenoughtskillpoints", "You dont have enought skillpoints"));
+                    if (!money)
+                        player.sendMessage(ExpSkills.lang.getString("error.notenoughtmoney", "You dont have enought money"));
+
+                    return false;
+                }
+                else
+                    return false;
+            }
+            player.sendMessage(ExpSkills.lang.getString("error.skillnotbuyable", "This skill can not be bought."));
+            return false;
         }
         player.sendMessage(ExpSkills.lang.getString("error.skillnotfound", "Skill not found"));
         return false;
