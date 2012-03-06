@@ -47,24 +47,25 @@ public class ExpSkills extends JavaPlugin
         {
             if (configversion.equals("0.7.0_RC2"))
             {
-                config.addDefault("general.updatetime", 6000);
+                config.set("general.updatetime", 6000);
             }
             else if (configversion.equals("0.6.4"))
             {
-                config.addDefault("general.formula", 0);
-                config.addDefault("general.formula_a", 0);
-                config.addDefault("general.formula_b", 0);
-                config.addDefault("general.formula_c", 0);
-                config.addDefault("general.formula_d", 0);
-                config.addDefault("general.formula_e", 0);
-                config.addDefault("general.skill_cap", 0);
-                config.addDefault("general.updatetime", 6000);
+                config.set("general.formula", 0);
+                config.set("general.formula_a", 0);
+                config.set("general.formula_b", 0);
+                config.set("general.formula_c", 0);
+                config.set("general.formula_d", 0);
+                config.set("general.formula_e", 0);
+                config.set("general.skill_cap", 0);
+                config.set("general.updatetime", 6000);
             }
         }
 
-        config.addDefault("version", pdffile.getVersion());
         config.set("version", pdffile.getVersion());
-        config.options().copyDefaults(true);
+        config.set("version", pdffile.getVersion());
+        if (config.getString("version") != null)
+            config.options().copyDefaults(true);
         saveConfig();
         // end of config.yml
 

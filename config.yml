@@ -1,4 +1,4 @@
-version: 0.9_beta3
+version: 0.8.2
 general:
   skillpoint_modifier: 2.0
   currency: Dollar
@@ -14,3 +14,31 @@ general:
   updatetime: 300
   change_expdrop: true
 skills:
+    testskill: #the key of this skill
+        name: testskill #Display name of you skill
+        description: Just an example #a short text for /xp list
+        info: Haha #a more advanced info for /xp info <skill>
+        cost_type: both #what is charged - money/skillpoints/both - only for /exp list and /exp info
+        skillpoints: 2 #how many skillpoints are charged for this skill
+        money: 1000 #how much money is charged for this skill
+        permissions_need: #the needed permissions to buy this skill
+            - 'foobar.bar'
+        permissions_earn: #the earned permissions when buying this skill
+            - 'foo.bar'
+            - 'bar.foo'
+        groups_need: #the player needs to be in this group to buy this skill
+            - builder
+        groups_earn: #the player gets this group when he buy this skills
+            - mod
+            - admin
+        revoke_need_groups: false #revokes all groups_need groups after buying this skill
+        level_need: 0 #the level needed to buy this skill
+        time: 60 #the playtime in seconds which are needed to buy this skill
+        buyable: true #is this skill buyable
+        rentable: true #is this skill rentable
+        rentcost: 100 #how much money is charged for renting this skill at max
+        rentcost_min: 50 #how much money will be charged at least when renting this skill
+        rentdiscount: true #will the player get a discount when he uses a lower time
+        renttime: 300 #the default and max renttime for this skill (no discount if you rent for lesser time)        
+        categories: #for /xp list <page> <filter> use
+             - 'example'

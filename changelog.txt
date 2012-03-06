@@ -1,17 +1,12 @@
-Version 0.9_beta4
+Version 0.8.2
 - added worlds: <list> node for skills to buy skills only for special worlds
 - added rentcost, rentdiscount, rentcost_min and rentable/buyable nodes for skills
-
-Version 0.9_beta3
 - added change_expdrop: true/false value in configfile to disable the orbdrop and exp saving (compatibility)
-
-Version 0.9_beta2
 - added "/skill" and "/skills" alias for "/exp"
-
-Version 0.9_beta1
 - added Vault Permission Support (untested)
 - fixed a possible conflict between Vault and Register
 - fixed error in "already own skill" check
+- fixed a few NPEs
 
 Version 0.8.1
 - fixed NPE on startup
