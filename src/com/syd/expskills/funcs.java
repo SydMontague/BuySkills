@@ -327,8 +327,7 @@ public class funcs
 
     public static Set<String> getSkills()
     {
-        Set<String> list = ExpSkills.config.getConfigurationSection("skills").getKeys(false);
-        return list;
+        return ExpSkills.config.getConfigurationSection("skills").getKeys(false);
     }
 
     public static String getSkillKey(String name)
@@ -383,7 +382,7 @@ public class funcs
         player.sendMessage(ChatColor.GOLD + ExpSkills.config.getString("skills." + key + ".info"));
         player.sendMessage(ChatColor.GOLD + neededlevel + ": " + ExpSkills.config.getInt("skills." + key + ".level_need", 0) + " || " + skilllevel + ": " + ExpSkills.config.getInt("skills." + key + ".skill_level", 0));
 
-        if (ExpSkills.config.getBoolean("general.use_skilltree", false))
+        if (ExpSkills.config.getBoolean("general.use_skilltree", false) && ExpSkills.skilltree.getConfigurationSection("skilltree") != null)
         {
             YamlConfiguration skilltree = FileManager.loadSkilltree();
             List<String> illegal = skilltree.getStringList("skilltree." + key + ".skill_illegal");
@@ -621,7 +620,7 @@ public class funcs
         boolean skills = true;
 
         // check skilltree
-        if (ExpSkills.config.getBoolean("general.use_skilltree", false))
+        if (ExpSkills.config.getBoolean("general.use_skilltree", false) && skilltree.getConfigurationSection("skilltree") != null)
         {
             if (skilltree.getConfigurationSection("skilltree").getKeys(false).contains(skill))
             {
@@ -654,7 +653,7 @@ public class funcs
                 else if (w == 0)
                     skills = true;
             }
-            else if (!skilltree.getConfigurationSection("skilltree").getKeys(false).contains(skill))
+            else 
                 skills = true;
         }
 
@@ -731,39 +730,40 @@ public class funcs
 
         Set<String> skills = getSkills();
 
-        for (String skill : skills)
-        {
-            List<String> list = ExpSkills.config.getStringList("skills." + skill + ".categories");
+        if (skills != null)
+            for (String skill : skills)
+            {
+                List<String> list = ExpSkills.config.getStringList("skills." + skill + ".categories");
 
-            if ((list != null && ((list.contains(filter)) || filter == null || filter.equalsIgnoreCase("all"))))
-                if (buyable(getSkillName(skill), player, false) || all || (filter != null && filter.equalsIgnoreCase("all")))
-                {
-                    if (b >= (page - 1) * 5 && a < 5)
+                if ((list != null && ((list.contains(filter)) || filter == null || filter.equalsIgnoreCase("all"))))
+                    if (buyable(getSkillName(skill), player, false) || all || (filter != null && filter.equalsIgnoreCase("all")))
                     {
-                        String costtype = ExpSkills.config.getString("skills." + skill + ".cost_type", "both");
-                        String skillname = ExpSkills.config.getString("skills." + skill + ".name", null);
-                        int skillp = ExpSkills.config.getInt("skills." + skill + ".skillpoints", 0);
-                        int money = ExpSkills.config.getInt("skills." + skill + ".money", 0);
-
-                        if (costtype.equalsIgnoreCase("skillpoints"))
-                            player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + skillp + " " + skillpoints);
-                        else if (costtype.equalsIgnoreCase("money"))
-                            player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + money + " " + currency);
-                        else if (costtype.equalsIgnoreCase("both"))
-                            player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + money + " " + currency + " " + skillp + " " + skillpoints);
-                        else
+                        if (b >= (page - 1) * 5 && a < 5)
                         {
-                            player.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.error", "Error! Please contact Admin!"));
-                            player.sendMessage(ChatColor.AQUA + "====================================");
-                        }
+                            String costtype = ExpSkills.config.getString("skills." + skill + ".cost_type", "both");
+                            String skillname = ExpSkills.config.getString("skills." + skill + ".name", null);
+                            int skillp = ExpSkills.config.getInt("skills." + skill + ".skillpoints", 0);
+                            int money = ExpSkills.config.getInt("skills." + skill + ".money", 0);
 
-                        player.sendMessage(ChatColor.GOLD + desc + ": " + ExpSkills.config.getString("skills." + skill + ".description", null));
-                        player.sendMessage(ChatColor.AQUA + "====================================");
-                        a++;
+                            if (costtype.equalsIgnoreCase("skillpoints"))
+                                player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + skillp + " " + skillpoints);
+                            else if (costtype.equalsIgnoreCase("money"))
+                                player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + money + " " + currency);
+                            else if (costtype.equalsIgnoreCase("both"))
+                                player.sendMessage(ChatColor.GOLD + Name + ": " + skillname + " || " + costs + ": " + money + " " + currency + " " + skillp + " " + skillpoints);
+                            else
+                            {
+                                player.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.error", "Error! Please contact Admin!"));
+                                player.sendMessage(ChatColor.AQUA + "====================================");
+                            }
+
+                            player.sendMessage(ChatColor.GOLD + desc + ": " + ExpSkills.config.getString("skills." + skill + ".description", null));
+                            player.sendMessage(ChatColor.AQUA + "====================================");
+                            a++;
+                        }
+                        b++;
                     }
-                    b++;
-                }
-        }
+            }
     }
 
     public static Set<String> getRented(Player player)

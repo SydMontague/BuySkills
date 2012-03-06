@@ -88,7 +88,7 @@ public class ExpSkills extends JavaPlugin
         // end of lang.yml
 
         // start skilltree
-        if (config.getBoolean("general.use_skilltree", false) == true)
+        if (config.getBoolean("general.use_skilltree", false))
             skilltree = FileManager.loadSkilltree();
 
         // start rented timer
