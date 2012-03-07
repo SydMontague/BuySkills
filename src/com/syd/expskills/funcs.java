@@ -265,6 +265,17 @@ public class funcs
 
         return h + "h " + min + "min " + s + "s";
     }
+    
+    /**
+     * Only for internal use
+     * @param player
+     * @return online time
+     */
+    public static long getPlayTimeLong(Player player)
+    {
+        return FileManager.loadPF(player).getLong("onlinetime", 0);
+    }
+    
 
     public static void updatePlaytime(Player player)
     {
