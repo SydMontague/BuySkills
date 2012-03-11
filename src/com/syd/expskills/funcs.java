@@ -671,7 +671,7 @@ public class funcs
         // perm check
         if (need != null)
             for (String node : need)
-                if (!PermissionsSystem.hasPermission(player.getWorld().getName(), player.getName(), node))
+                if (!player.hasPermission(node))
                 {
                     if (msg)
                         player.sendMessage(ExpSkills.lang.getString("error.permissions", "You don't have the needed permissions"));

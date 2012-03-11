@@ -131,27 +131,13 @@ public class PermissionsSystem
         }
     }
 
-    public static boolean hasPermission(String world, String player, String node)
-    {
-        Player p = ExpSkills.server.getPlayerExact(player);
-
-        if (permission != null)
-            return permission.has(p, node);
-        else if (permEX != null)
-            return permEX.getUser(player).has(node);
-        else if (perm != null)
-            return perm.has(world, player, node);
-        else
-            return p.hasPermission(node);
-    }
-
     public static void addGroup(String world, String player, String group)
     {
         Player p = ExpSkills.server.getPlayerExact(player);
-
+        
         if (permission != null)
             permission.playerAddGroup(p, group);
-        if (permEX != null)
+        else if (permEX != null)
             permEX.getUser(player).addGroup(group);
         else if (perm != null)
             ExpSkills.log.info("Can't use groups of Permissions");

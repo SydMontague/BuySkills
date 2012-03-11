@@ -1,5 +1,5 @@
 Version 0.8.3_beta1
-- just something for me ;)
+- some changes in permissions implementation
 
 Version 0.8.2
 - added worlds: <list> node for skills to buy skills only for special worlds

@@ -1,6 +1,8 @@
 name: ExpSkills
 main: com.syd.expskills.ExpSkills
-version: 0.8.2
+version: 0.8.3_beta1
+author: SydMontague
+dev-url: http://dev.bukkit.org/server-mods/expskills/
 description: Buy Skills with XP, money and more!
 softdepend: [Vault, Register]
 commands:
@@ -19,7 +21,8 @@ commands:
 permissions:
   expskills.use:
     description: Use ExpSkills
-    default: true
+    default: false
   expskills.admin:
     description: Use Admin Commands
     default: op
+    

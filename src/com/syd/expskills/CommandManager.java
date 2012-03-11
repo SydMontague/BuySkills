@@ -27,7 +27,7 @@ public class CommandManager implements CommandExecutor
         if (sender instanceof Player)
             p = (Player) sender;
 
-        if (p == null || PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.use") || PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+        if (p == null || p.hasPermission("expskills.use") || p.hasPermission("expskills.admin"))
         {
             if (cmd.getName().equalsIgnoreCase("exp"))
             {
@@ -45,7 +45,7 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage("/exp buy <skill> - " + ExpSkills.lang.getString("command.buy", "buy a skill"));
                         sender.sendMessage("/exp rent <skill> - " + ExpSkills.lang.getString("command.rent", "rent a skill"));
                         sender.sendMessage("/exp current - " + ExpSkills.lang.getString("command.current", "show's your current skills"));
-                        if (PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                        if (p == null || p.hasPermission("expskills.admin"))
                         {
                             sender.sendMessage("===== Admin Commands =====");
                             sender.sendMessage("/exp stats <player> - " + ExpSkills.lang.getString("command.stats", "show's stats"));
@@ -91,29 +91,29 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage(ExpSkills.lang.getString("help.current", "Show you all bought skills"));
                         return true;
                     }
-                    if (p == null || PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                    if (p == null || p.hasPermission("expskills.admin"))
                     {
-                        if (args[1].equalsIgnoreCase("set") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                        if (args[1].equalsIgnoreCase("set"))
                         {
                             sender.sendMessage(ExpSkills.lang.getString("help.set", "Set the stats off a player"));
                             return true;
                         }
-                        else if (args[1].equalsIgnoreCase("add") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                        else if (args[1].equalsIgnoreCase("add"))
                         {
                             sender.sendMessage(ExpSkills.lang.getString("help.add", "Modify stats of a player"));
                             return true;
                         }
-                        else if (args[1].equalsIgnoreCase("revoke") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                        else if (args[1].equalsIgnoreCase("revoke"))
                         {
                             sender.sendMessage(ExpSkills.lang.getString("help.revoke", "revokes a skill from a player"));
                             return true;
                         }
-                        else if (args[1].equalsIgnoreCase("grant") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                        else if (args[1].equalsIgnoreCase("grant"))
                         {
                             sender.sendMessage(ExpSkills.lang.getString("help.grant", "grants a skill to a player"));
                             return true;
                         }
-                        else if (args[1].equalsIgnoreCase("reset") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                        else if (args[1].equalsIgnoreCase("reset"))
                         {
                             sender.sendMessage(ExpSkills.lang.getString("help.reset", "resets a player's skills"));
                             return true;
@@ -128,7 +128,7 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage("/exp buy <skill> - " + ExpSkills.lang.getString("command.buy", "buy a skill"));
                         sender.sendMessage("/exp rent <skill> - " + ExpSkills.lang.getString("command.rent", "rent a skill"));
                         sender.sendMessage("/exp current - " + ExpSkills.lang.getString("command.current", "show's your current skills"));
-                        if (PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                        if (p == null || p.hasPermission("expskills.admin"))
                         {
                             sender.sendMessage("===== Admin Commands =====");
                             sender.sendMessage("/exp stats - " + ExpSkills.lang.getString("command.stats", "show's your stats"));
@@ -412,9 +412,9 @@ public class CommandManager implements CommandExecutor
                     else
                         sender.sendMessage(ExpSkills.lang.getString("error.notanyskillhe", "This player dont own any skill"));
                 }
-                if (p == null || PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                if (p == null || p.hasPermission("expskills.admin"))
                 {
-                    if (args[0].equalsIgnoreCase("add") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                    if (args[0].equalsIgnoreCase("add"))
                     {
                         if (args.length == 4)
                         {
@@ -450,7 +450,7 @@ public class CommandManager implements CommandExecutor
                         }
                         return true;
                     }
-                    if (args[0].equalsIgnoreCase("set") && PermissionsSystem.hasPermission(p.getWorld().getName(), p.getName(), "expskills.admin"))
+                    if (args[0].equalsIgnoreCase("set"))
                     {
                         if (args.length == 4)
                         {
