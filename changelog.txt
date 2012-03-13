@@ -1,3 +1,7 @@
+Version 0.8.3_beta2
+- fixed possible bug in skilltree need_type
+- fixed critical bug in Skills per World feature
+
 Version 0.8.3_beta1
 - some changes in permissions implementation
 
