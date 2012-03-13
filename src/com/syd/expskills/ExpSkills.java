@@ -40,6 +40,9 @@ public class ExpSkills extends JavaPlugin
         // start of config.yml
         config = getConfig();
 
+        if (config.getString("version") == null)
+            saveDefaultConfig();
+        
         String configversion = config.getString("version");
         String version = pdffile.getVersion();
 
@@ -61,11 +64,7 @@ public class ExpSkills extends JavaPlugin
                 config.set("general.updatetime", 6000);
             }
         }
-
         config.set("version", pdffile.getVersion());
-        config.set("version", pdffile.getVersion());
-        if (config.getString("version") != null)
-            config.options().copyDefaults(true);
         saveConfig();
         // end of config.yml
 

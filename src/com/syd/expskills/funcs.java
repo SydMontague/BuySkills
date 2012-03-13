@@ -265,9 +265,10 @@ public class funcs
 
         return h + "h " + min + "min " + s + "s";
     }
-    
+
     /**
      * Only for internal use
+     * 
      * @param player
      * @return online time
      */
@@ -275,7 +276,6 @@ public class funcs
     {
         return FileManager.loadPF(player).getLong("onlinetime", 0);
     }
-    
 
     public static void updatePlaytime(Player player)
     {
@@ -484,7 +484,7 @@ public class funcs
                         else if (vault != null)
                             vault.withdrawPlayer(player.getName(), costs);
 
-                        if (worlds != null)
+                        if (!worlds.isEmpty())
                         {
                             if (earn != null)
                                 for (String node : earn)
@@ -568,7 +568,7 @@ public class funcs
                         else if (vault != null)
                             vault.withdrawPlayer(player.getName(), costs);
 
-                        if (worlds != null)
+                        if (!worlds.isEmpty())
                         {
                             if (earn != null)
                                 for (String node : earn)
@@ -644,27 +644,32 @@ public class funcs
 
                 // check if you own a illegal skill
                 if (illegal != null && current != null)
+                {
                     for (String a : illegal)
                         if (current.contains(a))
                             w++;
+                }
+
 
                 // check if you own the needed skills
                 if (w == 0 && needs != null)
                 {
                     if (type.equalsIgnoreCase("or"))
+                    {
                         if (current != null)
                             for (String a : needs)
                                 if (current.contains(a))
                                     skills = true;
-                                else if (type.equalsIgnoreCase("all") && current != null)
-                                    if (current.containsAll(needs))
-                                        skills = true;
-                }
+                    }
+                    else if (type.equalsIgnoreCase("all") && current != null)
+                        if (current.containsAll(needs))
+                            skills = true;
 
+                }
                 else if (w == 0)
                     skills = true;
             }
-            else 
+            else
                 skills = true;
         }
 
