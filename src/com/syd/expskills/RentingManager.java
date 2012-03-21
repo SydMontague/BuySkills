@@ -16,28 +16,31 @@ public class RentingManager
         for (String player : players)
         {
             Player p = ExpSkills.server.getOfflinePlayer(player).getPlayer();
-            Set<String> skills = rented.getConfigurationSection(player).getKeys(false);
+            if (p.isOnline())
+            {
+                Set<String> skills = rented.getConfigurationSection(player).getKeys(false);
 
-            for (String skill : skills)
-                if (rented.getLong(player + "." + skill + ".time") <= System.currentTimeMillis())
-                {
-                    funcs.revokeSkill(p, funcs.getSkillName(skill));
-
-                    rented.set(player + "." + skill, null);
-
-                    String msg = ExpSkills.lang.getString("success.rentalexpired", "Your rental of %skill has expired!");
-                    msg = msg.replace("%skill", funcs.getSkillName(skill));
-                    p.sendMessage(msg);
-
-                    try
+                for (String skill : skills)
+                    if (rented.getLong(player + "." + skill + ".time") <= System.currentTimeMillis())
                     {
-                        rented.save("plugins/ExpSkills/rented.yml");
+                        funcs.revokeSkill(p, funcs.getSkillName(skill));
+
+                        rented.set(player + "." + skill, null);
+
+                        String msg = ExpSkills.lang.getString("success.rentalexpired", "Your rental of %skill has expired!");
+                        msg = msg.replace("%skill", funcs.getSkillName(skill));
+                        p.sendMessage(msg);
+
+                        try
+                        {
+                            rented.save("plugins/ExpSkills/rented.yml");
+                        }
+                        catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
+            }
         }
     }
 
