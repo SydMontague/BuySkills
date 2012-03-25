@@ -94,7 +94,7 @@ public class ExpSkills extends JavaPlugin
         // start rented timer
         long delay = config.getLong("general.updatetime", 6000);
 
-        server.getScheduler().scheduleAsyncRepeatingTask(this, new Runnable()
+        server.getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
         {
             public void run()
             {

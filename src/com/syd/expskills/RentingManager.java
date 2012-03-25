@@ -16,7 +16,7 @@ public class RentingManager
         for (String player : players)
         {
             Player p = ExpSkills.server.getOfflinePlayer(player).getPlayer();
-            if (p.isOnline())
+            if (p != null && p.isOnline())
             {
                 Set<String> skills = rented.getConfigurationSection(player).getKeys(false);
 

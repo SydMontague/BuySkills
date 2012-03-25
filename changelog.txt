@@ -1,3 +1,9 @@
+Version 0.8.3_beta4
+- added missing space in /exp info
+- fixed NPE in rented skills check
+- fixed a possible RTO error
+- skill names are now case insensitive
+
 Version 0.8.3_beta3
 - check rented skills only if the player is online (should fix a NPE)
 
