@@ -24,7 +24,6 @@ public class FileManager
             {
                 e.printStackTrace();
             }
-
     }
 
     public static YamlConfiguration loadPF(Player player)

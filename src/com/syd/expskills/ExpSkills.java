@@ -100,8 +100,8 @@ public class ExpSkills extends JavaPlugin
             {
                 RentingManager.update();
             }
-        }, 0, delay);
-
+        }, 0, delay);   
+        
         // initialize events and commands
         getCommand("exp").setExecutor(command);
         PluginManager pm = getServer().getPluginManager();

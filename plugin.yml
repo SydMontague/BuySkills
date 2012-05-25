@@ -23,6 +23,27 @@ permissions:
     description: Use ExpSkills
     default: false
   expskills.admin:
-    description: Use Admin Commands
+    description: Use all admin Commands
     default: op
+  expskills.current.others:
+    description: Get bought skills of other players
+    default: false
+  expskills.rented.others:
+    description: Get rented skills of other players
+    default: false
+  expskills.admin.add:
+    description: Add skillpoints/XP/level
+    default: false
+  expskills.admin.set:
+    description: Set skillpoints/XP/level
+    default: false
+  expskills.admin.reset:
+    description: reset skills
+    default: false
+  expskills.admin.grant:
+    description: Grant a skill
+    default: false
+  expskills.admin.revoke:
+    description: Revoke a skill
+    default: false
     

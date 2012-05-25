@@ -328,14 +328,7 @@ public class funcs
         pconfig.set("skillpoints", amount);
         FileManager.savePF(player, pconfig);
     }
-    
-    public static int getNumSkills()
-    {
-        Set<String> list = ExpSkills.config.getConfigurationSection("skills").getKeys(false);
-        int b = list.size() - 1;
-        return b;
-    }
-    
+        
     public static Set<String> getSkills()
     {
         return ExpSkills.config.getConfigurationSection("skills").getKeys(false);
