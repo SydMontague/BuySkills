@@ -367,6 +367,8 @@ public class CommandManager implements CommandExecutor
                     }
                     else
                         sender.sendMessage(ExpSkills.lang.getString("error.notanyskillhe", "This player dont own any skill"));
+                    
+                    return true;
                 }
                 if (args[0].equalsIgnoreCase("rented"))
                 {
@@ -411,6 +413,8 @@ public class CommandManager implements CommandExecutor
                     }
                     else
                         sender.sendMessage(ExpSkills.lang.getString("error.notanyskillhe", "This player dont own any skill"));
+                    
+                    return true;
                 }
                 if (args[0].equalsIgnoreCase("add") && (sender.hasPermission("expskills.admin") || sender.hasPermission("expskills.admin.add")))
                 {
@@ -542,6 +546,8 @@ public class CommandManager implements CommandExecutor
                     }
                     else
                         sender.sendMessage(ChatColor.RED + ExpSkills.lang.getString("error.pnotfoundexact", "Player is not online. You need a exact match."));
+                    
+                    return true;
                 }
             }
             else

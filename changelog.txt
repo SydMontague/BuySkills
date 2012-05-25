@@ -1,18 +1,13 @@
-Version 0.8.3_beta4
-- added missing space in /exp info
+Version 0.8.3
+- added per command permissions
+- changed Permissions implementation
+- changed that rented skills are only checked for online players
+- changed skillname check to be case insensitive
+- fixed critical bug in Skills per World feature
+- fixed possible bug in skilltree need_type
 - fixed NPE in rented skills check
 - fixed a possible RTO error
-- skill names are now case insensitive
-
-Version 0.8.3_beta3
-- check rented skills only if the player is online (should fix a NPE)
-
-Version 0.8.3_beta2
-- fixed possible bug in skilltree need_type
-- fixed critical bug in Skills per World feature
-
-Version 0.8.3_beta1
-- some changes in permissions implementation
+- fixed a missing space char
 
 Version 0.8.2
 - added worlds: <list> node for skills to buy skills only for special worlds
