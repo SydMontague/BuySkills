@@ -18,6 +18,7 @@ public class CommandManager implements CommandExecutor
         plugin = instance;
     }
     
+    @SuppressWarnings("unchecked")
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
     {
@@ -375,12 +376,9 @@ public class CommandManager implements CommandExecutor
                     List<String> rented = new ArrayList<String>();
                     
                     if (p != null && args.length == 1)
-                        for (String skill : funcs.getRented(p))
-                            rented.add(skill);
+                        rented = (List<String>) funcs.getRented(p);                            
                     else if (args.length == 2 && sender.hasPermission("expskills.rented.others"))
-                        for (String skill : funcs.getRented((Player) funcs.getOfflinePlayer(args[1])))
-                            rented.add(skill);
-                    
+                        rented = (List<String>) funcs.getRented((Player) funcs.getOfflinePlayer(args[1]));
                     else
                     {
                         sender.sendMessage("Consoles dont have skills!");
@@ -388,7 +386,7 @@ public class CommandManager implements CommandExecutor
                     }
                     
                     sender.sendMessage(ExpSkills.lang.getString("general.rentedskills", "Rented skills:"));
-                    if (rented.size() != 0)
+                    if (rented != null && rented.size() != 0)
                     {
                         int a = rented.size();
                         for (int i = 0; i < a;)

@@ -1,3 +1,6 @@
+Version 0.8.4_beta1
+- fixed an NPE (I´m retarded!)
+
 Version 0.8.3
 - added per command permissions
 - changed Permissions implementation
