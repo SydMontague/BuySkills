@@ -13,6 +13,7 @@ general:
   skill_cap: 1
   updatetime: 300
   change_expdrop: true
+  useGlobalPermissions: true
 skills:
     testskill: #the key of this skill
         name: testskill #Display name of you skill
