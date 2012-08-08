@@ -83,10 +83,8 @@ public class PermissionsSystem
 
     public static void addPermission(String world, String player, String node)
     {
-        Player p = ExpSkills.server.getPlayerExact(player);
-
         if (permission != null)
-            permission.playerAdd(p, node);
+            permission.playerAdd(world, player, node);
         else if (permEX != null)
             permEX.getUser(player).addPermission(node);
         else if (perm != null)
@@ -97,7 +95,7 @@ public class PermissionsSystem
             ExpSkills.server.dispatchCommand(sender, "permissions player setperm " + player + " " + node);
         else
         {
-            PermissionAttachment attachment = p.addAttachment(ExpSkills.server.getPluginManager().getPlugin("ExpSkills"));
+            PermissionAttachment attachment = ExpSkills.server.getPlayerExact(player).addAttachment(ExpSkills.server.getPluginManager().getPlugin("ExpSkills"));
             attachment.setPermission(node, true);
         }
     }
@@ -112,10 +110,9 @@ public class PermissionsSystem
     }
     
     public static void removePermission(String world, String player, String node)
-    {
-        Player p = ExpSkills.server.getPlayerExact(player);
+    {        
         if (permission != null)
-            permission.playerRemove(p, node);
+            permission.playerRemove(world, player, node);
         else if (permEX != null)
             permEX.getUser(player).removePermission(node);
         else if (perm != null)
@@ -126,7 +123,7 @@ public class PermissionsSystem
             ExpSkills.server.dispatchCommand(sender, "permissions player unsetperm " + player + " " + node);
         else
         {
-            PermissionAttachment attachment = p.addAttachment(ExpSkills.plugin);
+            PermissionAttachment attachment = ExpSkills.server.getPlayerExact(player).addAttachment(ExpSkills.plugin);
             attachment.unsetPermission(node);
         }
     }

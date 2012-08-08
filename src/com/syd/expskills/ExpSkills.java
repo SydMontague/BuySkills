@@ -38,10 +38,11 @@ public class ExpSkills extends JavaPlugin
         server = getServer();
 
         // start of config.yml
-        config = getConfig();
 
-        if (config.getString("version") == null)
+        if (!new File(this.getDataFolder().getPath() + File.separatorChar + "config.yml").exists())
             saveDefaultConfig();
+
+        config = getConfig();
         
         String configversion = config.getString("version");
         String version = pdffile.getVersion();

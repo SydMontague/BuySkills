@@ -61,7 +61,7 @@ public class funcs
     public static int getLevel(Player player)
     {
         int exp = player.getTotalExperience() + 1;
-        int formula = ExpSkills.config.getInt("general.formula", 2);
+        int formula = ExpSkills.config.getInt("general.formula", 0);
         
         int level = 0;
         
@@ -121,7 +121,7 @@ public class funcs
     public static int getLevel(int exp)
     {
         exp = exp + 1;
-        int formula = ExpSkills.config.getInt("general.formula", 2);
+        int formula = ExpSkills.config.getInt("general.formula", 0);
         
         int level = 0;
         
@@ -182,7 +182,7 @@ public class funcs
     {
         int level = getLevel(player) + 1;
         int exp = player.getTotalExperience();
-        int formula = ExpSkills.config.getInt("general.formula", 2);
+        int formula = ExpSkills.config.getInt("general.formula", 0);
         
         double value = 0;
         
@@ -219,7 +219,7 @@ public class funcs
     
     public static int getXpatLevel(int level)
     {
-        int formula = ExpSkills.config.getInt("general.formula", 2);
+        int formula = ExpSkills.config.getInt("general.formula", 0);
         
         double value = 0;
         
@@ -328,7 +328,7 @@ public class funcs
         pconfig.set("skillpoints", amount);
         FileManager.savePF(player, pconfig);
     }
-        
+    
     public static Set<String> getSkills()
     {
         return ExpSkills.config.getConfigurationSection("skills").getKeys(false);
@@ -336,7 +336,7 @@ public class funcs
     
     public static String getSkillKey(String name)
     {
-        Set<String> keys = ExpSkills.config.getConfigurationSection("skills").getKeys(false);        
+        Set<String> keys = ExpSkills.config.getConfigurationSection("skills").getKeys(false);
         
         for (String skill : keys)
         {
@@ -491,14 +491,14 @@ public class funcs
                         }
                         else
                         {
-                            String world = player.getWorld().getName();
+                            // World world = player.getWorld().getName();
                             if (earn != null)
                                 for (String node : earn)
-                                    PermissionsSystem.addPermission(world, player.getName(), node);
+                                    PermissionsSystem.addPermission(player.getWorld().getName(), player.getName(), node);
                             
                             if (earngrp != null)
                                 for (String group : earngrp)
-                                    PermissionsSystem.addGroup(world, player.getName(), group);
+                                    PermissionsSystem.addGroup(player.getWorld().getName(), player.getName(), group);
                         }
                         
                         if (needgrp != null && ExpSkills.config.getBoolean("skills." + key + ".revoke_need_groups", false))
@@ -575,14 +575,14 @@ public class funcs
                         }
                         else
                         {
-                            String world = player.getWorld().getName();
+                            // World world = player.getWorld();
                             if (earn != null)
                                 for (String node : earn)
-                                    PermissionsSystem.addPermission(world, player.getName(), node);
+                                    PermissionsSystem.addPermission(player.getWorld().getName(), player.getName(), node);
                             
                             if (earngrp != null)
                                 for (String group : earngrp)
-                                    PermissionsSystem.addGroup(world, player.getName(), group);
+                                    PermissionsSystem.addGroup(player.getWorld().getName(), player.getName(), group);
                         }
                         
                         if (needgrp != null && ExpSkills.config.getBoolean("skills." + key + ".revoke_need_groups", false))
@@ -817,14 +817,34 @@ public class funcs
         
         List<String> earn = ExpSkills.config.getStringList("skills." + key + ".permissions_earn");
         List<String> earngrp = ExpSkills.config.getStringList("skills." + key + ".groups_earn");
+        List<String> needgrp = ExpSkills.config.getStringList("skills." + key + ".groups_need");
+        List<String> worlds = ExpSkills.config.getStringList("skills." + key + ".worlds");
         
-        if (earn != null)
-            for (String node : earn)
-                PermissionsSystem.addPermission(player.getWorld().getName(), player.getName(), node);
+        if (!worlds.isEmpty())
+        {
+            if (earn != null)
+                for (String node : earn)
+                    PermissionsSystem.addPermission(worlds, player.getName(), node);
+            
+            if (earngrp != null)
+                for (String group : earngrp)
+                    PermissionsSystem.addGroup(worlds, player.getName(), group);
+        }
+        else
+        {
+            // World world = player.getWorld();
+            if (earn != null)
+                for (String node : earn)
+                    PermissionsSystem.addPermission(player.getWorld().getName(), player.getName(), node);
+            
+            if (earngrp != null)
+                for (String group : earngrp)
+                    PermissionsSystem.addGroup(player.getWorld().getName(), player.getName(), group);
+        }
         
-        if (earngrp != null)
-            for (String group : earngrp)
-                PermissionsSystem.addGroup(player.getWorld().getName(), player.getName(), group);
+        if (needgrp != null && ExpSkills.config.getBoolean("skills." + key + ".revoke_need_groups", false))
+            for (String group : needgrp)
+                PermissionsSystem.removeGroup(player.getWorld().getName(), player.getName(), group);
         
         addSkill(player, key);
         return true;

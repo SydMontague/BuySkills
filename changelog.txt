@@ -1,3 +1,9 @@
+Version 0.8.4_beta2
+- fixed enchantment level dupe bug
+- fixed crash/infinite loop 
+- fixed empty config file generation
+- fixed /exp grant to use the worlds: node
+
 Version 0.8.4_beta1
 - fixed an NPE (I´m retarded!)
 
