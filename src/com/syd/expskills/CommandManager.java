@@ -509,7 +509,7 @@ public class CommandManager implements CommandExecutor
                         
                         if (player != null)
                         {
-                            if (funcs.revokeSkill(player, args[2]))
+                            if (funcs.revokeSkill(player, args[2], false))
                                 sender.sendMessage(ExpSkills.lang.getString("success.revoked", "Skill successfully revoked"));
                             else
                                 sender.sendMessage(ExpSkills.lang.getString("error.skillnotfound", "Skill is not existing"));

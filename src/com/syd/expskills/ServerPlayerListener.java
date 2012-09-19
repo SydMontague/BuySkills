@@ -15,7 +15,7 @@ import org.bukkit.permissions.PermissionAttachment;
 
 public class ServerPlayerListener implements Listener
 {
-    protected static ExpSkills plugin;
+    protected ExpSkills plugin;
     
     public ServerPlayerListener(ExpSkills instance)
     {
@@ -103,3 +103,4 @@ public class ServerPlayerListener implements Listener
         FileManager.savePF(player, pconfig);
     }
 }
+

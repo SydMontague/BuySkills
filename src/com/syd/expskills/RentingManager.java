@@ -8,8 +8,11 @@ import org.bukkit.entity.Player;
 
 public class RentingManager
 {
+    
     public static void update()
     {
+        
+
         YamlConfiguration rented = FileManager.loadRented();
         Set<String> players = rented.getKeys(false);
 
@@ -23,7 +26,7 @@ public class RentingManager
                 for (String skill : skills)
                     if (rented.getLong(player + "." + skill + ".time") <= System.currentTimeMillis())
                     {
-                        funcs.revokeSkill(p, funcs.getSkillName(skill));
+                        funcs.revokeSkill(p, skill, true);
 
                         rented.set(player + "." + skill, null);
 

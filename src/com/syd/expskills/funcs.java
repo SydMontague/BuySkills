@@ -869,9 +869,13 @@ public class funcs
         return true;
     }
     
-    public static boolean revokeSkill(Player player, String skill)
+    public static boolean revokeSkill(Player player, String skill, boolean exact)
     {
-        String key = getSkillKey(skill);
+        String key = skill;
+        
+        if (!exact)
+            key = getSkillKey(skill);
+        
         if (key == null)
         {
             ExpSkills.log.info(ExpSkills.lang.getString("error.skillnotfound", "Skill not found"));
@@ -922,7 +926,7 @@ public class funcs
         if (skills != null && !mode.equalsIgnoreCase("level"))
         {
             for (String skill : skills)
-                revokeSkill(p, skill);
+                revokeSkill(p, skill, true);
             
             p.sendMessage(ExpSkills.lang.getString("success.skillreset", "Your skills were reset"));
             
