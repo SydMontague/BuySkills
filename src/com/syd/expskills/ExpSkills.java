@@ -154,4 +154,81 @@ public class ExpSkills extends JavaPlugin
         PluginDescriptionFile pdffile = getDescription();
         log.info("[ExpSkills] " + pdffile.getName() + " " + pdffile.getVersion() + " disabled");
     }
+    
+    public static int getExp(double level)
+    {
+        int exp = 0;
+        
+        double nlevel = Math.ceil(level);
+        
+        if (nlevel - 32 > 0)
+            exp += (1 - (nlevel - level)) * (65 + (nlevel - 32) * 7);
+        else if (nlevel - 16 > 0)
+            exp += (1 - (nlevel - level)) * (17 + (level - 16) * 3);
+        else
+            exp += (1 - (nlevel - level)) * 17;
+        
+        level = Math.ceil(level - 1);
+        
+        while (level > 0)
+        {
+            if (level - 32 > 0)
+                exp += 65 + (level - 32) * 7;
+            else if (level - 16 > 0)
+                exp += 17 + (level - 16) * 3;
+            else
+                exp += 17;
+            
+            level--;
+        }
+        
+        return exp;
+    }
+    
+    public static double getLevel(int exp)
+    {
+        double i = 0;
+        boolean stop = true;
+        
+        while (stop)
+        {
+            i++;
+            
+            if (i - 32 > 0)
+            {
+                if (exp - (65 + (i - 32) * 7) > 0)
+                    exp = (int) (exp - (65 + (i - 32) * 7));
+                else
+                    stop = false;
+            }
+            else if (i - 16 > 0)
+            {
+                if (exp - (17 + (i - 16) * 3) > 0)
+                    exp = (int) (exp - (17 + (i - 16) * 3));
+                else
+                    stop = false;
+            }
+            else if (exp > 17)
+                exp -= 17;
+            else
+                stop = false;
+        }
+        
+        if (exp != 0)
+        {
+            if (i - 32 > 0)
+                i += exp / (65 + (i - 32) * 7);
+            else if (i - 16 > 0)
+                i += exp / (17 + (i - 16) * 3);
+            else
+                i += exp / 17D;
+            
+        }
+        
+        if (exp == 0)
+            i--;
+        
+        i--;
+        return i;
+    }
 }

@@ -27,6 +27,7 @@ public class ServerEntityListener implements Listener
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event)
     {
+        //TODO add Enchantment drop config
         // modify ORB drop on player death
         if (event.getEntity() instanceof Player && ExpSkills.config.getBoolean("general.change_expdrop", false))
         {
@@ -47,19 +48,9 @@ public class ServerEntityListener implements Listener
             pconfig.set("experience", newxp);
             FileManager.savePF(p, pconfig);
             
-            double level = p.getLevel();
-            int exp = 0;
-            while (level >= 1)
-            {
-                if (level - 32 > 0)
-                    exp += 65 + (level - 32) * 7;
-                else if (level - 16 > 0)
-                    exp += 17 + (level - 16) * 3;
-                else
-                    exp += 17;
-                
-                level--;
-            }
+                        
+            int exp = ExpSkills.getExp(p.getLevel() + p.getExp());
+            
             // level = 1.75 * (level * level) + 4.5 * level;
             
             // default usage of EXP Drop - add dynamic method with config usage
@@ -94,36 +85,13 @@ public class ServerEntityListener implements Listener
                 
                 Player player = event.getPlayer();
                 
-                double level = player.getLevel() + player.getExp();
-                
-                int exp = 0;
-                while (level >= 1)
-                {
-                    if (level - 32 > 0)
-                        exp += 65 + (level - 32) * 7;
-                    else if (level - 16 > 0)
-                        exp += 17 + (level - 16) * 3;
-                    else
-                        exp += 17;
-                    
-                    level--;
-                }
+                int exp = ExpSkills.getExp(player.getLevel() + player.getExp());
                 
                 int copy2 = exp;
                 exp += expsave.get(save).exp;
                 int copy1 = exp;
                 
-                int i = 0;
-                while (exp >= 17)
-                {
-                    i++;
-                    if (i - 32 > 0)
-                        exp = exp - (65 + (i - 32) * 7);
-                    else if (i - 16 > 0)
-                        exp = exp - (17 + (i - 16) * 3);
-                    else
-                        exp -= 17;
-                }
+                int i = (int) ExpSkills.getLevel(exp);
                 
                 if (i > 200)
                 {

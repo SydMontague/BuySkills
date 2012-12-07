@@ -324,6 +324,8 @@ public class CommandManager implements CommandExecutor
                 }
                 if (args[0].equalsIgnoreCase("current"))
                 {
+                    
+                    //TODO fix console bug
                     List<String> current = null;
                     
                     if (p != null && args.length == 1)
