@@ -9,7 +9,6 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,34 +18,35 @@ import com.nijikokun.register.payment.Methods;
 
 public class ExpSkills extends JavaPlugin
 {
-    protected static Server server;
     protected static ExpSkills plugin;
+    protected static Server server;
     protected static FileConfiguration config;
     protected static YamlConfiguration skilltree;
     protected static YamlConfiguration lang;
-    protected final static Logger log = Logger.getLogger("Minecraft");
-    public final ServerEntityListener entityListener = new ServerEntityListener(this);
-    public final ServerPlayerListener playerListener = new ServerPlayerListener(this);
+    protected static Logger log = Logger.getLogger("Minecraft");
+    private final ServerEntityListener entityListener = new ServerEntityListener(this);
+    private final ServerPlayerListener playerListener = new ServerPlayerListener(this);
     private CommandManager command = new CommandManager(this);
-    public final PermissionsSystem permSys = new PermissionsSystem();
     protected static Method method;
     protected static Economy economy = null;
-
+    
+    @Override
     public void onEnable()
     {
-        PluginDescriptionFile pdffile = getDescription();
+        log = getLogger();
         server = getServer();
-
+        plugin = this;
+        
         // start of config.yml
-
+        
         if (!new File(this.getDataFolder().getPath() + File.separatorChar + "config.yml").exists())
             saveDefaultConfig();
-
+        
         config = getConfig();
         
         String configversion = config.getString("version");
-        String version = pdffile.getVersion();
-
+        String version = getDescription().getVersion();
+        
         if (configversion.equalsIgnoreCase(version))
         {
             if (configversion.equals("0.7.0_RC2"))
@@ -65,13 +65,13 @@ public class ExpSkills extends JavaPlugin
                 config.set("general.updatetime", 6000);
             }
         }
-        config.set("version", pdffile.getVersion());
+        config.set("version", getDescription().getVersion());
         saveConfig();
         // end of config.yml
-
+        
         // start of lang.yml
         File langfile = new File(this.getDataFolder() + File.separator + "lang.yml");
-
+        
         if (!langfile.exists())
         {
             lang = YamlConfiguration.loadConfiguration(getResource("lang.yml"));
@@ -87,72 +87,62 @@ public class ExpSkills extends JavaPlugin
         else
             lang = YamlConfiguration.loadConfiguration(langfile);
         // end of lang.yml
-
+        
         // start skilltree
         if (config.getBoolean("general.use_skilltree", false))
             skilltree = FileManager.loadSkilltree();
-
+        
         // start rented timer
         long delay = config.getLong("general.updatetime", 6000);
-
+        
         server.getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
         {
+            @Override
             public void run()
             {
                 RentingManager.update();
             }
-        }, 0, delay);   
+        }, 0, delay);
         
         // initialize events and commands
         getCommand("exp").setExecutor(command);
-        PluginManager pm = getServer().getPluginManager();
+        final PluginManager pm = server.getPluginManager();
         pm.registerEvents(playerListener, this);
         pm.registerEvents(entityListener, this);
-
-        // start permissions section
-        permSys.start();
         
-        // start economy section  
+        // start permissions section
+        PermissionsSystem.start();
+        
+        // start economy section
         if ((config.getBoolean("general.use_economy", false)))
         {
-            if (ExpSkills.server.getPluginManager().getPlugin("Vault") != null)
+            if (pm.getPlugin("Vault") != null)
             {
                 RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
                 if (economyProvider != null)
                 {
-                    economy = economyProvider.getProvider();
-
+                    economy = economyProvider.getProvider();                    
                     log.info("[ExpSkills] " + economy.getName() + " hooked");
                 }
             }
-            else if (ExpSkills.server.getPluginManager().getPlugin("Register") != null)
+            else if (pm.getPlugin("Register") != null)
             {
-                // is a Runnable needed? Scheduled for removal!
-                this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable()
+                if (Methods.setMethod(pm))
                 {
-                    public void run()
-                    {
-                        boolean a = Methods.setMethod(getServer().getPluginManager());
-                        if (a)
-                        {
-                            method = Methods.getMethod();
-                            log.info("[ExpSkills] " + method.getName() + " hooked");
-                        }
-                        else
-                            log.severe("[ExpSkills] Hooking Economy Failed");
-                    }
-                }, 0L);
+                    method = Methods.getMethod();
+                    log.info("[ExpSkills] " + method.getName() + " hooked");
+                }
+                else
+                    log.severe("[ExpSkills] Hooking Economy Failed");                
             }
         }
         // end economy section
-
-        log.info("[ExpSkills] " + pdffile.getName() + " " + pdffile.getVersion() + " enabled");
     }
-
+    
+    @Override
     public void onDisable()
     {
-        PluginDescriptionFile pdffile = getDescription();
-        log.info("[ExpSkills] " + pdffile.getName() + " " + pdffile.getVersion() + " disabled");
+        server.getScheduler().cancelTasks(this);
     }
     
     public static int getExp(double level)

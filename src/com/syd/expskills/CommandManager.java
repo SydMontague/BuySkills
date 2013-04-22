@@ -18,7 +18,6 @@ public class CommandManager implements CommandExecutor
         plugin = instance;
     }
     
-    @SuppressWarnings("unchecked")
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
     {
@@ -129,7 +128,7 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage("/exp buy <skill> - " + ExpSkills.lang.getString("command.buy", "buy a skill"));
                         sender.sendMessage("/exp rent <skill> - " + ExpSkills.lang.getString("command.rent", "rent a skill"));
                         sender.sendMessage("/exp current - " + ExpSkills.lang.getString("command.current", "show's your current skills"));
-                        if (p == null || p.hasPermission("expskills.admin"))
+                        if (p.hasPermission("expskills.admin"))
                         {
                             sender.sendMessage("===== Admin Commands =====");
                             sender.sendMessage("/exp stats - " + ExpSkills.lang.getString("command.stats", "show's your stats"));

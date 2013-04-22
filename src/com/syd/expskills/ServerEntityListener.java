@@ -17,7 +17,7 @@ public class ServerEntityListener implements Listener
 {
     ExpSkills plugin;
     HashMap<Short, ExpSave> expsave = new HashMap<Short, ExpSave>();
-    short i = 1;
+    short bottleNumber = 1;
     
     public ServerEntityListener(ExpSkills instance)
     {
@@ -54,12 +54,12 @@ public class ServerEntityListener implements Listener
             // level = 1.75 * (level * level) + 4.5 * level;
             
             // default usage of EXP Drop - add dynamic method with config usage
-            p.getWorld().dropItem(p.getLocation(), new ItemStack(384, 1, i));
-            expsave.put(i, new ExpSave(xp, exp));
+            p.getWorld().dropItem(p.getLocation(), new ItemStack(384, 1, bottleNumber));
+            expsave.put(bottleNumber, new ExpSave(xp, exp));
             
-            i++;
-            if (i > 32760)
-                i = 1;
+            bottleNumber++;
+            if (bottleNumber > 32760)
+                bottleNumber = 1;
             
             // item.setMetadata("expskills.exp", new FixedMetadataValue(plugin,
             // xp));

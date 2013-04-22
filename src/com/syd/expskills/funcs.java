@@ -505,12 +505,12 @@ public class funcs
                             
                             if (earngrp != null)
                                 for (String group : earngrp)
-                                    PermissionsSystem.addGroup(world, player.getName(), group);
+                                    PermissionsSystem.addGroup(player.getName(), group);
                         }
                         
                         if (needgrp != null && ExpSkills.config.getBoolean("skills." + key + ".revoke_need_groups", false))
                             for (String group : needgrp)
-                                PermissionsSystem.removeGroup(world, player.getName(), group);
+                                PermissionsSystem.removeGroup(player.getName(), group);
                         
                         return true;
                     }
@@ -595,12 +595,12 @@ public class funcs
                             
                             if (earngrp != null)
                                 for (String group : earngrp)
-                                    PermissionsSystem.addGroup(world, player.getName(), group);
+                                    PermissionsSystem.addGroup(player.getName(), group);
                         }
                         
                         if (needgrp != null && ExpSkills.config.getBoolean("skills." + key + ".revoke_need_groups", false))
                             for (String group : needgrp)
-                                PermissionsSystem.removeGroup(world, player.getName(), group);
+                                PermissionsSystem.removeGroup(player.getName(), group);
                         
                         return true;
                     }
@@ -692,7 +692,7 @@ public class funcs
         
         if (needgrp != null)
             for (String group : needgrp)
-                if (!PermissionsSystem.hasGroup(player.getName(), group, player.getWorld().getName()))
+                if (!PermissionsSystem.hasGroup(player.getName(), group))
                 {
                     if (msg)
                         player.sendMessage(ExpSkills.lang.getString("error.group", "You don't have the needed group"));
@@ -858,12 +858,12 @@ public class funcs
             
             if (earngrp != null)
                 for (String group : earngrp)
-                    PermissionsSystem.addGroup(world, player.getName(), group);
+                    PermissionsSystem.addGroup(player.getName(), group);
         }
         
         if (needgrp != null && ExpSkills.config.getBoolean("skills." + key + ".revoke_need_groups", false))
             for (String group : needgrp)
-                PermissionsSystem.removeGroup(world, player.getName(), group);
+                PermissionsSystem.removeGroup(player.getName(), group);
         
         addSkill(player, key);
         return true;
@@ -911,7 +911,7 @@ public class funcs
             
             if (earngrp != null)
                 for (String group : earngrp)
-                    PermissionsSystem.removeGroup(world, player.getName(), group);
+                    PermissionsSystem.removeGroup(player.getName(), group);
         }
         removeSkill(player, skill);
         return true;

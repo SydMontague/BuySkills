@@ -10,15 +10,12 @@ public class FileManager
 {
     public static void createPlayerFile(Player player)
     {
-        final String dir = "plugins" + File.separator + "ExpSkills" + File.separator + "player" + File.separator;
-        final File PlayerFile = new File(dir + player.getName() + ".yml");
+        final File file = new File(ExpSkills.plugin.getDataFolder(), "player" + File.separator + player.getName() + ".yml");
 
-        new File(dir).mkdir();
-
-        if (!PlayerFile.exists())
+        if (!file.exists())
             try
             {
-                PlayerFile.createNewFile();
+                file.createNewFile();
             }
             catch (IOException e)
             {
@@ -28,18 +25,17 @@ public class FileManager
 
     public static YamlConfiguration loadPF(Player player)
     {
-        final String dir = "plugins" + File.separator + "ExpSkills" + File.separator + "player" + File.separator;
-        final File pfile = new File(dir + player.getName() + ".yml");
+        final File pfile = new File(ExpSkills.plugin.getDataFolder(), "player" + File.separator + player.getName() + ".yml");
         YamlConfiguration prconfig = YamlConfiguration.loadConfiguration(pfile);
 
         return prconfig;
     }
 
     public static void savePF(Player player, YamlConfiguration pconfig)
-    {
+    {        
         try
         {
-            pconfig.save("plugins/ExpSkills/player/" + player.getName() + ".yml");
+            pconfig.save(new File(ExpSkills.plugin.getDataFolder(), "player" + File.separator + player.getName() + ".yml"));
         }
         catch (IOException e)
         {
@@ -49,10 +45,7 @@ public class FileManager
 
     public static YamlConfiguration loadSkilltree()
     {
-        final String dir = "plugins" + File.separator + "ExpSkills" + File.separator;
-        final File treefile = new File(dir + "skilltree.yml");
-
-        new File(dir).mkdir();
+        final File treefile = new File(ExpSkills.plugin.getDataFolder(), "skilltree.yml");
 
         if (!treefile.exists())
             try
@@ -71,8 +64,7 @@ public class FileManager
 
     public static YamlConfiguration loadRented()
     {
-        final String dir = "plugins" + File.separator + "ExpSkills" + File.separator;
-        final File rentfile = new File(dir + "rented.yml");
+        final File rentfile = new File(ExpSkills.plugin.getDataFolder(), "rented.yml");
 
         if (!rentfile.exists())
             try
