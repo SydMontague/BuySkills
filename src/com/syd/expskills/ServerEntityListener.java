@@ -27,7 +27,6 @@ public class ServerEntityListener implements Listener
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event)
     {
-        //TODO add Enchantment drop config
         // modify ORB drop on player death
         if (event.getEntity() instanceof Player && ExpSkills.config.getBoolean("general.change_expdrop", false))
         {
