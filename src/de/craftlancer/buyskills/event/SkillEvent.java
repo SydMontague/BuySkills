@@ -10,7 +10,7 @@ import de.craftlancer.buyskills.Skill;
 public class SkillEvent extends Event implements Cancellable
 {
     private static final HandlerList handlers = new HandlerList();
-
+    
     Skill skill;
     Player player;
     boolean cancel = false;
@@ -36,13 +36,13 @@ public class SkillEvent extends Event implements Cancellable
     {
         return handlers;
     }
-
+    
     @Override
     public boolean isCancelled()
     {
         return cancel;
     }
-
+    
     @Override
     public void setCancelled(boolean bool)
     {

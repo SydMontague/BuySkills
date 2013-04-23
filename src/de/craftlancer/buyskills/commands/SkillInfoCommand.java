@@ -1,0 +1,33 @@
+package de.craftlancer.buyskills.commands;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+
+import de.craftlancer.buyskills.BuySkills;
+import de.craftlancer.buyskills.SkillLanguage;
+import de.craftlancer.buyskills.SkillUtils;
+
+public class SkillInfoCommand extends SkillSubCommand
+{
+    private BuySkills plugin;
+    
+    public SkillInfoCommand(String perm, BuySkills plugin)
+    {
+        super(perm);
+        this.plugin = plugin;
+    }
+    
+    @Override
+    public void execute(CommandSender sender, Command cmd, String label, String[] args)
+    {
+        if (!sender.hasPermission(getPermission()))
+            sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
+        else if (args.length <= 1)
+            sender.sendMessage(SkillLanguage.HELP_COMMAND_INFO);
+        else if (!plugin.hasSkill(args[1]))
+            sender.sendMessage(SkillLanguage.SKILL_NOT_EXIST);
+        else
+            sender.sendMessage(SkillUtils.replaceValues(plugin.getSkill(args[1]), SkillLanguage.INFO_DEFAULT_STRING));
+    }
+    
+}

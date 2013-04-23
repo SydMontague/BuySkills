@@ -13,23 +13,23 @@ public class SkillPlayer
     
     public static void buySkill(Player p, Skill s)
     {
-        //TODO
+        // TODO
     }
     
     public static void rentSkill(Player p, Skill s, long time)
     {
-        //TODO
+        // TODO
     }
     
     public static List<Skill> getAvaibleSkills(Player p)
     {
-        //TODO
+        // TODO
         return null;
     }
     
-    public static List<Skill> getSkills(Player p)
+    public static List<String> getSkills(Player p)
     {
-        //TODO
+        // TODO
         return null;
     }
 }

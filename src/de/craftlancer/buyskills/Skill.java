@@ -302,12 +302,12 @@ public class Skill
     {
         this.rentNeed = rentNeed;
     }
-
+    
     public List<String> getWorlds()
     {
         return worlds;
     }
-
+    
     public void setWorlds(List<String> worlds)
     {
         this.worlds = worlds;

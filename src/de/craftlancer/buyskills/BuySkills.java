@@ -2,6 +2,7 @@ package de.craftlancer.buyskills;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
@@ -19,6 +20,7 @@ public class BuySkills extends JavaPlugin
     public static HashMap<String, SkillHandler> handlerList = new HashMap<String, SkillHandler>();
     public static Logger log = Bukkit.getLogger();
     public HashMap<String, Skill> skills = new HashMap<String, Skill>();
+    public HashSet<String> categories = new HashSet<String>();
     public FileConfiguration sConfig;
     public Permission permission;
     public RentTask task;
@@ -27,22 +29,20 @@ public class BuySkills extends JavaPlugin
     public String currency = "Dollar";
     public int skillcap = 0;
     public long updatetime = 300;
+    public int skillsperpage = 5;
     
     @Override
     public void onEnable()
     {
         log = getLogger();
-        config = getConfig();
-        sConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "skills.yml"));
         
-        loadConfig();
-        skills = loadSkills();
+        loadConfigurations();
         
         if (getServer().getPluginManager().getPlugin("Vault") != null)
         {
             RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
             if (economyProvider != null)
-                registerCurrency("money", new MoneyHandler(economyProvider.getProvider()));
+                registerCurrency("money", new MoneyHandler(economyProvider.getProvider(), currency));
             
             RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
             if (permissionProvider != null)
@@ -78,24 +78,35 @@ public class BuySkills extends JavaPlugin
         return true;
     }
     
-    private void loadConfig()
+    public void loadConfigurations()
     {
-        currency = config.getString("currency", "Dollar");
-        updatetime = config.getLong("updatetime", 300);
-        skillcap = config.getInt("skillcap", 0);
+        reloadConfig();
+        sConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "skills.yml"));
+        config = getConfig();
+        
+        loadConfig();
+        loadSkills();
     }
     
-    private HashMap<String, Skill> loadSkills()
+    private void loadConfig()
     {
-        HashMap<String, Skill> map = new HashMap<String, Skill>();
+        currency = config.getString("general.currency", "Dollar");
+        updatetime = config.getLong("general.updatetime", 300);
+        skillcap = config.getInt("general.skillcap", 0);
+        skillsperpage = config.getInt("general.skillsperpage", 5);
+    }
+    
+    private void loadSkills()
+    {
+        skills.clear();
         
         for (String key : sConfig.getKeys(false))
         {
             Skill skill = loadSkill(key);
-            map.put(skill.getName(), skill);
+            skills.put(skill.getName().toLowerCase(), skill);
+            for (String cat : skill.getCategories())
+                categories.add(cat);
         }
-        
-        return map;
     }
     
     private Skill loadSkill(String key)
@@ -154,13 +165,9 @@ public class BuySkills extends JavaPlugin
         return skill;
     }
     
-    public void saveSkill(String key, Skill s)
+    public void saveSkill(Skill s)
     {
-        if(s == null)
-        {
-            sConfig.set(key, null);
-            return;
-        }
+        String key = s.getKey();
         
         sConfig.set(key + ".name", s.getName());
         sConfig.set(key + ".description", s.getDescription());
@@ -187,14 +194,29 @@ public class BuySkills extends JavaPlugin
         
         for (Entry<String, Integer> k : s.getBuyCosts().entrySet())
             sConfig.set(k.getKey(), k.getValue());
-                
+        
         for (Entry<String, Integer> k : s.getRentCosts().entrySet())
             sConfig.set(k.getKey(), k.getValue());
-                
+        
         for (Entry<String, Integer> k : s.getBuyNeed().entrySet())
             sConfig.set(k.getKey(), k.getValue());
-                
+        
         for (Entry<String, Integer> k : s.getRentNeed().entrySet())
-            sConfig.set(k.getKey(), k.getValue());             
+            sConfig.set(k.getKey(), k.getValue());
+    }
+    
+    public void removeSkill(String key)
+    {
+        sConfig.set(key, null);
+    }
+    
+    public Skill getSkill(String name)
+    {
+        return skills.get(name.toLowerCase());
+    }
+    
+    public boolean hasSkill(String name)
+    {
+        return skills.containsKey(name.toLowerCase());
     }
 }

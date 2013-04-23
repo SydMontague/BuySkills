@@ -20,8 +20,7 @@ public interface SkillHandler
     /**
      * Withdraw an amount of the handled currency from a player
      * Called when buying or renting a skill
-     * 
-     * This function will only called when hasCurrency(p, amount) returns true 
+     * This function will only called when hasCurrency(p, amount) returns true
      * 
      * @param p
      *            the checked player
@@ -29,4 +28,11 @@ public interface SkillHandler
      *            the amount of the handled currency
      */
     public abstract void withdrawCurrency(Player p, int amount);
+    
+    /**
+     * Get the name of the currency.
+     * 
+     * @return the name of the currency as String
+     */
+    public abstract String getCurrencyName();
 }
