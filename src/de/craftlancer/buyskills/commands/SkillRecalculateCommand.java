@@ -1,5 +1,7 @@
 package de.craftlancer.buyskills.commands;
 
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -33,6 +35,12 @@ public class SkillRecalculateCommand extends SkillSubCommand
         }
         
         // TOTEST
+    }
+    
+    @Override
+    public List<String> onTabComplete(String[] args)
+    {
+        return null; // TOTEST player TabComplete
     }
     
 }

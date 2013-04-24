@@ -1,6 +1,8 @@
 package de.craftlancer.buyskills;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -108,5 +110,27 @@ public class SkillUtils
         long s = time - h * 3600 - min * 60;
         
         return h + "h " + min + "min " + s + "s";
+    }
+    
+    public static List<String> getMatches(String value, Collection<String> list)
+    {
+        List<String> result = new ArrayList<String>();
+        
+        for (String str : list)
+            if (str.startsWith(value))
+                result.add(str);
+        
+        return result;
+    }
+    
+    public static List<String> getMatches(String value, String[] list)
+    {
+        List<String> result = new ArrayList<String>();
+        
+        for (String str : list)
+            if (str.startsWith(value))
+                result.add(str);
+        
+        return result;
     }
 }

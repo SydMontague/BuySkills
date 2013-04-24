@@ -48,4 +48,9 @@ public class SkillCurrentCommand extends SkillSubCommand
         }
     }
     
+    @Override
+    public List<String> onTabComplete(String[] args)
+    {
+        return null; // TOTEST player Tabcomplete
+    }
 }

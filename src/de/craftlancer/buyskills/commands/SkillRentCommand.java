@@ -1,5 +1,6 @@
 package de.craftlancer.buyskills.commands;
 
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.bukkit.command.Command;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Player;
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.Skill;
 import de.craftlancer.buyskills.SkillLanguage;
+import de.craftlancer.buyskills.SkillUtils;
 import de.craftlancer.buyskills.api.event.BuySkillsRentEvent;
 
 public class SkillRentCommand extends SkillSubCommand
@@ -69,4 +71,15 @@ public class SkillRentCommand extends SkillSubCommand
         }
     }
     
+    @Override
+    public List<String> onTabComplete(String[] args)
+    {
+        switch (args.length)
+        {
+            case 2:
+                return SkillUtils.getMatches(args[1], plugin.skills.keySet());
+            default:
+                return null;
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package de.craftlancer.buyskills.commands;
 
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -38,6 +40,12 @@ public class SkillResetCommand extends SkillSubCommand
             plugin.getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.RESET_NOTIFY);
         }
         // TOTEST
+    }
+    
+    @Override
+    public List<String> onTabComplete(String[] args)
+    {
+        return null; // TOTEST player TabComplete
     }
     
 }

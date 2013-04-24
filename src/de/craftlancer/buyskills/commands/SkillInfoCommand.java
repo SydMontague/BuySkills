@@ -1,5 +1,7 @@
 package de.craftlancer.buyskills.commands;
 
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -27,4 +29,15 @@ public class SkillInfoCommand extends SkillSubCommand
             sender.sendMessage(SkillUtils.replaceValues(plugin.getSkill(args[1]), SkillLanguage.INFO_DEFAULT_STRING));
     }
     
+    @Override
+    public List<String> onTabComplete(String[] args)
+    {
+        switch (args.length)
+        {
+            case 2:
+                return SkillUtils.getMatches(args[1], plugin.skills.keySet());
+            default:
+                return null;
+        }
+    }
 }

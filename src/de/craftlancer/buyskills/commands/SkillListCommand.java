@@ -74,4 +74,18 @@ public class SkillListCommand extends SkillSubCommand
         
         return returnList;
     }
+    
+    @Override
+    public List<String> onTabComplete(String[] args)
+    {
+        switch (args.length)
+        {
+            case 1:
+                return null;
+            default:
+                List<String> a = SkillUtils.getMatches(args[args.length - 1], plugin.categories);
+                a.addAll(SkillUtils.getMatches(args[args.length - 1], new String[] { "rent", "buy", "all" }));
+                return a;
+        }
+    }
 }

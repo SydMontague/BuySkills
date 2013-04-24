@@ -1,14 +1,16 @@
 package de.craftlancer.buyskills.commands;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 
 import de.craftlancer.buyskills.BuySkills;
+import de.craftlancer.buyskills.SkillUtils;
 
-public class SkillCommandHandler implements CommandExecutor
+public class SkillCommandHandler implements TabExecutor
 {
     public HashMap<String, SkillSubCommand> commands = new HashMap<String, SkillSubCommand>();
     
@@ -28,22 +30,6 @@ public class SkillCommandHandler implements CommandExecutor
         commands.put("recalculate", new SkillRecalculateCommand("buyskills.command.recalculate", plugin));
     }
     
-    /*
-     * Commands:
-     * help - page | command //help pages //
-     * list - page category avaible //list skills //
-     * info - skill //info about skills //
-     * buy - skill //buy skill as player //
-     * rent - skill time //rent skill as player for time //
-     * current - player //show player's current skills //
-     * rented - player //show player's current rented skills //
-     * grant - skill player //grant skill to player as admin //
-     * revoke - skill player //revoke skill from player as admin //
-     * reset - player //reset player's skill as admin //
-     * reload - //reload the config //
-     * reloadPerm - player //recalculate the player's permissions //
-     */
-    
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
@@ -54,16 +40,22 @@ public class SkillCommandHandler implements CommandExecutor
         
         return true;
     }
-}
-
-enum Commands
-{
-    HELP("help"), LIST("list"), INFO("info"), BUY("buy"), RENT("rent"), CURRENT("current"), RENTED("rented"), GRANT("grant"), REVOKE("revoke"), RESET("reset"), NEW("new"), REMOVE("remove"), EDIT("edit"), RELOAD("reload"), RELOADPERM("reloadperm");
     
-    String command;
-    
-    Commands(String cmd)
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args)
     {
-        command = cmd;
+        switch (args.length)
+        {
+            case 1:
+                return SkillUtils.getMatches(args[0], commands.keySet());
+            case 2:
+                if (!commands.containsKey(args[0]))
+                    return null;
+                else
+                    return commands.get(args[0]).onTabComplete(args);
+                
+            default:
+                return null;
+        }
     }
 }

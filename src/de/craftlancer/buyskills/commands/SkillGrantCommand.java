@@ -1,5 +1,6 @@
 package de.craftlancer.buyskills.commands;
 
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.bukkit.command.Command;
@@ -56,4 +57,17 @@ public class SkillGrantCommand extends SkillSubCommand
         }
     }
     
+    @Override
+    public List<String> onTabComplete(String[] args)
+    {
+        switch (args.length)
+        {
+            case 2:
+                return null; // TOTEST player Tabcomplete
+            case 3:
+                return SkillUtils.getMatches(args[1], plugin.skills.keySet());
+            default:
+                return SkillUtils.getMatches(args[args.length - 1], new String[] { "rent", "charge" });
+        }
+    }
 }

@@ -30,5 +30,4 @@ public class SkillRentTask extends BukkitRunnable
                     plugin.getServer().getPluginManager().callEvent(new BuySkillsRentExpireEvent(plugin.getSkill(set.getKey()), p));
                 }
     }
-    
 }

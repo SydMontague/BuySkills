@@ -1,10 +1,13 @@
 package de.craftlancer.buyskills.commands;
 
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
+import de.craftlancer.buyskills.SkillUtils;
 import de.craftlancer.buyskills.api.event.BuySkillsRevokeEvent;
 
 public class SkillRevokeCommand extends SkillSubCommand
@@ -40,6 +43,18 @@ public class SkillRevokeCommand extends SkillSubCommand
             sender.sendMessage(SkillLanguage.REVOKE_SUCCESS);
             plugin.getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.REVOKE_NOTIFY.replace("%skill%", args[2]));
             
+        }
+    }
+    
+    @Override
+    public List<String> onTabComplete(String[] args)
+    {
+        switch (args.length)
+        {
+            case 3:
+                return SkillUtils.getMatches(args[2], plugin.skills.keySet());
+            default:
+                return null;
         }
     }
     

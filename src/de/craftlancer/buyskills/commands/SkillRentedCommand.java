@@ -1,5 +1,6 @@
 package de.craftlancer.buyskills.commands;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -36,6 +37,12 @@ public class SkillRentedCommand extends SkillSubCommand
             for (Entry<String, Long> entry : skills.entrySet())
                 sender.sendMessage(entry.getKey() + " : " + SkillUtils.getTimeDiffString(entry.getValue()));
         }
+    }
+    
+    @Override
+    public List<String> onTabComplete(String[] args)
+    {
+        return null;
     }
     
 }

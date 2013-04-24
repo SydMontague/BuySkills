@@ -1,5 +1,7 @@
 package de.craftlancer.buyskills.commands;
 
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -22,4 +24,6 @@ public abstract class SkillSubCommand
     }
     
     public abstract void execute(CommandSender sender, Command cmd, String label, String[] args);
+    
+    public abstract List<String> onTabComplete(String[] args);
 }

@@ -1,5 +1,7 @@
 package de.craftlancer.buyskills.commands;
 
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -23,6 +25,12 @@ public class SkillReloadCommand extends SkillSubCommand
             plugin.loadConfigurations();
             sender.sendMessage(SkillLanguage.RELOAD_SUCCESS);
         }
+    }
+    
+    @Override
+    public List<String> onTabComplete(String[] args)
+    {
+        return null;
     }
     
 }

@@ -1,13 +1,18 @@
 package de.craftlancer.buyskills.commands;
 
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
+import de.craftlancer.buyskills.SkillUtils;
 
 public class SkillHelpCommand extends SkillSubCommand
 {
+    private static String[] cmdList = { "help", "buy", "current", "grant", "info", "list", "recalculate", "reload", "rent", "rented", "reset", "revoke" };
+    
     public SkillHelpCommand(String perm, BuySkills plugin)
     {
         super(perm, plugin);
@@ -44,4 +49,15 @@ public class SkillHelpCommand extends SkillSubCommand
             sender.sendMessage(SkillLanguage.HELP_COMMAND_REVOKE);
     }
     
+    @Override
+    public List<String> onTabComplete(String[] args)
+    {
+        switch (args.length)
+        {
+            case 2:
+                return SkillUtils.getMatches(args[1], cmdList);
+            default:
+                return null;
+        }
+    }
 }
