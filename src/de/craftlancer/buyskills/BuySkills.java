@@ -58,7 +58,7 @@ public class BuySkills extends JavaPlugin
         }
         
         task = new SkillRentTask(this);
-        task.runTaskTimer(this, 300, 300);
+        task.runTaskTimer(this, updatetime, updatetime);
     }
     
     @Override
