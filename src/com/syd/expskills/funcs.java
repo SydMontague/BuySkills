@@ -339,10 +339,8 @@ public class funcs
         Set<String> keys = ExpSkills.config.getConfigurationSection("skills").getKeys(false);
         
         for (String skill : keys)
-        {
             if (ExpSkills.config.getString("skills." + skill + ".name").toLowerCase().contains(name.toLowerCase()))
                 return skill;
-        }
         
         return null;
     }
@@ -538,7 +536,6 @@ public class funcs
         if (key != null)
         {
             if (ExpSkills.config.getBoolean("skills." + key + ".buyable", true))
-            {
                 if (buyable(name, player, true))
                 {
                     List<String> earn = ExpSkills.config.getStringList("skills." + key + ".permissions_earn");
@@ -614,7 +611,6 @@ public class funcs
                 }
                 else
                     return false;
-            }
             player.sendMessage(ExpSkills.lang.getString("error.skillnotbuyable", "This skill can not be bought."));
             return false;
         }
@@ -640,7 +636,6 @@ public class funcs
         
         // check skilltree
         if (ExpSkills.config.getBoolean("general.use_skilltree", false) && skilltree.getConfigurationSection("skilltree") != null)
-        {
             if (skilltree.getConfigurationSection("skilltree").getKeys(false).contains(skill))
             {
                 int w = 0;
@@ -652,11 +647,9 @@ public class funcs
                 
                 // check if you own a illegal skill
                 if (illegal != null && current != null)
-                {
                     for (String a : illegal)
                         if (current.contains(a))
                             w++;
-                }
                 
                 // check if you own the needed skills
                 if (w == 0 && needs != null)
@@ -678,7 +671,6 @@ public class funcs
             }
             else
                 skills = true;
-        }
         
         // perm check
         if (need != null)

@@ -28,7 +28,6 @@ public class CommandManager implements CommandExecutor
             p = (Player) sender;
         
         if (p == null || p.hasPermission("expskills.use") || p.hasPermission("expskills.admin"))
-        {
             if (cmd.getName().equalsIgnoreCase("exp"))
             {
                 if (args.length == 0)
@@ -141,7 +140,6 @@ public class CommandManager implements CommandExecutor
                     return true;
                 }
                 if (args[0].equalsIgnoreCase("stats"))
-                {
                     if (args.length == 2)
                     {
                         Player player = funcs.getPlayer(args[1]);
@@ -175,7 +173,6 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage(ExpSkills.lang.getString("general.playtime", "Playtime") + ": " + funcs.getPlaytime(p));
                         return true;
                     }
-                }
                 if (args[0].equalsIgnoreCase("list"))
                 {
                     int page;
@@ -249,7 +246,6 @@ public class CommandManager implements CommandExecutor
                     return true;
                 }
                 if (args[0].equalsIgnoreCase("info"))
-                {
                     if (p == null)
                     {
                         sender.sendMessage("You are not a player!");
@@ -265,9 +261,7 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage(ExpSkills.lang.getString("error.skillnotfound", "Skill not found!"));
                         return true;
                     }
-                }
                 if (args[0].equalsIgnoreCase("buy"))
-                {
                     if (p != null)
                     {
                         if (args.length == 2)
@@ -290,9 +284,7 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage("The Console can't buy skills!");
                         return true;
                     }
-                }
                 if (args[0].equalsIgnoreCase("rent"))
-                {
                     if (p != null)
                     {
                         if (args.length == 3)
@@ -320,7 +312,6 @@ public class CommandManager implements CommandExecutor
                         sender.sendMessage("The Console can't rent skills!");
                         return true;
                     }
-                }
                 if (args[0].equalsIgnoreCase("current"))
                 {
                     List<String> current = null;
@@ -346,7 +337,6 @@ public class CommandManager implements CommandExecutor
                     {
                         int a = current.size();
                         for (int i = 0; i < a;)
-                        {
                             if (a - i >= 3)
                             {
                                 sender.sendMessage(ExpSkills.config.getString("skills." + current.get(i) + ".name") + " " + ExpSkills.config.getString("skills." + current.get(i + 1) + ".name") + " " + ExpSkills.config.getString("skills." + current.get(i + 2) + ".name"));
@@ -362,7 +352,6 @@ public class CommandManager implements CommandExecutor
                                 sender.sendMessage(ExpSkills.config.getString("skills." + current.get(i) + ".name"));
                                 i = a;
                             }
-                        }
                         return true;
                     }
                     else
@@ -375,7 +364,7 @@ public class CommandManager implements CommandExecutor
                     List<String> rented = new ArrayList<String>();
                     
                     if (p != null && args.length == 1)
-                        rented = (List<String>) funcs.getRented(p);                            
+                        rented = (List<String>) funcs.getRented(p);
                     else if (args.length == 2 && sender.hasPermission("expskills.rented.others"))
                         rented = (List<String>) funcs.getRented((Player) funcs.getOfflinePlayer(args[1]));
                     else
@@ -389,7 +378,6 @@ public class CommandManager implements CommandExecutor
                     {
                         int a = rented.size();
                         for (int i = 0; i < a;)
-                        {
                             if (a - i >= 3)
                             {
                                 sender.sendMessage(ExpSkills.config.getString("skills." + rented.get(i) + ".name") + " " + ExpSkills.config.getString("skills." + rented.get(i + 1) + ".name") + " " + ExpSkills.config.getString("skills." + rented.get(i + 2) + ".name"));
@@ -405,8 +393,6 @@ public class CommandManager implements CommandExecutor
                                 sender.sendMessage(ExpSkills.config.getString("skills." + rented.get(i) + ".name"));
                                 i = a;
                             }
-                            
-                        }
                     }
                     else
                         sender.sendMessage(ExpSkills.lang.getString("error.notanyskillhe", "This player dont own any skill"));
@@ -444,9 +430,7 @@ public class CommandManager implements CommandExecutor
                         }
                     }
                     else
-                    {
                         sender.sendMessage(ExpSkills.lang.getString("error.toomuchlessarguments", "Too much/less arguments"));
-                    }
                     return true;
                 }
                 if (args[0].equalsIgnoreCase("set") && (sender.hasPermission("expskills.admin") || sender.hasPermission("expskills.admin.set")))
@@ -549,7 +533,6 @@ public class CommandManager implements CommandExecutor
             }
             else
                 return false;
-        }
         sender.sendMessage(ExpSkills.lang.getString("error.permissions", "You don't have the needed permissions"));
         return true;
     }

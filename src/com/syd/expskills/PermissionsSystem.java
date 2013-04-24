@@ -13,7 +13,7 @@ public class PermissionsSystem
     public static Permission permission = null;
     
     public static void start()
-    {        
+    {
         if (ExpSkills.server.getPluginManager().getPlugin("Vault") != null)
         {
             RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
@@ -21,7 +21,7 @@ public class PermissionsSystem
                 permission = permissionProvider.getProvider();
             
             ExpSkills.log.info("[ExpSkills] " + permission.getName() + " hooked");
-        }       
+        }
     }
     
     public static void addPermission(String world, String player, String node)

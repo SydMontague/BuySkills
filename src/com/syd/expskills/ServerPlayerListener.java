@@ -81,4 +81,3 @@ public class ServerPlayerListener implements Listener
         FileManager.savePF(player, pconfig);
     }
 }
-

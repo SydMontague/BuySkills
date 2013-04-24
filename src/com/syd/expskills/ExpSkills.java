@@ -39,7 +39,7 @@ public class ExpSkills extends JavaPlugin
         
         // start of config.yml
         
-        if (!new File(this.getDataFolder().getPath() + File.separatorChar + "config.yml").exists())
+        if (!new File(getDataFolder().getPath() + File.separatorChar + "config.yml").exists())
             saveDefaultConfig();
         
         config = getConfig();
@@ -48,11 +48,8 @@ public class ExpSkills extends JavaPlugin
         String version = getDescription().getVersion();
         
         if (configversion.equalsIgnoreCase(version))
-        {
             if (configversion.equals("0.7.0_RC2"))
-            {
                 config.set("general.updatetime", 6000);
-            }
             else if (configversion.equals("0.6.4"))
             {
                 config.set("general.formula", 0);
@@ -64,13 +61,12 @@ public class ExpSkills extends JavaPlugin
                 config.set("general.skill_cap", 0);
                 config.set("general.updatetime", 6000);
             }
-        }
         config.set("version", getDescription().getVersion());
         saveConfig();
         // end of config.yml
         
         // start of lang.yml
-        File langfile = new File(this.getDataFolder() + File.separator + "lang.yml");
+        File langfile = new File(getDataFolder() + File.separator + "lang.yml");
         
         if (!langfile.exists())
         {
@@ -115,28 +111,23 @@ public class ExpSkills extends JavaPlugin
         
         // start economy section
         if ((config.getBoolean("general.use_economy", false)))
-        {
             if (pm.getPlugin("Vault") != null)
             {
                 RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
                 if (economyProvider != null)
                 {
-                    economy = economyProvider.getProvider();                    
+                    economy = economyProvider.getProvider();
                     log.info("[ExpSkills] " + economy.getName() + " hooked");
                 }
             }
             else if (pm.getPlugin("Register") != null)
-            {
                 if (Methods.setMethod(pm))
                 {
                     method = Methods.getMethod();
                     log.info("[ExpSkills] " + method.getName() + " hooked");
                 }
                 else
-                    log.severe("[ExpSkills] Hooking Economy Failed");                
-            }
-        }
-        // end economy section
+                    log.severe("[ExpSkills] Hooking Economy Failed");
     }
     
     @Override
@@ -205,15 +196,12 @@ public class ExpSkills extends JavaPlugin
         }
         
         if (exp != 0)
-        {
             if (i - 32 > 0)
                 i += exp / (65 + (i - 32) * 7);
             else if (i - 16 > 0)
                 i += exp / (17 + (i - 16) * 3);
             else
                 i += exp / 17D;
-            
-        }
         
         if (exp == 0)
             i--;

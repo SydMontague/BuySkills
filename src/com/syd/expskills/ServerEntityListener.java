@@ -47,7 +47,6 @@ public class ServerEntityListener implements Listener
             pconfig.set("experience", newxp);
             FileManager.savePF(p, pconfig);
             
-                        
             int exp = ExpSkills.getExp(p.getLevel() + p.getExp());
             
             // level = 1.75 * (level * level) + 4.5 * level;
