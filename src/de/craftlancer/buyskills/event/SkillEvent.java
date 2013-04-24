@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 import de.craftlancer.buyskills.Skill;
 
 public class SkillEvent extends Event
-{    
+{
     private static final HandlerList handlers = new HandlerList();
     
     Skill skill;

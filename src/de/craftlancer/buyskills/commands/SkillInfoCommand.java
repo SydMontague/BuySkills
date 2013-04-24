@@ -8,7 +8,7 @@ import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillUtils;
 
 public class SkillInfoCommand extends SkillSubCommand
-{    
+{
     public SkillInfoCommand(String perm, BuySkills plugin)
     {
         super(perm, plugin);

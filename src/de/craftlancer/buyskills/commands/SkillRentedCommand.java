@@ -24,16 +24,16 @@ public class SkillRentedCommand extends SkillSubCommand
     {
         if (!sender.hasPermission(getPermission()))
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
-        else if(!(sender instanceof Player))
+        else if (!(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PLAYERONLY);
         else
-        {            
+        {
             Player p = (Player) sender;
-                
-            Map<String, Long> skills = plugin.getPlayerManager().getRentedSkills(p);            
             
-            sender.sendMessage(SkillLanguage.RENTED_DEFAULT_STRING);            
-            for(Entry<String, Long> entry  : skills.entrySet())
+            Map<String, Long> skills = plugin.getPlayerManager().getRentedSkills(p);
+            
+            sender.sendMessage(SkillLanguage.RENTED_DEFAULT_STRING);
+            for (Entry<String, Long> entry : skills.entrySet())
                 sender.sendMessage(entry.getKey() + " : " + SkillUtils.getTimeDiffString(entry.getValue()));
         }
     }

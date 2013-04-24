@@ -17,7 +17,7 @@ public class BuySkillsResetEvent extends Event
     public Player getPlayer()
     {
         return player;
-    }   
+    }
     
     @Override
     public HandlerList getHandlers()

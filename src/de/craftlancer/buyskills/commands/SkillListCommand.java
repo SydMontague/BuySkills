@@ -14,7 +14,7 @@ import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillUtils;
 
 public class SkillListCommand extends SkillSubCommand
-{    
+{
     public SkillListCommand(String perm, BuySkills plugin)
     {
         super(perm, plugin);

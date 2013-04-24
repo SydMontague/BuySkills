@@ -16,7 +16,7 @@ public class SkillPlayer
         this.name = name;
         this.skills = skills;
         this.rented = rented;
-        this.setBonusCap(bonuscap);
+        setBonusCap(bonuscap);
     }
     
     /**
@@ -53,8 +53,6 @@ public class SkillPlayer
         return name;
     }
     
-    
-    
     public void removeRentedSkill(String s)
     {
         rented.remove(s);
@@ -84,12 +82,12 @@ public class SkillPlayer
     {
         removeSkill(s.getName());
     }
-
+    
     public void addRented(String s, long l)
     {
-        rented.put(s, l);        
+        rented.put(s, l);
     }
-
+    
     public List<String> getBoughtSkills()
     {
         return skills;

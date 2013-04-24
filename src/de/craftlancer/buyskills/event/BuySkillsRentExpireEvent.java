@@ -9,5 +9,5 @@ public class BuySkillsRentExpireEvent extends SkillEvent
     public BuySkillsRentExpireEvent(Skill skill, Player player)
     {
         super(skill, player);
-    }    
+    }
 }

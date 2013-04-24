@@ -22,25 +22,25 @@ public class SkillCurrentCommand extends SkillSubCommand
     {
         if (!sender.hasPermission(getPermission()))
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
-        else if(!(sender instanceof Player) && args.length <= 1)
+        else if (!(sender instanceof Player) && args.length <= 1)
             sender.sendMessage(SkillLanguage.COMMAND_ARGUMENTS);
-        else if(args.length >= 2 && Bukkit.getPlayerExact(args[1]) == null)
+        else if (args.length >= 2 && Bukkit.getPlayerExact(args[1]) == null)
             sender.sendMessage(SkillLanguage.COMMAND_PLAYER_NOT_EXIST);
         else
-        {            
+        {
             Player p;
-            if(args.length >= 2)
+            if (args.length >= 2)
                 p = Bukkit.getPlayerExact(args[1]);
             else
                 p = (Player) sender;
-                
+            
             List<String> skills = plugin.getPlayerManager().getSkills(p);
             String msg = SkillLanguage.CURRENT_DEFAULT_STRING.replace("%player%", p.getName());
             
-            for(int i = 0; i < skills.size(); i++)
+            for (int i = 0; i < skills.size(); i++)
             {
                 msg = msg + skills.get(i) + " ";
-                if(i % 3 == 0 && i != 0)
+                if (i % 3 == 0 && i != 0)
                     msg = msg + "\n";
             }
             

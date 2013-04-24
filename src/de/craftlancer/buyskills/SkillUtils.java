@@ -102,7 +102,7 @@ public class SkillUtils
         
         return str;
     }
-
+    
     public static String getTimeDiffString(Long value)
     {
         long time = (value - System.currentTimeMillis()) / 1000;

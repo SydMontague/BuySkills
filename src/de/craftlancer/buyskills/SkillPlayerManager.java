@@ -91,7 +91,7 @@ public class SkillPlayerManager
     }
     
     public void revokeRented(String p, String key)
-    {        
+    {
         playerMap.get(p).removeRentedSkill(key);
         savePlayer(p);
         handleSkillRevoke(p, key);
@@ -106,7 +106,7 @@ public class SkillPlayerManager
     
     public void grantSkill(Player p, Skill s)
     {
-        grantSkill(p.getName(), s.getName());        
+        grantSkill(p.getName(), s.getName());
     }
     
     public void grantSkill(String p, String s)
@@ -118,7 +118,7 @@ public class SkillPlayerManager
     
     public void grantRented(Player p, Skill s, long time)
     {
-        grantRented(p.getName(), s.getName(), time);        
+        grantRented(p.getName(), s.getName(), time);
     }
     
     public void grantRented(String p, String s, long time)
@@ -247,7 +247,7 @@ public class SkillPlayerManager
         
         return true;
     }
-
+    
     public List<String> getBoughtSkills(String string)
     {
         return playerMap.get(string).getBoughtSkills();

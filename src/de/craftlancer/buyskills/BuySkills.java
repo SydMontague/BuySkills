@@ -32,7 +32,7 @@ public class BuySkills extends JavaPlugin
     public int skillcap = 0;
     public long updatetime = 300;
     public int skillsperpage = 5;
-        
+    
     @Override
     public void onEnable()
     {
@@ -227,16 +227,16 @@ public class BuySkills extends JavaPlugin
     {
         return skills.containsKey(name.toLowerCase());
     }
-
+    
     public static SkillHandler getHandler(String key)
     {
         return handlerList.get(key);
     }
-
+    
     public static boolean hasHandler(String key)
     {
         return handlerList.containsKey(key);
-    }    
+    }
     
     public static boolean canAfford(Player p, Skill s)
     {
