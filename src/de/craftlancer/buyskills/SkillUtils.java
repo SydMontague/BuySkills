@@ -102,4 +102,15 @@ public class SkillUtils
         
         return str;
     }
+
+    public static String getTimeDiffString(Long value)
+    {
+        long time = (value - System.currentTimeMillis()) / 1000;
+        
+        long h = time / 3600;
+        long min = (time - h * 3600) / 60;
+        long s = time - h * 3600 - min * 60;
+        
+        return h + "h " + min + "min " + s + "s";
+    }
 }

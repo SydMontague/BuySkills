@@ -12,6 +12,7 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,22 +20,24 @@ public class BuySkills extends JavaPlugin
 {
     public static HashMap<String, SkillHandler> handlerList = new HashMap<String, SkillHandler>();
     public static Logger log = Bukkit.getLogger();
+    public Permission permission;
     public HashMap<String, Skill> skills = new HashMap<String, Skill>();
     public HashSet<String> categories = new HashSet<String>();
     public FileConfiguration sConfig;
-    public Permission permission;
-    public RentTask task;
+    public SkillRentTask task;
+    public SkillPlayerManager pmanager;
     
     private FileConfiguration config;
     public String currency = "Dollar";
     public int skillcap = 0;
     public long updatetime = 300;
     public int skillsperpage = 5;
-    
+        
     @Override
     public void onEnable()
     {
         log = getLogger();
+        pmanager = new SkillPlayerManager(this);
         
         loadConfigurations();
         
@@ -49,7 +52,7 @@ public class BuySkills extends JavaPlugin
                 permission = permissionProvider.getProvider();
         }
         
-        task = new RentTask();
+        task = new SkillRentTask(this);
         task.runTaskTimer(this, 300, 300);
     }
     
@@ -74,8 +77,13 @@ public class BuySkills extends JavaPlugin
             return false;
         
         handlerList.put(key, handler);
-        Bukkit.getLogger().info("[BuySkills] Registering handler for key: " + key);
+        log.info("Registering handler for key: " + key);
         return true;
+    }
+    
+    public SkillPlayerManager getPlayerManager()
+    {
+        return pmanager;
     }
     
     public void loadConfigurations()
@@ -91,9 +99,9 @@ public class BuySkills extends JavaPlugin
     private void loadConfig()
     {
         currency = config.getString("general.currency", "Dollar");
-        updatetime = config.getLong("general.updatetime", 300);
+        updatetime = Math.max(1, config.getLong("general.updatetime", 300));
         skillcap = config.getInt("general.skillcap", 0);
-        skillsperpage = config.getInt("general.skillsperpage", 5);
+        skillsperpage = Math.max(1, config.getInt("general.skillsperpage", 5));
     }
     
     private void loadSkills()
@@ -218,5 +226,25 @@ public class BuySkills extends JavaPlugin
     public boolean hasSkill(String name)
     {
         return skills.containsKey(name.toLowerCase());
+    }
+
+    public static SkillHandler getHandler(String key)
+    {
+        return handlerList.get(key);
+    }
+
+    public static boolean hasHandler(String key)
+    {
+        return handlerList.containsKey(key);
+    }    
+    
+    public static boolean canAfford(Player p, Skill s)
+    {
+        for (Entry<String, Integer> set : s.getBuyCosts().entrySet())
+            if (hasHandler(set.getKey()))
+                if (!getHandler(set.getKey()).hasCurrency(p, set.getValue()))
+                    return false;
+        
+        return false;
     }
 }

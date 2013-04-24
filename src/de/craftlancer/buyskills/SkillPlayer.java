@@ -1,35 +1,97 @@
 package de.craftlancer.buyskills;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import org.bukkit.entity.Player;
 
 public class SkillPlayer
 {
-    public SkillPlayer(String name)
+    private String name;
+    private List<String> skills = new ArrayList<String>();
+    private HashMap<String, Long> rented = new HashMap<String, Long>();
+    private int bonuscap = 0;
+    
+    public SkillPlayer(String name, List<String> skills, HashMap<String, Long> rented, int bonuscap)
     {
+        this.name = name;
+        this.skills = skills;
+        this.rented = rented;
+        this.setBonusCap(bonuscap);
+    }
+    
+    /**
+     * Get all skills (rented and bought) of this player
+     * 
+     * @return all the player's owned skills
+     */
+    public List<String> getSkills()
+    {
+        List<String> fin = new ArrayList<String>();
+        fin.addAll(skills);
+        fin.addAll(rented.keySet());
         
+        return fin;
     }
     
-    public static void buySkill(Player p, Skill s)
+    public HashMap<String, Long> getRented()
     {
-        // TODO
+        return rented;
     }
     
-    public static void rentSkill(Player p, Skill s, long time)
+    public int getBonusCap()
     {
-        // TODO
+        return bonuscap;
     }
     
-    public static List<Skill> getAvaibleSkills(Player p)
+    public void setBonusCap(int bonuscap)
     {
-        // TODO
-        return null;
+        this.bonuscap = bonuscap;
     }
     
-    public static List<String> getSkills(Player p)
+    public String getName()
     {
-        // TODO
-        return null;
+        return name;
+    }
+    
+    
+    
+    public void removeRentedSkill(String s)
+    {
+        rented.remove(s);
+    }
+    
+    public void removeRentedSkill(Skill s)
+    {
+        removeRentedSkill(s.getName());
+    }
+    
+    public void addSkill(Skill s)
+    {
+        addSkill(s.getName());
+    }
+    
+    public void addSkill(String s)
+    {
+        skills.add(s);
+    }
+    
+    public void removeSkill(String s)
+    {
+        skills.remove(s);
+    }
+    
+    public void removeSkill(Skill s)
+    {
+        removeSkill(s.getName());
+    }
+
+    public void addRented(String s, long l)
+    {
+        rented.put(s, l);        
+    }
+
+    public List<String> getBoughtSkills()
+    {
+        return skills;
     }
 }

@@ -14,18 +14,18 @@ public class SkillCommandHandler implements CommandExecutor
     
     public SkillCommandHandler(BuySkills plugin)
     {
-        commands.put("help", new SkillHelpCommand("buyskills.command.help"));
+        commands.put("help", new SkillHelpCommand("buyskills.command.help", plugin));
         commands.put("list", new SkillListCommand("buyskills.command.list", plugin));
         commands.put("info", new SkillInfoCommand("buyskills.command.info", plugin));
-        commands.put("buy", new SkillBuyCommand("buyskills.command.buy"));
-        commands.put("rent", new SkillRentCommand("buyskills.command.rent"));
-        commands.put("current", new SkillCurrentCommand("buyskills.command.current"));
-        commands.put("rented", new SkillRentedCommand("buyskills.command.rented"));
-        commands.put("grant", new SkillGrantCommand("buyskills.command.grant"));
-        commands.put("revoke", new SkillRevokeCommand("buyskills.command.revoke"));
-        commands.put("reset", new SkillResetCommand("buyskills.command.reset"));
+        commands.put("buy", new SkillBuyCommand("buyskills.command.buy", plugin));
+        commands.put("rent", new SkillRentCommand("buyskills.command.rent", plugin));
+        commands.put("current", new SkillCurrentCommand("buyskills.command.current", plugin));
+        commands.put("rented", new SkillRentedCommand("buyskills.command.rented", plugin));
+        commands.put("grant", new SkillGrantCommand("buyskills.command.grant", plugin));
+        commands.put("revoke", new SkillRevokeCommand("buyskills.command.revoke", plugin));
+        commands.put("reset", new SkillResetCommand("buyskills.command.reset", plugin));
         commands.put("reload", new SkillReloadCommand("buyskills.command.reload", plugin));
-        commands.put("recalculate", new SkillRecalculateCommand("buyskills.command.recalculate"));
+        commands.put("recalculate", new SkillRecalculateCommand("buyskills.command.recalculate", plugin));
     }
     
     /*

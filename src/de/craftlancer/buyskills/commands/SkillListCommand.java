@@ -11,17 +11,13 @@ import org.bukkit.entity.Player;
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.Skill;
 import de.craftlancer.buyskills.SkillLanguage;
-import de.craftlancer.buyskills.SkillPlayer;
 import de.craftlancer.buyskills.SkillUtils;
 
 public class SkillListCommand extends SkillSubCommand
-{
-    BuySkills plugin;
-    
+{    
     public SkillListCommand(String perm, BuySkills plugin)
     {
-        super(perm);
-        this.plugin = plugin;
+        super(perm, plugin);
     }
     
     @Override
@@ -73,34 +69,9 @@ public class SkillListCommand extends SkillSubCommand
         
         for (Skill s : initList)
             if (cat == null || s.getCategories().contains(cat))
-                if ((all || skillAvaible(sender, s)) || (buyable && s.isBuyable()) || (rentable && s.isRentable()))
+                if ((all || plugin.getPlayerManager().skillAvaible(sender, s)) || (buyable && s.isBuyable()) || (rentable && s.isRentable()))
                     returnList.add(s);
         
         return returnList;
-    }
-    
-    // TODO marked for outsourcing
-    private boolean skillAvaible(Player p, Skill s)
-    {
-        for (String str : s.getPermNeed())
-            if (!p.hasPermission(str))
-                return false;
-        
-        for (String str : s.getGroupNeed())
-            if (!plugin.permission.playerInGroup(p, str))
-                return false;
-        
-        for (String str : s.getSkillsIllegal())
-            if (SkillPlayer.getSkills(p).contains(str))
-                return false;
-        
-        for (String str : s.getSkillsNeed())
-            if (!SkillPlayer.getSkills(p).contains(str))
-                return false;
-        
-        if (SkillPlayer.getSkills(p).contains(s.getName()))
-            return false;
-        
-        return true;
     }
 }

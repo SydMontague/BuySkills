@@ -3,13 +3,17 @@ package de.craftlancer.buyskills.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import de.craftlancer.buyskills.BuySkills;
+
 public abstract class SkillSubCommand
 {
     String permission = "";
+    BuySkills plugin;
     
-    public SkillSubCommand(String perm)
+    public SkillSubCommand(String permission, BuySkills plugin)
     {
-        permission = perm;
+        this.permission = permission;
+        this.plugin = plugin;
     }
     
     public String getPermission()

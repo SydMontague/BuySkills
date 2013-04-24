@@ -3,13 +3,14 @@ package de.craftlancer.buyskills.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
 
 public class SkillHelpCommand extends SkillSubCommand
 {
-    public SkillHelpCommand(String perm)
+    public SkillHelpCommand(String perm, BuySkills plugin)
     {
-        super(perm);
+        super(perm, plugin);
     }
     
     @Override

@@ -8,13 +8,9 @@ import de.craftlancer.buyskills.SkillLanguage;
 
 public class SkillReloadCommand extends SkillSubCommand
 {
-    private BuySkills plugin;
-    
     public SkillReloadCommand(String perm, BuySkills plugin)
     {
-        super(perm);
-        this.plugin = plugin;
-        // TODO Auto-generated constructor stub
+        super(perm, plugin);
     }
     
     @Override
@@ -23,7 +19,10 @@ public class SkillReloadCommand extends SkillSubCommand
         if (!sender.hasPermission(getPermission()))
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
         else
+        {
             plugin.loadConfigurations();
+            sender.sendMessage(SkillLanguage.RELOAD_SUCCESS);
+        }
     }
     
 }
