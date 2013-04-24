@@ -17,6 +17,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.craftlancer.buyskills.api.SkillHandler;
+import de.craftlancer.buyskills.commands.SkillCommandHandler;
 
 public class BuySkills extends JavaPlugin
 {
@@ -43,6 +44,7 @@ public class BuySkills extends JavaPlugin
         
         loadConfigurations();
         SkillLanguage.loadStrings(config);
+        getCommand("skill").setExecutor(new SkillCommandHandler(this));
         
         if (getServer().getPluginManager().getPlugin("Vault") != null)
         {
