@@ -39,6 +39,7 @@ public class SkillRevokeCommand extends SkillSubCommand
             
             sender.sendMessage(SkillLanguage.REVOKE_SUCCESS);
             plugin.getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.REVOKE_NOTIFY.replace("%skill%", args[2]));
+            
         }
     }
     

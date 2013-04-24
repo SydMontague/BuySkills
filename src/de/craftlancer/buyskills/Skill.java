@@ -29,10 +29,7 @@ public class Skill
     // rent
     private boolean buyable;
     private boolean rentable;
-    private boolean rentdiscount;
     private long renttime;
-    private long maxtime;
-    private long mintime;
     // Skilltree
     private List<String> skillsNeed;
     private List<String> skillsIllegal;
@@ -213,16 +210,6 @@ public class Skill
         this.rentable = rentable;
     }
     
-    public boolean isRentdiscount()
-    {
-        return rentdiscount;
-    }
-    
-    public void setRentDiscount(boolean rentdiscount)
-    {
-        this.rentdiscount = rentdiscount;
-    }
-    
     public long getRenttime()
     {
         return renttime;
@@ -231,26 +218,6 @@ public class Skill
     public void setRentTime(long renttime)
     {
         this.renttime = renttime;
-    }
-    
-    public long getMaxtime()
-    {
-        return maxtime;
-    }
-    
-    public void setMaxTime(long maxtime)
-    {
-        this.maxtime = maxtime;
-    }
-    
-    public long getMintime()
-    {
-        return mintime;
-    }
-    
-    public void setMinTime(long mintime)
-    {
-        this.mintime = mintime;
     }
     
     public List<String> getSkillsNeed()

@@ -28,9 +28,8 @@ public class SkillUtils
     /**
      * Replaces dummy string values with correct values.
      * Possible Values:
-     * %name%, %desc%, %info%, %categories%, %buycost%, %rentcost%,
-     * %buyneed%, %rentneed%, %worlds%, %rentable%, %buyable%,
-     * %rentdiscount%, %renttime%, %mintime%, %maxtime%, %skillsneed%,
+     * %name%, %desc%, %info%, %categories%, %buycost%, %rentcost%, %buyneed%,
+     * %rentneed%, %worlds%, %rentable%, %buyable%, %renttime%, %skillsneed%,
      * %skillsillegal%, %skillsneeded%
      * Strings surrounded by ° are only shown when the skill is buyable
      * Strings surrounded by ~ are only shown when the skill is rentable
@@ -82,10 +81,7 @@ public class SkillUtils
         string = string.replace("%worlds%", skill.getWorlds().toString().replace("[", "").replace("]", ""));
         string = string.replace("%rentable%", Boolean.toString(skill.isRentable()));
         string = string.replace("%buyable%", Boolean.toString(skill.isBuyable()));
-        string = string.replace("%rentdiscount%", Boolean.toString(skill.isRentdiscount()));
         string = string.replace("%renttime%", Long.toString(skill.getRenttime()));
-        string = string.replace("%minetime%", Long.toString(skill.getMintime()));
-        string = string.replace("%maxtime%", Long.toString(skill.getMaxtime()));
         string = string.replace("%skillneed%", skill.getSkillsNeed().toString().replace("[", "").replace("]", ""));
         string = string.replace("%skillillegal%", skill.getSkillsIllegal().toString().replace("[", "").replace("]", ""));
         string = string.replace("%skillsneeded%", Integer.toString(skill.getSkillsNeeded()));

@@ -140,11 +140,8 @@ public class BuySkills extends JavaPlugin
         skill.setRegrantPerm(sConfig.getBoolean(key + ".regrant_perm", true));
         skill.setBuyable(sConfig.getBoolean(key + ".buyable", false));
         skill.setRentable(sConfig.getBoolean(key + ".rentable", false));
-        skill.setRentDiscount(sConfig.getBoolean(key + ".rentdiscount", false));
         
         skill.setRentTime(sConfig.getLong(key + ".renttime", 0));
-        skill.setMaxTime(sConfig.getLong(key + ".maxrenttime", 0));
-        skill.setMinTime(sConfig.getLong(key + ".minrenttime", 0));
         skill.setSkillsNeeded(sConfig.getInt(key + ".skills_needed", 0));
         
         HashMap<String, Integer> buyHelpMap = new HashMap<String, Integer>();
@@ -192,10 +189,7 @@ public class BuySkills extends JavaPlugin
         sConfig.set(key + ".regrant_perm", s.isRegrantPerm());
         sConfig.set(key + ".buyable", s.isBuyable());
         sConfig.set(key + ".rentable", s.isRentable());
-        sConfig.set(key + ".rentdiscount", s.isRentdiscount());
         sConfig.set(key + ".renttime", s.getRenttime());
-        sConfig.set(key + ".maxrenttime", s.getMaxtime());
-        sConfig.set(key + ".minrenttime", s.getMintime());
         sConfig.set(key + ".skills_needed", s.getSkillsNeeded());
         sConfig.set(key + ".skill_need", s.getSkillsNeed());
         sConfig.set(key + ".skill_illegal", s.getSkillsIllegal());
@@ -238,9 +232,19 @@ public class BuySkills extends JavaPlugin
         return handlerList.containsKey(key);
     }
     
-    public static boolean canAfford(Player p, Skill s)
+    public static boolean canAffordBuy(Player p, Skill s)
     {
         for (Entry<String, Integer> set : s.getBuyCosts().entrySet())
+            if (hasHandler(set.getKey()))
+                if (!getHandler(set.getKey()).hasCurrency(p, set.getValue()))
+                    return false;
+        
+        return false;
+    }
+    
+    public static boolean canAffordRent(Player p, Skill s)
+    {
+        for (Entry<String, Integer> set : s.getRentCosts().entrySet())
             if (hasHandler(set.getKey()))
                 if (!getHandler(set.getKey()).hasCurrency(p, set.getValue()))
                     return false;

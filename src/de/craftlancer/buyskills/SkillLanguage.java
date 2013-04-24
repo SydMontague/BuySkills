@@ -49,5 +49,11 @@ public class SkillLanguage
     public static String RECALC_NOTIFY;
     public static String RELOAD_SUCCESS;
     public static String REVOKE_NOTIFY;
+    public static String SKILL_NOT_RENTABLE;
+    public static String RENT_CANCELLED;
+    public static String RENT_SUCCESS;
+    public static String GRANT_ALREADY_OWN;
+    public static String GRANT_SUCCESS;
+    public static String GRANT_NOTIFY;
     
 }
