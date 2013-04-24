@@ -4,6 +4,8 @@ import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.entity.Player;
 
+import de.craftlancer.buyskills.api.SkillHandler;
+
 public class MoneyHandler implements SkillHandler
 {
     Economy economy;

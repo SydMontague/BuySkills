@@ -10,7 +10,7 @@ import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.Skill;
 import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillUtils;
-import de.craftlancer.buyskills.event.BuySkillsGrantEvent;
+import de.craftlancer.buyskills.api.event.BuySkillsGrantEvent;
 
 public class SkillGrantCommand extends SkillSubCommand
 {

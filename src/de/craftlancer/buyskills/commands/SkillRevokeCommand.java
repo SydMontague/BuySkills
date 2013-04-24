@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
-import de.craftlancer.buyskills.event.BuySkillsRevokeEvent;
+import de.craftlancer.buyskills.api.event.BuySkillsRevokeEvent;
 
 public class SkillRevokeCommand extends SkillSubCommand
 {
@@ -27,7 +27,7 @@ public class SkillRevokeCommand extends SkillSubCommand
         else if (!plugin.hasSkill(args[2]))
             sender.sendMessage(SkillLanguage.COMMAND_SKILL_NOT_EXIST);
         else if (!plugin.getPlayerManager().getSkills(args[1]).contains(args[2]))
-            sender.sendMessage(SkillLanguage.PLAYER_NOT_OWN);
+            sender.sendMessage(SkillLanguage.REVOKE_NOT_OWN);
         else
         {
             if (plugin.getPlayerManager().getRentedSkills(args[1]).containsKey(args[2]))

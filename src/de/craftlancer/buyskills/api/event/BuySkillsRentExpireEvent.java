@@ -1,4 +1,4 @@
-package de.craftlancer.buyskills.event;
+package de.craftlancer.buyskills.api.event;
 
 import org.bukkit.entity.Player;
 

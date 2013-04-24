@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.Skill;
 import de.craftlancer.buyskills.SkillLanguage;
-import de.craftlancer.buyskills.event.BuySkillsRentEvent;
+import de.craftlancer.buyskills.api.event.BuySkillsRentEvent;
 
 public class SkillRentCommand extends SkillSubCommand
 {
@@ -31,24 +31,24 @@ public class SkillRentCommand extends SkillSubCommand
         else if (!plugin.hasSkill(args[1]))
             sender.sendMessage(SkillLanguage.COMMAND_SKILL_NOT_EXIST);
         else if (!plugin.getSkill(args[1]).isRentable())
-            sender.sendMessage(SkillLanguage.SKILL_NOT_RENTABLE);
+            sender.sendMessage(SkillLanguage.RENT_NOT_RENTABLE);
         else if (plugin.skillcap <= plugin.getPlayerManager().getSkills(sender.getName()).size() - plugin.getPlayerManager().getBonusCap(sender.getName()))
-            sender.sendMessage(SkillLanguage.SKILLCAP_REACHED);
+            sender.sendMessage(SkillLanguage.BUYRENT_SKILLCAP_REACHED);
         else if (plugin.getPlayerManager().getSkills(sender.getName()).contains(args[2]))
-            sender.sendMessage(SkillLanguage.BUY_ALREADY_OWN);
+            sender.sendMessage(SkillLanguage.BUYRENT_ALREADY_OWN);
         else
         {
             Player p = (Player) sender;
             Skill s = plugin.getSkill(args[1]);
             
             if (plugin.getPlayerManager().hasPermNeed(p, s))
-                sender.sendMessage(SkillLanguage.BUY_NOT_PERMISSION);
+                sender.sendMessage(SkillLanguage.BUYRENT_NOT_PERMISSION);
             else if (plugin.getPlayerManager().hasPermNeed(p, s))
-                sender.sendMessage(SkillLanguage.BUY_NOT_GROUP);
+                sender.sendMessage(SkillLanguage.BUYRENT_NOT_GROUP);
             else if (plugin.getPlayerManager().followsSkilltree(p, s))
-                sender.sendMessage(SkillLanguage.BUY_NOT_SKILLTREE);
+                sender.sendMessage(SkillLanguage.BUYRENT_NOT_SKILLTREE);
             else if (!BuySkills.canAffordRent(p, s))
-                sender.sendMessage(SkillLanguage.BUY_NOT_AFFORD);
+                sender.sendMessage(SkillLanguage.BUYRENT_NOT_AFFORD);
             else
             {
                 BuySkillsRentEvent event = new BuySkillsRentEvent(s, p);

@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import de.craftlancer.buyskills.event.BuySkillsRentExpireEvent;
+import de.craftlancer.buyskills.api.event.BuySkillsRentExpireEvent;
 
 public class SkillRentTask extends BukkitRunnable
 {
@@ -26,7 +26,7 @@ public class SkillRentTask extends BukkitRunnable
                 if (set.getValue() < time)
                 {
                     plugin.getPlayerManager().revokeRented(p.getName(), set.getKey());
-                    p.sendMessage(SkillLanguage.SKILL_RENT_EXPIRED.replace("%skill%", set.getKey()));
+                    p.sendMessage(SkillLanguage.RENT_EXPIRED.replace("%skill%", set.getKey()));
                     plugin.getServer().getPluginManager().callEvent(new BuySkillsRentExpireEvent(plugin.getSkill(set.getKey()), p));
                 }
     }

@@ -1,17 +1,27 @@
-package de.craftlancer.buyskills.event;
+package de.craftlancer.buyskills.api.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class BuySkillsResetEvent extends Event
+import de.craftlancer.buyskills.Skill;
+
+public class SkillEvent extends Event
 {
     private static final HandlerList handlers = new HandlerList();
-    private Player player;
     
-    public BuySkillsResetEvent(Player player)
+    Skill skill;
+    Player player;
+    
+    public SkillEvent(Skill skill, Player player)
     {
+        this.skill = skill;
         this.player = player;
+    }
+    
+    public Skill getSkill()
+    {
+        return skill;
     }
     
     public Player getPlayer()

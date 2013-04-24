@@ -16,6 +16,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.craftlancer.buyskills.api.SkillHandler;
+
 public class BuySkills extends JavaPlugin
 {
     public static HashMap<String, SkillHandler> handlerList = new HashMap<String, SkillHandler>();
@@ -40,6 +42,7 @@ public class BuySkills extends JavaPlugin
         pmanager = new SkillPlayerManager(this);
         
         loadConfigurations();
+        SkillLanguage.loadStrings(config);
         
         if (getServer().getPluginManager().getPlugin("Vault") != null)
         {
@@ -65,10 +68,8 @@ public class BuySkills extends JavaPlugin
     /**
      * Register a new currency to be used with this plugin
      * 
-     * @param key
-     *            the key, used in config for the "currency"
-     * @param handler
-     *            the handler object
+     * @param key the key, used in config for the "currency"
+     * @param handler the handler object
      * @return false when something went wrong, true otherwise
      */
     public static boolean registerCurrency(String key, SkillHandler handler)

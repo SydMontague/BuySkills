@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
-import de.craftlancer.buyskills.event.BuySkillsResetEvent;
+import de.craftlancer.buyskills.api.event.BuySkillsResetEvent;
 
 public class SkillResetCommand extends SkillSubCommand
 {
