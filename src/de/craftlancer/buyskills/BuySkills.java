@@ -19,6 +19,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.craftlancer.buyskills.api.SkillHandler;
 import de.craftlancer.buyskills.commands.SkillCommandHandler;
 
+/*
+ * TODO SkillHandler for more than just Integer Values
+ * TODO add default ItemHandler (paying Items as Currency)
+ */
+
 public class BuySkills extends JavaPlugin
 {
     public static HashMap<String, SkillHandler> handlerList = new HashMap<String, SkillHandler>();
@@ -248,6 +253,26 @@ public class BuySkills extends JavaPlugin
     public static boolean canAffordRent(Player p, Skill s)
     {
         for (Entry<String, Integer> set : s.getRentCosts().entrySet())
+            if (hasHandler(set.getKey()))
+                if (!getHandler(set.getKey()).hasCurrency(p, set.getValue()))
+                    return false;
+        
+        return false;
+    }
+
+    public static boolean hasNeededRent(Player p, Skill s)
+    {
+        for (Entry<String, Integer> set : s.getRentNeed().entrySet())
+            if (hasHandler(set.getKey()))
+                if (!getHandler(set.getKey()).hasCurrency(p, set.getValue()))
+                    return false;
+        
+        return false;
+    }
+    
+    public static boolean hasNeededBuy(Player p, Skill s)
+    {
+        for (Entry<String, Integer> set : s.getBuyNeed().entrySet())
             if (hasHandler(set.getKey()))
                 if (!getHandler(set.getKey()).hasCurrency(p, set.getValue()))
                     return false;

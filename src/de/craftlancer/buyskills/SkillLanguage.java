@@ -30,6 +30,8 @@ public class SkillLanguage
     public static String BUYRENT_NOT_SKILLTREE;
     public static String BUYRENT_NOT_AFFORD;
     public static String BUYRENT_SKILLCAP_REACHED;
+    public static String BUYRENT_WRONG_WORLD;
+    public static String BUYRENT_NOT_CURRENCYS;
     
     public static String BUY_CANCELLED;
     public static String BUY_SUCCESS;
@@ -89,11 +91,13 @@ public class SkillLanguage
         REVOKE_SUCCESS = config.getString("string." + REVOKE_SUCCESS);
         BUY_NOT_BUYABLE = config.getString("string." + BUY_NOT_BUYABLE);
         BUYRENT_SKILLCAP_REACHED = config.getString("string." + BUYRENT_SKILLCAP_REACHED);
+        BUYRENT_WRONG_WORLD = config.getString("string." + BUYRENT_WRONG_WORLD);
         BUYRENT_ALREADY_OWN = config.getString("string." + BUYRENT_ALREADY_OWN);
         BUYRENT_NOT_REQUIREMENT = config.getString("string." + BUYRENT_NOT_REQUIREMENT);
         BUYRENT_NOT_PERMISSION = config.getString("string." + BUYRENT_NOT_PERMISSION);
         BUYRENT_NOT_GROUP = config.getString("string." + BUYRENT_NOT_GROUP);
         BUYRENT_NOT_SKILLTREE = config.getString("string." + BUYRENT_NOT_SKILLTREE);
+        BUYRENT_NOT_CURRENCYS = config.getString("string." + BUYRENT_NOT_CURRENCYS);
         BUYRENT_NOT_AFFORD = config.getString("string." + BUYRENT_NOT_AFFORD);
         BUY_CANCELLED = config.getString("string." + BUY_CANCELLED);
         BUY_SUCCESS = config.getString("string." + BUY_SUCCESS);
