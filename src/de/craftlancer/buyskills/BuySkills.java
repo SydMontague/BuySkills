@@ -3,6 +3,7 @@ package de.craftlancer.buyskills;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
@@ -240,43 +241,13 @@ public class BuySkills extends JavaPlugin
         return handlerList.containsKey(key);
     }
     
-    public static boolean canAffordBuy(Player p, Skill s)
+    public static boolean hasCurrency(Player p, Map<String, Integer> s)
     {
-        for (Entry<String, Integer> set : s.getBuyCosts().entrySet())
+        for (Entry<String, Integer> set : s.entrySet())
             if (hasHandler(set.getKey()))
                 if (!getHandler(set.getKey()).hasCurrency(p, set.getValue()))
                     return false;
         
-        return false;
-    }
-    
-    public static boolean canAffordRent(Player p, Skill s)
-    {
-        for (Entry<String, Integer> set : s.getRentCosts().entrySet())
-            if (hasHandler(set.getKey()))
-                if (!getHandler(set.getKey()).hasCurrency(p, set.getValue()))
-                    return false;
-        
-        return false;
-    }
-
-    public static boolean hasNeededRent(Player p, Skill s)
-    {
-        for (Entry<String, Integer> set : s.getRentNeed().entrySet())
-            if (hasHandler(set.getKey()))
-                if (!getHandler(set.getKey()).hasCurrency(p, set.getValue()))
-                    return false;
-        
-        return false;
-    }
-    
-    public static boolean hasNeededBuy(Player p, Skill s)
-    {
-        for (Entry<String, Integer> set : s.getBuyNeed().entrySet())
-            if (hasHandler(set.getKey()))
-                if (!getHandler(set.getKey()).hasCurrency(p, set.getValue()))
-                    return false;
-        
-        return false;
+        return true;
     }
 }

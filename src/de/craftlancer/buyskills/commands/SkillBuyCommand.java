@@ -50,9 +50,9 @@ public class SkillBuyCommand extends SkillSubCommand
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_GROUP);
             else if (plugin.getPlayerManager().followsSkilltree(p, s))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_SKILLTREE);
-            else if (!BuySkills.hasNeededBuy(p, s))
+            else if (!BuySkills.hasCurrency(p, s.getBuyNeed()))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_CURRENCYS);
-            else if (!BuySkills.canAffordBuy(p, s))
+            else if (!BuySkills.hasCurrency(p, s.getBuyCosts()))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_AFFORD);
             else
             {

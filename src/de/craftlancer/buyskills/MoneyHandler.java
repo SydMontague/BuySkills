@@ -34,5 +34,4 @@ public class MoneyHandler implements SkillHandler
     {
         return currency;
     }
-    
 }
