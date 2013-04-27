@@ -87,17 +87,23 @@ public class SkillUtils
         string = string.replace("%skillneed%", skill.getSkillsNeed().toString().replace("[", "").replace("]", ""));
         string = string.replace("%skillillegal%", skill.getSkillsIllegal().toString().replace("[", "").replace("]", ""));
         string = string.replace("%skillsneeded%", Integer.toString(skill.getSkillsNeeded()));
+        
         return string;
     }
     
-    private static String getHandlerValues(Map<String, Integer> map)
+    private static String getHandlerValues(Map<String, Object> map)
     {
         String str = "";
         
-        for (Entry<String, Integer> set : map.entrySet())
-            if (BuySkills.handlerList.containsKey(set.getKey()))
-                str = str + set.getValue() + " " + BuySkills.handlerList.get(set.getKey()).getCurrencyName();
-        
+        for (Entry<String, Object> set : map.entrySet())
+            if (BuySkills.hasHandler(set.getKey()))
+                if (BuySkills.getHandler(set.getKey()).checkInputClass(set.getValue()))
+                    str = str + BuySkills.getHandler(set.getKey()).getFormatedString(set.getValue());  // set.getValue()
+                                                                                                      // +
+                                                                                                      // " "
+                                                                                                      // +
+                                                                                                      // BuySkills.handlerList.get(set.getKey()).getCurrencyName();
+                    
         return str;
     }
     

@@ -34,9 +34,9 @@ public class SkillRentCommand extends SkillSubCommand
             sender.sendMessage(SkillLanguage.COMMAND_SKILL_NOT_EXIST);
         else if (!plugin.getSkill(args[1]).isRentable())
             sender.sendMessage(SkillLanguage.RENT_NOT_RENTABLE);
-        else if (plugin.skillcap <= plugin.getPlayerManager().getSkills(sender.getName()).size() - plugin.getPlayerManager().getBonusCap(sender.getName()))
+        else if (plugin.skillcap != 0 && plugin.skillcap <= plugin.getPlayerManager().getSkills(sender.getName()).size() - plugin.getPlayerManager().getBonusCap(sender.getName()))
             sender.sendMessage(SkillLanguage.BUYRENT_SKILLCAP_REACHED);
-        else if (plugin.getPlayerManager().getSkills(sender.getName()).contains(args[2]))
+        else if (plugin.getPlayerManager().getSkills(sender.getName()).contains(args[1]))
             sender.sendMessage(SkillLanguage.BUYRENT_ALREADY_OWN);
         else
         {
@@ -49,7 +49,7 @@ public class SkillRentCommand extends SkillSubCommand
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_PERMISSION);
             else if (plugin.getPlayerManager().hasPermNeed(p, s))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_GROUP);
-            else if (plugin.getPlayerManager().followsSkilltree(p, s))
+            else if (!plugin.getPlayerManager().followsSkilltree(p, s))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_SKILLTREE);
             else if (!BuySkills.hasCurrency(p, s.getRentNeed()))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_CURRENCYS);
@@ -64,9 +64,10 @@ public class SkillRentCommand extends SkillSubCommand
                     sender.sendMessage(SkillLanguage.RENT_CANCELLED);
                 else
                 {
-                    for (Entry<String, Integer> set : s.getRentCosts().entrySet())
+                    for (Entry<String, Object> set : s.getRentCosts().entrySet())
                         if (BuySkills.hasHandler(set.getKey()))
-                            BuySkills.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
+                            if (BuySkills.getHandler(set.getKey()).checkInputClass(set.getValue()))
+                                BuySkills.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
                     
                     plugin.getPlayerManager().grantRented(p, s, s.getRenttime());
                     sender.sendMessage(SkillLanguage.RENT_SUCCESS);

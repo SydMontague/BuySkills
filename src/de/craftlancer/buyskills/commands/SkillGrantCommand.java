@@ -41,9 +41,10 @@ public class SkillGrantCommand extends SkillSubCommand
             boolean rent = SkillUtils.arrayContains(args, "rent");
             
             if (SkillUtils.arrayContains(args, "charge"))
-                for (Entry<String, Integer> set : ((rent) ? s.getRentCosts().entrySet() : s.getBuyCosts().entrySet()))
+                for (Entry<String, Object> set : ((rent) ? s.getRentCosts().entrySet() : s.getBuyCosts().entrySet()))
                     if (BuySkills.hasHandler(set.getKey()))
-                        BuySkills.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
+                        if (BuySkills.getHandler(set.getKey()).checkInputClass(set.getValue()))
+                            BuySkills.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
             
             if (rent)
                 plugin.getPlayerManager().grantRented(p, s, s.getRenttime());
@@ -60,12 +61,14 @@ public class SkillGrantCommand extends SkillSubCommand
     @Override
     public List<String> onTabComplete(String[] args)
     {
+        BuySkills.debug(args.length + " " + args[args.length - 1]);
+        
         switch (args.length)
         {
             case 2:
-                return null; // TOTEST player Tabcomplete
+                return null;
             case 3:
-                return SkillUtils.getMatches(args[1], plugin.skills.keySet());
+                return SkillUtils.getMatches(args[2], plugin.skills.keySet());
             default:
                 return SkillUtils.getMatches(args[args.length - 1], new String[] { "rent", "charge" });
         }

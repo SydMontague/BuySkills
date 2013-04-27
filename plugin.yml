@@ -1,49 +1,73 @@
-name: ExpSkills
-main: com.syd.expskills.ExpSkills
-version: 0.8.4_beta4
+name: BuySkills
+main: de.craftlancer.buyskills.BuySkills
+version: Beta1
 author: SydMontague
 dev-url: http://dev.bukkit.org/server-mods/expskills/
-description: Buy Skills with XP, money and more!
-softdepend: [Vault, Register]
+description: Buy permission nodes and groups with money, and other currencies!
+depend: [Vault]
 commands:
-    exp:
+    skill:
         description: Gives out XP and current Level    
         usage: |
-            /exp help [command] - get help for this plugin
-            /exp stats - show your stats
-            /exp list <page> <filter> - list available skills
-            /exp info <skill> - get information to a specific skill
-            /exp buy <skill> - buy a skill
-            /exp rent <skill> <time> - rent a skill
-            /exp current - show your bought skills
-            /exp rented - show's your rented skills
-        aliases: [skills, skill]
+            /skill help [command] - get help for this plugin
+            /skill list <page> <filter> - list available skills
+            /skill info <skill> - get information to a specific skill
+            /skill buy <skill> - buy a skill
+            /skill rent <skill> <time> - rent a skill
+            /skill current - show your bought skills
+            /skill rented - show's your rented skills
 permissions:
-  expskills.use:
-    description: Use ExpSkills
-    default: false
-  expskills.admin:
-    description: Use all admin Commands
-    default: op
-  expskills.current.others:
-    description: Get bought skills of other players
-    default: false
-  expskills.rented.others:
-    description: Get rented skills of other players
-    default: false
-  expskills.admin.add:
-    description: Add skillpoints/XP/level
-    default: false
-  expskills.admin.set:
-    description: Set skillpoints/XP/level
-    default: false
-  expskills.admin.reset:
-    description: reset skills
-    default: false
-  expskills.admin.grant:
-    description: Grant a skill
-    default: false
-  expskills.admin.revoke:
-    description: Revoke a skill
-    default: false
-    
+    buyskills.command.help:
+        description: Grant access to /help command
+        default: false
+    buyskills.command.list:
+        description: Grant access to /list command
+        default: false
+    buyskills.command.info:
+        description: Grant access to /info command
+        default: false
+    buyskills.command.buy:
+        description: Grant access to /buy command
+        default: false
+    buyskills.command.rent:
+        description: Grant access to /rent command
+        default: false
+    buyskills.command.current:
+        description: Grant access to /current command
+        default: false
+    buyskills.command.rented:
+        description: Grant access to /rented command
+        default: false
+    buyskills.command.recalculate:
+        description: Grant access to /recalculate command
+        default: false
+    buyskills.command.reload:
+        description: Grant access to /reload command
+        default: false
+    buyskills.command.reset:  
+        description: Grant access to /reset command
+        default: false
+    buyskills.command.revoke:
+        description: Grant access to /revoke command
+        default: false
+    buyskills.command.grant:
+        description: Grant access to /grant command
+        default: false
+    buyskills.user:
+        default: false
+        children:
+            buyskills.command.help: true
+            buyskills.command.list: true
+            buyskills.command.info: true
+            buyskills.command.buy: true
+            buyskills.command.rent: true
+            buyskills.command.current: true
+            buyskills.command.rented: true
+    buyskills.admin:
+        default: false
+        children:
+            buyskills.command.recalculate: true
+            buyskills.command.reload: true
+            buyskills.command.reset: true
+            buyskills.command.revoke: true
+            buyskills.command.grant: true

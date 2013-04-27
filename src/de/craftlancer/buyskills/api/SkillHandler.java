@@ -2,7 +2,7 @@ package de.craftlancer.buyskills.api;
 
 import org.bukkit.entity.Player;
 
-public interface SkillHandler
+public interface SkillHandler<T>
 {
     /**
      * Check if a player owns enough of the handled currency
@@ -15,7 +15,7 @@ public interface SkillHandler
      * @return true if the amount of the handled currency is greater or equal
      *         the amount
      */
-    public abstract boolean hasCurrency(Player p, int amount);
+    public abstract boolean hasCurrency(Player p, T amount);
     
     /**
      * Withdraw an amount of the handled currency from a player
@@ -27,7 +27,7 @@ public interface SkillHandler
      * @param amount
      *            the amount of the handled currency
      */
-    public abstract void withdrawCurrency(Player p, int amount);
+    public abstract void withdrawCurrency(Player p, T amount);
     
     /**
      * Get the name of the currency.
@@ -35,4 +35,8 @@ public interface SkillHandler
      * @return the name of the currency as String
      */
     public abstract String getCurrencyName();
+    
+    public abstract boolean checkInputClass(Object obj);
+    
+    public abstract String getFormatedString(Object value);
 }

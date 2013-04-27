@@ -21,20 +21,33 @@ public class SkillPlayerManager
     public SkillPlayerManager(BuySkills plugin)
     {
         this.plugin = plugin;
+        
         rentedFile = new File(plugin.getDataFolder(), "rented.yml");
+        if (!rentedFile.exists())
+            try
+            {
+                rentedFile.createNewFile();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        
         rentedConfig = YamlConfiguration.loadConfiguration(rentedFile);
     }
     
     private void loadPlayer(String p)
     {
-        FileConfiguration conf = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "players" + File.separator + p + ".yml"));
+        File file = new File(plugin.getDataFolder(), "players" + File.separator + p + ".yml");
+        FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
         
         List<String> skills = conf.getStringList("skills");
         int bonuscap = conf.getInt("bonuscap", 0);
         HashMap<String, Long> rent = new HashMap<String, Long>();
         
-        for (String key : rentedConfig.getConfigurationSection(p).getKeys(false))
-            rent.put(key, rentedConfig.getLong(p + "." + key));
+        if (rentedConfig.getConfigurationSection(p) != null)
+            for (String key : rentedConfig.getConfigurationSection(p).getKeys(false))
+                rent.put(key, rentedConfig.getLong(p + "." + key));
         
         playerMap.put(p, new SkillPlayer(p, skills, rent, bonuscap));
     }
@@ -48,7 +61,7 @@ public class SkillPlayerManager
     {
         File file = new File(plugin.getDataFolder(), "players" + File.separator + p.getName() + ".yml");
         FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
-        conf.set("skills", p.getSkills());
+        conf.set("skills", p.getBoughtSkills());
         conf.set("bonuscap", p.getBonusCap());
         
         rentedConfig.set(p.getName(), p.getRented());
@@ -92,14 +105,14 @@ public class SkillPlayerManager
     
     public void revokeRented(String p, String key)
     {
-        playerMap.get(p).removeRentedSkill(key);
+        playerMap.get(p).removeRentedSkill(key.toLowerCase());
         savePlayer(p);
         handleSkillRevoke(p, key);
     }
     
     public void revokeSkill(String p, String key)
     {
-        playerMap.get(p).removeSkill(key);
+        playerMap.get(p).removeSkill(key.toLowerCase());
         savePlayer(p);
         handleSkillRevoke(p, key);
     }
@@ -111,7 +124,7 @@ public class SkillPlayerManager
     
     public void grantSkill(String p, String s)
     {
-        playerMap.get(p).addSkill(s);
+        playerMap.get(p).addSkill(s.toLowerCase());
         savePlayer(p);
         handleSkillGrant(p, s);
     }
@@ -123,7 +136,7 @@ public class SkillPlayerManager
     
     public void grantRented(String p, String s, long time)
     {
-        playerMap.get(p).addRented(s, System.currentTimeMillis() + time);
+        playerMap.get(p).addRented(s.toLowerCase(), System.currentTimeMillis() + time);
         savePlayer(p);
         handleSkillGrant(p, s);
     }
@@ -224,9 +237,14 @@ public class SkillPlayerManager
             if (plugin.getPlayerManager().getSkills(p).contains(str))
                 return false;
         
+        int i = 0;
+        
         for (String str : s.getSkillsNeed())
-            if (!plugin.getPlayerManager().getSkills(p).contains(str))
-                return false;
+            if (plugin.getPlayerManager().getSkills(p).contains(str))
+                i++;
+        
+        if (i < s.getSkillsNeeded())
+            return false;
         
         return true;
     }

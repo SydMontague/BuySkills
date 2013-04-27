@@ -33,9 +33,9 @@ public class SkillBuyCommand extends SkillSubCommand
             sender.sendMessage(SkillLanguage.COMMAND_SKILL_NOT_EXIST);
         else if (!plugin.getSkill(args[1]).isBuyable())
             sender.sendMessage(SkillLanguage.BUY_NOT_BUYABLE);
-        else if (plugin.skillcap <= plugin.getPlayerManager().getSkills(sender.getName()).size() - plugin.getPlayerManager().getBonusCap(sender.getName()))
+        else if (plugin.skillcap != 0 && plugin.skillcap <= plugin.getPlayerManager().getSkills(sender.getName()).size() - plugin.getPlayerManager().getBonusCap(sender.getName()))
             sender.sendMessage(SkillLanguage.BUYRENT_SKILLCAP_REACHED);
-        else if (plugin.getPlayerManager().getSkills(sender.getName()).contains(args[2]))
+        else if (plugin.getPlayerManager().getSkills(sender.getName()).contains(args[1]))
             sender.sendMessage(SkillLanguage.BUYRENT_ALREADY_OWN);
         else
         {
@@ -43,12 +43,12 @@ public class SkillBuyCommand extends SkillSubCommand
             Skill s = plugin.getSkill(args[1]);
             
             if (!s.getWorlds().contains(p.getWorld().getName()))
-                sender.sendMessage(SkillLanguage.BUYRENT_WRONG_WORLD);   
-            if (plugin.getPlayerManager().hasPermNeed(p, s))
+                sender.sendMessage(SkillLanguage.BUYRENT_WRONG_WORLD);
+            else if (plugin.getPlayerManager().hasPermNeed(p, s))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_PERMISSION);
             else if (plugin.getPlayerManager().hasPermNeed(p, s))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_GROUP);
-            else if (plugin.getPlayerManager().followsSkilltree(p, s))
+            else if (!plugin.getPlayerManager().followsSkilltree(p, s))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_SKILLTREE);
             else if (!BuySkills.hasCurrency(p, s.getBuyNeed()))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_CURRENCYS);
@@ -63,9 +63,10 @@ public class SkillBuyCommand extends SkillSubCommand
                     sender.sendMessage(SkillLanguage.BUY_CANCELLED);
                 else
                 {
-                    for (Entry<String, Integer> set : s.getBuyCosts().entrySet())
+                    for (Entry<String, Object> set : s.getBuyCosts().entrySet())
                         if (BuySkills.hasHandler(set.getKey()))
-                            BuySkills.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
+                            if (BuySkills.getHandler(set.getKey()).checkInputClass(set.getValue()))
+                                BuySkills.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
                     
                     plugin.getPlayerManager().grantSkill(p, s);
                     sender.sendMessage(SkillLanguage.BUY_SUCCESS);

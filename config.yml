@@ -1,45 +1,54 @@
-version: 0.8.4_beta2
 general:
-  skillpoint_modifier: 2.0
-  currency: Dollar
-  use_skilltree: false
-  use_economy: false
-  formula: 0
-  formula_a: 0
-  formula_b: 0
-  formula_c: 0
-  formula_d: 0
-  formula_e: 0
-  skill_cap: 1
-  updatetime: 300
-  change_expdrop: true
-  useGlobalPermissions: true
-skills:
-    testskill: #the key of this skill
-        name: testskill #Display name of you skill
-        description: Just an example #a short text for /xp list
-        info: Haha #a more advanced info for /xp info <skill>
-        cost_type: both #what is charged - money/skillpoints/both - only for /exp list and /exp info
-        skillpoints: 2 #how many skillpoints are charged for this skill
-        money: 1000 #how much money is charged for this skill
-        permissions_need: #the needed permissions to buy this skill
-            - 'foobar.bar'
-        permissions_earn: #the earned permissions when buying this skill
-            - 'foo.bar'
-            - 'bar.foo'
-        groups_need: #the player needs to be in this group to buy this skill
-            - builder
-        groups_earn: #the player gets this group when he buy this skills
-            - mod
-            - admin
-        revoke_need_groups: false #revokes all groups_need groups after buying this skill
-        level_need: 0 #the level needed to buy this skill
-        time: 60 #the playtime in seconds which are needed to buy this skill
-        buyable: true #is this skill buyable
-        rentable: true #is this skill rentable
-        rentcost: 100 #how much money is charged for renting this skill at max
-        rentcost_min: 50 #how much money will be charged at least when renting this skill
-        rentdiscount: true #will the player get a discount when he uses a lower time
-        renttime: 300 #the default and max renttime for this skill (no discount if you rent for lesser time)        
-        categories: #for /xp list <page> <filter> use
-             - 'example'
+    currency: "Dollar"
+    updatetime: 300
+    skillcap: 0
+    skillsperpage: 5
+string:
+    COMMAND_PERMISSION: "COMMAND_PERMISSION"
+    COMMAND_PLAYERONLY: "COMMAND_PLAYERONLY"
+    COMMAND_SKILL_NOT_EXIST: "COMMAND_SKILL_NOT_EXIST"
+    COMMAND_PLAYER_NOT_EXIST: "COMMAND_PLAYER_NOT_EXIST"
+    COMMAND_ARGUMENTS: "COMMAND_ARGUMENTS"    
+    HELP_COMMAND_HELP: "HELP_COMMAND_HELP"
+    HELP_COMMAND_BUY: "HELP_COMMAND_BUY"
+    HELP_COMMAND_CURRENT: "HELP_COMMAND_CURRENT"
+    HELP_COMMAND_GRANT: "HELP_COMMAND_GRANT"
+    HELP_COMMAND_INFO: "HELP_COMMAND_INFO"
+    HELP_COMMAND_LIST: "HELP_COMMAND_LIST"
+    HELP_COMMAND_RECALCULATE: "HELP_COMMAND_RECALCULATE"
+    HELP_COMMAND_RELOAD: "HELP_COMMAND_RELOAD"
+    HELP_COMMAND_RENT: "HELP_COMMAND_RENT"
+    HELP_COMMAND_RENTED: "HELP_COMMAND_RENTED"
+    HELP_COMMAND_RESET: "HELP_COMMAND_RESET"
+    HELP_COMMAND_REVOKE: "HELP_COMMAND_REVOKE"    
+    BUYRENT_ALREADY_OWN: "BUYRENT_ALREADY_OWN"
+    BUYRENT_NOT_REQUIREMENT: "BUYRENT_NOT_REQUIREMENT"
+    BUYRENT_NOT_PERMISSION: "BUYRENT_NOT_PERMISSION"
+    BUYRENT_NOT_GROUP: "BUYRENT_NOT_GROUP"
+    BUYRENT_NOT_SKILLTREE: "BUYRENT_NOT_SKILLTREE"
+    BUYRENT_NOT_AFFORD: "BUYRENT_NOT_AFFORD"
+    BUYRENT_SKILLCAP_REACHED: "BUYRENT_SKILLCAP_REACHED"
+    BUYRENT_WRONG_WORLD: "BUYRENT_WRONG_WORLD"
+    BUYRENT_NOT_CURRENCYS: "BUYRENT_NOT_CURRENCYS"    
+    BUY_CANCELLED: "BUY_CANCELLED"
+    BUY_SUCCESS: "BUY_SUCCESS"
+    BUY_NOT_BUYABLE: "BUY_NOT_BUYABLE"    
+    RENT_CANCELLED: "RENT_CANCELLED"
+    RENT_SUCCESS: "RENT_SUCCESS"
+    RENT_NOT_RENTABLE: "RENT_NOT_RENTABLE"
+    RENT_EXPIRED: "RENT_EXPIRED"    
+    LIST_DEFAULT_STRING: "LIST_DEFAULT_STRING"
+    INFO_DEFAULT_STRING: "INFO_DEFAULT_STRING"
+    RENTED_DEFAULT_STRING: "RENTED_DEFAULT_STRING"
+    CURRENT_DEFAULT_STRING: "CURRENT_DEFAULT_STRING"    
+    RESET_SUCCESS: "RESET_SUCCESS"
+    RESET_NOTIFY: "RESET_NOTIFY"    
+    RECALC_SUCCESS: "RECALC_SUCCESS"
+    RECALC_NOTIFY: "RECALC_NOTIFY"    
+    RELOAD_SUCCESS: "RELOAD_SUCCESS"    
+    REVOKE_SUCCESS: "REVOKE_SUCCESS"
+    REVOKE_NOTIFY: "REVOKE_NOTIFY"
+    REVOKE_NOT_OWN: "REVOKE_NOT_OWN"    
+    GRANT_ALREADY_OWN: "GRANT_ALREADY_OWN"
+    GRANT_SUCCESS: "GRANT_SUCCESS"
+    GRANT_NOTIFY: "GRANT_NOTIFY"

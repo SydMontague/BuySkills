@@ -1,5 +1,6 @@
 package de.craftlancer.buyskills.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -33,19 +34,18 @@ public class SkillResetCommand extends SkillSubCommand
             for (String s : plugin.getPlayerManager().getRentedSkills(args[1]).keySet())
                 plugin.getPlayerManager().revokeRented(args[1], s);
             
-            for (String s : plugin.getPlayerManager().getBoughtSkills(args[1]))
+            for (String s : new ArrayList<String>(plugin.getPlayerManager().getBoughtSkills(args[1])))
                 plugin.getPlayerManager().revokeSkill(args[1], s);
             
             sender.sendMessage(SkillLanguage.RESET_SUCCESS);
             plugin.getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.RESET_NOTIFY);
         }
-        // TOTEST
     }
     
     @Override
     public List<String> onTabComplete(String[] args)
     {
-        return null; // TOTEST player TabComplete
+        return null;
     }
     
 }

@@ -46,16 +46,18 @@ public class SkillCommandHandler implements TabExecutor
     {
         switch (args.length)
         {
+            case 0:
+                return null;
             case 1:
                 return SkillUtils.getMatches(args[0], commands.keySet());
-            case 2:
+            default:
                 if (!commands.containsKey(args[0]))
                     return null;
                 else
                     return commands.get(args[0]).onTabComplete(args);
                 
-            default:
-                return null;
+                // default:
+                // return null;
         }
     }
 }

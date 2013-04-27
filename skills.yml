@@ -1,0 +1,37 @@
+testskill:
+    name: Test
+    description: "Das ist eine Testbeschreibung"
+    info: "Das ist eine Testinfo"
+    category:
+    - testskill
+    - foo
+    perm_earn:
+    - foo.bar
+    perm_need:
+    - bar.boo
+    group_earn:
+    - foobar
+    group_need:
+    - barfoo
+    skill_need:
+    skill_illegal:
+    - nichttest
+    worlds:
+    - world
+    revoke_group: false
+    revoke_perm: false
+    regrant_perm: false
+    regrant_group: false
+    buyable: true
+    rentable: true
+    renttime: 200
+    skills_needed: 0
+    buy_costs:
+        money: 10
+    rent_costs:
+        money: 10
+    buy_need:
+        money: 20
+    rent_need:
+        money: 20
+    

@@ -39,7 +39,7 @@ public class SkillListCommand extends SkillSubCommand
             {
                 try
                 {
-                    page = Integer.parseInt(args[2]) > 1 ? Integer.parseInt(args[2]) - 1 : 0;
+                    page = Integer.parseInt(args[1]) > 1 ? Integer.parseInt(args[1]) - 1 : 0;
                 }
                 catch (NumberFormatException e)
                 {
@@ -58,7 +58,12 @@ public class SkillListCommand extends SkillSubCommand
             List<Skill> skill = getAvaibleSkills((Player) sender, rentable, buyable, all, cat);
             
             for (int i = 0; i < plugin.skillsperpage; i++)
+            {
+                if (skill.size() <= page * plugin.skillsperpage + i)
+                    break;
+                
                 sender.sendMessage(SkillUtils.replaceValues(skill.get(page * plugin.skillsperpage + i), SkillLanguage.LIST_DEFAULT_STRING));
+            }
         }
     }
     

@@ -33,14 +33,12 @@ public class SkillRecalculateCommand extends SkillSubCommand
             sender.sendMessage(SkillLanguage.RECALC_SUCCESS);
             plugin.getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.RECALC_NOTIFY);
         }
-        
-        // TOTEST
     }
     
     @Override
     public List<String> onTabComplete(String[] args)
     {
-        return null; // TOTEST player TabComplete
+        return null;
     }
     
 }

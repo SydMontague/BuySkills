@@ -12,10 +12,10 @@ public class Skill
     private String info;
     private List<String> categories;
     // buy
-    private Map<String, Integer> buyCosts;
-    private Map<String, Integer> rentCosts;
-    private Map<String, Integer> buyNeed;
-    private Map<String, Integer> rentNeed;
+    private Map<String, Object> buyCosts;
+    private Map<String, Object> rentCosts;
+    private Map<String, Object> buyNeed;
+    private Map<String, Object> rentNeed;
     // permission
     private List<String> permNeed;
     private List<String> permEarn;
@@ -90,22 +90,22 @@ public class Skill
         this.categories = categories;
     }
     
-    public Map<String, Integer> getBuyCosts()
+    public Map<String, Object> getBuyCosts()
     {
         return buyCosts;
     }
     
-    public void setBuyCosts(Map<String, Integer> buy_costs)
+    public void setBuyCosts(Map<String, Object> buy_costs)
     {
         buyCosts = buy_costs;
     }
     
-    public Map<String, Integer> getRentCosts()
+    public Map<String, Object> getRentCosts()
     {
         return rentCosts;
     }
     
-    public void setRentCosts(Map<String, Integer> rent_costs)
+    public void setRentCosts(Map<String, Object> rent_costs)
     {
         rentCosts = rent_costs;
     }
@@ -250,22 +250,22 @@ public class Skill
         this.skillsNeeded = skillsNeeded;
     }
     
-    public Map<String, Integer> getBuyNeed()
+    public Map<String, Object> getBuyNeed()
     {
         return buyNeed;
     }
     
-    public void setBuyNeed(Map<String, Integer> buyNeed)
+    public void setBuyNeed(Map<String, Object> buyNeed)
     {
         this.buyNeed = buyNeed;
     }
     
-    public Map<String, Integer> getRentNeed()
+    public Map<String, Object> getRentNeed()
     {
         return rentNeed;
     }
     
-    public void setRentNeed(Map<String, Integer> rentNeed)
+    public void setRentNeed(Map<String, Object> rentNeed)
     {
         this.rentNeed = rentNeed;
     }
