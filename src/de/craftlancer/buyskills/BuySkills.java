@@ -19,12 +19,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import de.craftlancer.buyskills.api.SkillHandler;
 import de.craftlancer.buyskills.commands.SkillCommandHandler;
+import de.craftlancer.buyskills.handlers.FoodHandler;
+import de.craftlancer.buyskills.handlers.HealthHandler;
+import de.craftlancer.buyskills.handlers.ItemHandler;
+import de.craftlancer.buyskills.handlers.LevelHandler;
+import de.craftlancer.buyskills.handlers.MoneyHandler;
 
 /*
  * TODO JavaDocs
  * TOTEST the whole plugin (minor cases)
  * TODO extend OO, especially in Command classes
- * TODO more default Handlers (Health, Hunger, XP, Enchantment Level, )
+ * TODO commands from console
+ * TODO deactivate default handler
  */
 
 @SuppressWarnings("rawtypes")
@@ -44,6 +50,10 @@ public class BuySkills extends JavaPlugin
     public int skillcap = 0;
     public long updatetime = 6000;
     public int skillsperpage = 5;
+    private String foodname = "Food"; //TODO Load
+    private String healthname = "Health"; //TODO Load
+    private String levelname = "Level"; //TODO Load
+    private String xpname = "XP"; //TODO Load
     
     @Override
     public void onEnable()
@@ -67,6 +77,10 @@ public class BuySkills extends JavaPlugin
         }
         
         registerCurrency("item", new ItemHandler());
+        registerCurrency("food", new FoodHandler(foodname));
+        registerCurrency("health", new HealthHandler(healthname));
+        registerCurrency("level", new LevelHandler(levelname));
+        registerCurrency("xp", new LevelHandler(xpname));
         
         task = new SkillRentTask(this);
         task.runTaskTimer(this, updatetime, updatetime);

@@ -49,7 +49,11 @@ public class SkillCommandHandler implements TabExecutor
             case 0:
                 return null;
             case 1:
-                return SkillUtils.getMatches(args[0], commands.keySet());
+                List<String> l = SkillUtils.getMatches(args[0], commands.keySet());
+                for (String str : l)
+                    if (!sender.hasPermission(commands.get(str).getPermission()))
+                        l.remove(l);
+                return l;                
             default:
                 if (!commands.containsKey(args[0]))
                     return null;

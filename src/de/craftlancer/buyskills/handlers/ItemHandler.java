@@ -1,4 +1,4 @@
-package de.craftlancer.buyskills;
+package de.craftlancer.buyskills.handlers;
 
 import java.util.List;
 

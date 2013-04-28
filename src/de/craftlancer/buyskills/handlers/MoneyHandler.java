@@ -1,9 +1,10 @@
-package de.craftlancer.buyskills;
+package de.craftlancer.buyskills.handlers;
 
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.entity.Player;
 
+import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.api.SkillHandler;
 
 public class MoneyHandler implements SkillHandler<Number>
