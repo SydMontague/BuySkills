@@ -14,8 +14,7 @@ import de.craftlancer.buyskills.SkillUtils;
 import de.craftlancer.buyskills.api.event.BuySkillsRentEvent;
 
 public class SkillRentCommand extends SkillSubCommand
-{
-    
+{    
     public SkillRentCommand(String perm, BuySkills plugin)
     {
         super(perm, plugin);

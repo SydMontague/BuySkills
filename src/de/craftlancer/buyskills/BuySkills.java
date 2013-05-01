@@ -30,7 +30,6 @@ import de.craftlancer.buyskills.handlers.MoneyHandler;
  * TOTEST the whole plugin (minor cases)
  * TODO extend OO, especially in Command classes
  * TODO commands from console
- * TODO deactivate default handler
  */
 
 @SuppressWarnings("rawtypes")
@@ -46,14 +45,9 @@ public class BuySkills extends JavaPlugin
     public SkillPlayerManager pmanager;
     
     private FileConfiguration config;
-    public String currency = "Dollar";
     public int skillcap = 0;
     public long updatetime = 6000;
     public int skillsperpage = 5;
-    private String foodname = "Food"; //TODO Load
-    private String healthname = "Health"; //TODO Load
-    private String levelname = "Level"; //TODO Load
-    private String xpname = "XP"; //TODO Load
     
     @Override
     public void onEnable()
@@ -67,20 +61,28 @@ public class BuySkills extends JavaPlugin
         
         if (getServer().getPluginManager().getPlugin("Vault") != null)
         {
-            RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-            if (economyProvider != null)
-                registerCurrency("money", new MoneyHandler(economyProvider.getProvider(), currency));
+            if (config.getBoolean("general.handler.economy.activate", true))
+            {
+                RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+                if (economyProvider != null)
+                    registerCurrency("money", new MoneyHandler(economyProvider.getProvider(), config.getString("general.handler.money.name", "Dollar")));
+            }
             
             RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
             if (permissionProvider != null)
                 permission = permissionProvider.getProvider();
         }
         
-        registerCurrency("item", new ItemHandler());
-        registerCurrency("food", new FoodHandler(foodname));
-        registerCurrency("health", new HealthHandler(healthname));
-        registerCurrency("level", new LevelHandler(levelname));
-        registerCurrency("xp", new LevelHandler(xpname));
+        if (config.getBoolean("general.handler.item.activate", true))
+            registerCurrency("item", new ItemHandler());
+        if (config.getBoolean("general.handler.food.activate", true))
+            registerCurrency("food", new FoodHandler(config.getString("general.handler.food.name", "Food")));
+        if (config.getBoolean("general.handler.health.activate", true))
+            registerCurrency("health", new HealthHandler(config.getString("general.handler.health.name", "Health")));
+        if (config.getBoolean("general.handler.level.activate", true))
+            registerCurrency("level", new LevelHandler(config.getString("general.handler.level.name", "Level")));
+        if (config.getBoolean("general.handler.xp.activate", true))
+            registerCurrency("xp", new LevelHandler(config.getString("general.handler.xp.name", "XP")));
         
         task = new SkillRentTask(this);
         task.runTaskTimer(this, updatetime, updatetime);
@@ -129,7 +131,6 @@ public class BuySkills extends JavaPlugin
     
     private void loadConfig()
     {
-        currency = config.getString("general.currency", "Dollar");
         updatetime = Math.max(1, config.getLong("general.updatetime", 300)) * 20;
         skillcap = config.getInt("general.skillcap", 0);
         skillsperpage = Math.max(1, config.getInt("general.skillsperpage", 5));
