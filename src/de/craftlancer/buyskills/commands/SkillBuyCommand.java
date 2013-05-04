@@ -11,7 +11,6 @@ import de.craftlancer.buyskills.Skill;
 import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillUtils;
 import de.craftlancer.buyskills.api.event.BuySkillsBuyEvent;
-import de.craftlancer.currencyhandler.CurrencyHandler;
 
 public class SkillBuyCommand extends SkillSubCommand
 {
@@ -50,9 +49,9 @@ public class SkillBuyCommand extends SkillSubCommand
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_GROUP);
             else if (!plugin.getPlayerManager().followsSkilltree(p, s))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_SKILLTREE);
-            else if (!CurrencyHandler.hasCurrency(p, s.getBuyNeed()))
+            else if (!SkillUtils.hasCurrency(p, s.getBuyNeed()))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_CURRENCYS);
-            else if (!CurrencyHandler.hasCurrency(p, s.getBuyCosts()))
+            else if (!SkillUtils.hasCurrency(p, s.getBuyCosts()))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_AFFORD);
             else
             {

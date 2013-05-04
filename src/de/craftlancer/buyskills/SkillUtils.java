@@ -148,4 +148,15 @@ public class SkillUtils
                 if (CurrencyHandler.getHandler(set.getKey()).checkInputClass(set.getValue()))
                     CurrencyHandler.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
     }
+    
+    public static boolean hasCurrency(Player p, Map<String, Object> s)
+    {
+        for (Entry<String, Object> set : s.entrySet())
+            if (CurrencyHandler.hasHandler(set.getKey()))
+                if (CurrencyHandler.getHandler(set.getKey()).checkInputClass(set.getValue()))
+                    if (!CurrencyHandler.getHandler(set.getKey()).hasCurrency(p, set.getValue()))
+                        return false;
+        
+        return true;
+    }
 }
