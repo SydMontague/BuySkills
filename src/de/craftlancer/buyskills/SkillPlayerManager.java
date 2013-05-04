@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 public class SkillPlayerManager
 {
-    public HashMap<String, SkillPlayer> playerMap = new HashMap<String, SkillPlayer>();
+    private HashMap<String, SkillPlayer> playerMap = new HashMap<String, SkillPlayer>();
     private BuySkills plugin;
     private FileConfiguration rentedConfig;
     private File rentedFile;

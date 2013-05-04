@@ -53,15 +53,12 @@ public class SkillCommandHandler implements TabExecutor
                 for (String str : l)
                     if (!sender.hasPermission(commands.get(str).getPermission()))
                         l.remove(l);
-                return l;                
+                return l;
             default:
                 if (!commands.containsKey(args[0]))
                     return null;
                 else
                     return commands.get(args[0]).onTabComplete(args);
-                
-                // default:
-                // return null;
         }
     }
 }

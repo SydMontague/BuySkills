@@ -5,6 +5,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import org.bukkit.entity.Player;
+
+import de.craftlancer.currencyhandler.CurrencyHandler;
 
 public class SkillUtils
 {
@@ -96,14 +101,10 @@ public class SkillUtils
         String str = "";
         
         for (Entry<String, Object> set : map.entrySet())
-            if (BuySkills.hasHandler(set.getKey()))
-                if (BuySkills.getHandler(set.getKey()).checkInputClass(set.getValue()))
-                    str = str + BuySkills.getHandler(set.getKey()).getFormatedString(set.getValue());  // set.getValue()
-                                                                                                      // +
-                                                                                                      // " "
-                                                                                                      // +
-                                                                                                      // BuySkills.handlerList.get(set.getKey()).getCurrencyName();
-                    
+            if (CurrencyHandler.hasHandler(set.getKey()))
+                if (CurrencyHandler.getHandler(set.getKey()).checkInputClass(set.getValue()))
+                    str = str + CurrencyHandler.getHandler(set.getKey()).getFormatedString(set.getValue());
+        
         return str;
     }
     
@@ -138,5 +139,13 @@ public class SkillUtils
                 result.add(str);
         
         return result;
+    }
+    
+    public static void withdraw(Player p, Set<Entry<String, Object>> input)
+    {
+        for (Entry<String, Object> set : input)
+            if (CurrencyHandler.hasHandler(set.getKey()))
+                if (CurrencyHandler.getHandler(set.getKey()).checkInputClass(set.getValue()))
+                    CurrencyHandler.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
     }
 }

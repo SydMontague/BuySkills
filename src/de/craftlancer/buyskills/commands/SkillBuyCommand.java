@@ -1,7 +1,6 @@
 package de.craftlancer.buyskills.commands;
 
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,6 +11,7 @@ import de.craftlancer.buyskills.Skill;
 import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillUtils;
 import de.craftlancer.buyskills.api.event.BuySkillsBuyEvent;
+import de.craftlancer.currencyhandler.CurrencyHandler;
 
 public class SkillBuyCommand extends SkillSubCommand
 {
@@ -23,7 +23,7 @@ public class SkillBuyCommand extends SkillSubCommand
     @Override
     public void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!sender.hasPermission(getPermission()))
+        if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
         else if (!(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PLAYERONLY);
@@ -50,9 +50,9 @@ public class SkillBuyCommand extends SkillSubCommand
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_GROUP);
             else if (!plugin.getPlayerManager().followsSkilltree(p, s))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_SKILLTREE);
-            else if (!BuySkills.hasCurrency(p, s.getBuyNeed()))
+            else if (!CurrencyHandler.hasCurrency(p, s.getBuyNeed()))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_CURRENCYS);
-            else if (!BuySkills.hasCurrency(p, s.getBuyCosts()))
+            else if (!CurrencyHandler.hasCurrency(p, s.getBuyCosts()))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_AFFORD);
             else
             {
@@ -63,10 +63,7 @@ public class SkillBuyCommand extends SkillSubCommand
                     sender.sendMessage(SkillLanguage.BUY_CANCELLED);
                 else
                 {
-                    for (Entry<String, Object> set : s.getBuyCosts().entrySet())
-                        if (BuySkills.hasHandler(set.getKey()))
-                            if (BuySkills.getHandler(set.getKey()).checkInputClass(set.getValue()))
-                                BuySkills.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
+                    SkillUtils.withdraw(p, s.getBuyCosts().entrySet());
                     
                     plugin.getPlayerManager().grantSkill(p, s);
                     sender.sendMessage(SkillLanguage.BUY_SUCCESS);

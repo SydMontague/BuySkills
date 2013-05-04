@@ -1,7 +1,6 @@
 package de.craftlancer.buyskills.commands;
 
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -24,7 +23,7 @@ public class SkillGrantCommand extends SkillSubCommand
     @Override
     public void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!sender.hasPermission(getPermission()))
+        if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
         else if (args.length < 3)
             sender.sendMessage(SkillLanguage.COMMAND_ARGUMENTS);
@@ -41,10 +40,7 @@ public class SkillGrantCommand extends SkillSubCommand
             boolean rent = SkillUtils.arrayContains(args, "rent");
             
             if (SkillUtils.arrayContains(args, "charge"))
-                for (Entry<String, Object> set : ((rent) ? s.getRentCosts().entrySet() : s.getBuyCosts().entrySet()))
-                    if (BuySkills.hasHandler(set.getKey()))
-                        if (BuySkills.getHandler(set.getKey()).checkInputClass(set.getValue()))
-                            BuySkills.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
+                SkillUtils.withdraw(p, ((rent) ? s.getRentCosts().entrySet() : s.getBuyCosts().entrySet()));
             
             if (rent)
                 plugin.getPlayerManager().grantRented(p, s, s.getRenttime());

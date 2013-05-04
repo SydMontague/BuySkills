@@ -20,7 +20,7 @@ public class SkillCurrentCommand extends SkillSubCommand
     @Override
     public void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!sender.hasPermission(getPermission()))
+        if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
         else if (!(sender instanceof Player) && args.length <= 1)
             sender.sendMessage(SkillLanguage.COMMAND_ARGUMENTS);

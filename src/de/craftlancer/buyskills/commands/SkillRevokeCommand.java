@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
@@ -21,7 +22,7 @@ public class SkillRevokeCommand extends SkillSubCommand
     @Override
     public void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!sender.hasPermission(getPermission()))
+        if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
         else if (args.length < 3)
             sender.sendMessage(SkillLanguage.COMMAND_ARGUMENTS);

@@ -3,48 +3,36 @@ package de.craftlancer.buyskills;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Logger;
 
-import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.craftlancer.buyskills.api.SkillHandler;
 import de.craftlancer.buyskills.commands.SkillCommandHandler;
-import de.craftlancer.buyskills.handlers.FoodHandler;
-import de.craftlancer.buyskills.handlers.HealthHandler;
-import de.craftlancer.buyskills.handlers.ItemHandler;
-import de.craftlancer.buyskills.handlers.LevelHandler;
-import de.craftlancer.buyskills.handlers.MoneyHandler;
 
 /*
  * TODO JavaDocs
  * TOTEST the whole plugin (minor cases)
  * TODO extend OO, especially in Command classes
- * TODO commands from console
+ * TODO extend Events
  */
 
-@SuppressWarnings("rawtypes")
 public class BuySkills extends JavaPlugin
 {
-    public static HashMap<String, SkillHandler> handlerList = new HashMap<String, SkillHandler>();
     public static Logger log = Bukkit.getLogger();
     public Permission permission;
     public HashMap<String, Skill> skills = new HashMap<String, Skill>();
     public HashSet<String> categories = new HashSet<String>();
     public FileConfiguration sConfig;
-    public SkillRentTask task;
-    public SkillPlayerManager pmanager;
-    
+    private SkillRentTask task;
+    private SkillPlayerManager pmanager;
     private FileConfiguration config;
+    
     public int skillcap = 0;
     public long updatetime = 6000;
     public int skillsperpage = 5;
@@ -56,33 +44,14 @@ public class BuySkills extends JavaPlugin
         
         loadConfigurations();
         pmanager = new SkillPlayerManager(this);
-        SkillLanguage.loadStrings(config);
         getCommand("skill").setExecutor(new SkillCommandHandler(this));
         
         if (getServer().getPluginManager().getPlugin("Vault") != null)
         {
-            if (config.getBoolean("general.handler.economy.activate", true))
-            {
-                RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-                if (economyProvider != null)
-                    registerCurrency("money", new MoneyHandler(economyProvider.getProvider(), config.getString("general.handler.money.name", "Dollar")));
-            }
-            
             RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
             if (permissionProvider != null)
                 permission = permissionProvider.getProvider();
         }
-        
-        if (config.getBoolean("general.handler.item.activate", true))
-            registerCurrency("item", new ItemHandler());
-        if (config.getBoolean("general.handler.food.activate", true))
-            registerCurrency("food", new FoodHandler(config.getString("general.handler.food.name", "Food")));
-        if (config.getBoolean("general.handler.health.activate", true))
-            registerCurrency("health", new HealthHandler(config.getString("general.handler.health.name", "Health")));
-        if (config.getBoolean("general.handler.level.activate", true))
-            registerCurrency("level", new LevelHandler(config.getString("general.handler.level.name", "Level")));
-        if (config.getBoolean("general.handler.xp.activate", true))
-            registerCurrency("xp", new LevelHandler(config.getString("general.handler.xp.name", "XP")));
         
         task = new SkillRentTask(this);
         task.runTaskTimer(this, updatetime, updatetime);
@@ -92,23 +61,6 @@ public class BuySkills extends JavaPlugin
     public void onDisable()
     {
         task.cancel();
-    }
-    
-    /**
-     * Register a new currency to be used with this plugin
-     * 
-     * @param key the key, used in config for the "currency"
-     * @param handler the handler object
-     * @return false when something went wrong, true otherwise
-     */
-    public static boolean registerCurrency(String key, SkillHandler handler)
-    {
-        if (handler == null || handlerList.containsKey(key))
-            return false;
-        
-        handlerList.put(key, handler);
-        log.info("Registering handler for key: " + key);
-        return true;
     }
     
     public SkillPlayerManager getPlayerManager()
@@ -124,7 +76,8 @@ public class BuySkills extends JavaPlugin
         reloadConfig();
         sConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "skills.yml"));
         config = getConfig();
-        
+
+        SkillLanguage.loadStrings(config);
         loadConfig();
         loadSkills();
     }
@@ -215,28 +168,6 @@ public class BuySkills extends JavaPlugin
     public boolean hasSkill(String name)
     {
         return skills.containsKey(name.toLowerCase());
-    }
-    
-    public static SkillHandler getHandler(String key)
-    {
-        return handlerList.get(key);
-    }
-    
-    public static boolean hasHandler(String key)
-    {
-        return handlerList.containsKey(key);
-    }
-    
-    @SuppressWarnings("unchecked")
-    public static boolean hasCurrency(Player p, Map<String, Object> s)
-    {
-        for (Entry<String, Object> set : s.entrySet())
-            if (hasHandler(set.getKey()))
-                if (getHandler(set.getKey()).checkInputClass(set.getValue()))
-                    if (!getHandler(set.getKey()).hasCurrency(p, set.getValue()))
-                        return false;
-        
-        return true;
     }
     
     public static void debug(String string)

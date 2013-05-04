@@ -4,7 +4,7 @@ version: Beta1
 author: SydMontague
 dev-url: http://dev.bukkit.org/server-mods/expskills/
 description: Buy permission nodes and groups with money, and other currencies!
-depend: [Vault]
+depend: [Vault, CurrencyHandler]
 commands:
     skill:
         description: Gives out XP and current Level    
