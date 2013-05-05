@@ -1,5 +1,4 @@
 general:
-    currency: "Dollar"
     updatetime: 300
     skillcap: 0
     skillsperpage: 5

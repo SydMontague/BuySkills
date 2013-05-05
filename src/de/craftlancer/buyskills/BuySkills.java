@@ -17,7 +17,7 @@ import de.craftlancer.buyskills.commands.SkillCommandHandler;
 
 /*
  * TODO JavaDocs
- * TOTEST the whole plugin (minor cases)
+ * TOTEST the whole plugin (edge cases)
  * TODO extend OO, especially in Command classes
  * TODO extend Events
  */
