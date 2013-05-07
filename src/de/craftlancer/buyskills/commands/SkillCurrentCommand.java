@@ -10,6 +10,9 @@ import org.bukkit.entity.Player;
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
 
+/**
+ * Handles the /skill current command
+ */
 public class SkillCurrentCommand extends SkillSubCommand
 {
     public SkillCurrentCommand(String perm, BuySkills plugin)
@@ -18,7 +21,7 @@ public class SkillCurrentCommand extends SkillSubCommand
     }
     
     @Override
-    public void execute(CommandSender sender, Command cmd, String label, String[] args)
+    protected void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
@@ -49,7 +52,7 @@ public class SkillCurrentCommand extends SkillSubCommand
     }
     
     @Override
-    public List<String> onTabComplete(String[] args)
+    protected List<String> onTabComplete(String[] args)
     {
         return null;
     }

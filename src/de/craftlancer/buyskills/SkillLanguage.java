@@ -2,6 +2,9 @@ package de.craftlancer.buyskills;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
+/**
+ * Handles and stores all Strings used in this plugin
+ */
 public class SkillLanguage
 {
     public static String COMMAND_PERMISSION;
@@ -63,7 +66,7 @@ public class SkillLanguage
     public static String GRANT_SUCCESS;
     public static String GRANT_NOTIFY;
     
-    public static void loadStrings(FileConfiguration config)
+    protected static void loadStrings(FileConfiguration config)
     {
         COMMAND_PERMISSION = config.getString("string.COMMAND_PERMISSION");
         COMMAND_PLAYERONLY = config.getString("string.COMMAND_PLAYERONLY");

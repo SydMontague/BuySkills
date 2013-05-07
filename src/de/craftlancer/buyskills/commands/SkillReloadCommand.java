@@ -9,6 +9,9 @@ import org.bukkit.entity.Player;
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
 
+/**
+ * Handles the /skill reload command
+ */
 public class SkillReloadCommand extends SkillSubCommand
 {
     public SkillReloadCommand(String perm, BuySkills plugin)
@@ -33,5 +36,4 @@ public class SkillReloadCommand extends SkillSubCommand
     {
         return null;
     }
-    
 }

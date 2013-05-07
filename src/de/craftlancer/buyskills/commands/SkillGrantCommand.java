@@ -10,18 +10,20 @@ import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.Skill;
 import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillUtils;
-import de.craftlancer.buyskills.api.event.BuySkillsGrantEvent;
+import de.craftlancer.buyskills.event.BuySkillsGrantEvent;
 
+/**
+ * Handles the /skill grant command
+ */
 public class SkillGrantCommand extends SkillSubCommand
 {
-    
     public SkillGrantCommand(String perm, BuySkills plugin)
     {
         super(perm, plugin);
     }
     
     @Override
-    public void execute(CommandSender sender, Command cmd, String label, String[] args)
+    protected void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
@@ -55,16 +57,14 @@ public class SkillGrantCommand extends SkillSubCommand
     }
     
     @Override
-    public List<String> onTabComplete(String[] args)
+    protected List<String> onTabComplete(String[] args)
     {
-        BuySkills.debug(args.length + " " + args[args.length - 1]);
-        
         switch (args.length)
         {
             case 2:
                 return null;
             case 3:
-                return SkillUtils.getMatches(args[2], plugin.skills.keySet());
+                return SkillUtils.getMatches(args[2], plugin.getSkillMap().keySet());
             default:
                 return SkillUtils.getMatches(args[args.length - 1], new String[] { "rent", "charge" });
         }

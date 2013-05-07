@@ -9,11 +9,13 @@ import org.bukkit.entity.Player;
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillUtils;
-import de.craftlancer.buyskills.api.event.BuySkillsRevokeEvent;
+import de.craftlancer.buyskills.event.BuySkillsRevokeEvent;
 
+/**
+ * Handles the /skill revoke command
+ */
 public class SkillRevokeCommand extends SkillSubCommand
 {
-    
     public SkillRevokeCommand(String perm, BuySkills plugin)
     {
         super(perm, plugin);
@@ -53,10 +55,9 @@ public class SkillRevokeCommand extends SkillSubCommand
         switch (args.length)
         {
             case 3:
-                return SkillUtils.getMatches(args[2], plugin.skills.keySet());
+                return SkillUtils.getMatches(args[2], plugin.getSkillMap().keySet());
             default:
                 return null;
         }
     }
-    
 }

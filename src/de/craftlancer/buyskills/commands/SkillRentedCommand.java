@@ -12,9 +12,11 @@ import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillUtils;
 
+/**
+ * Handles the /skill rented command
+ */
 public class SkillRentedCommand extends SkillSubCommand
 {
-    
     public SkillRentedCommand(String perm, BuySkills plugin)
     {
         super(perm, plugin);
@@ -44,5 +46,4 @@ public class SkillRentedCommand extends SkillSubCommand
     {
         return null;
     }
-    
 }

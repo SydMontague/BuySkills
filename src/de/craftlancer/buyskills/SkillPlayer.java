@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Represents a Player
+ */
 public class SkillPlayer
 {
     private String name;
@@ -33,63 +36,90 @@ public class SkillPlayer
         return fin;
     }
     
+    /**
+     * Get all rented skills of this player
+     * 
+     * @return all rented skill of this player
+     */
     public HashMap<String, Long> getRented()
     {
         return rented;
     }
     
+    /**
+     * Get all bought skills of this player
+     * 
+     * @return all bought skills of this player
+     */
+    public List<String> getBoughtSkills()
+    {
+        return skills;
+    }
+    
+    /**
+     * Get the amount of extra skills this player can have
+     * Negative values allow the player to have less skills
+     * 
+     * @return the bonuscap
+     */
     public int getBonusCap()
     {
         return bonuscap;
     }
     
+    /**
+     * Set the amount of extra skills this player can have
+     * Negative values allow the player to have less skills
+     * 
+     * @param bonuscap the amount of bonusskills
+     */
     public void setBonusCap(int bonuscap)
     {
         this.bonuscap = bonuscap;
     }
     
+    /**
+     * Get the name of the player
+     * 
+     * @return the name
+     */
     public String getName()
     {
         return name;
     }
     
-    public void removeRentedSkill(String s)
+    protected void removeRentedSkill(String s)
     {
         rented.remove(s);
     }
     
-    public void removeRentedSkill(Skill s)
+    protected void removeRentedSkill(Skill s)
     {
         removeRentedSkill(s.getName());
     }
     
-    public void addSkill(Skill s)
+    protected void addSkill(Skill s)
     {
         addSkill(s.getName());
     }
     
-    public void addSkill(String s)
+    protected void addSkill(String s)
     {
         skills.add(s);
     }
     
-    public void removeSkill(String s)
+    protected void removeSkill(String s)
     {
         skills.remove(s);
     }
     
-    public void removeSkill(Skill s)
+    protected void removeSkill(Skill s)
     {
         removeSkill(s.getName());
     }
     
-    public void addRented(String s, long l)
+    protected void addRented(String s, long l)
     {
         rented.put(s, l);
-    }
-    
-    public List<String> getBoughtSkills()
-    {
-        return skills;
     }
 }

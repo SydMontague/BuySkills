@@ -3,6 +3,8 @@ package de.craftlancer.buyskills;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.permission.Permission;
@@ -26,16 +28,17 @@ public class BuySkills extends JavaPlugin
 {
     public static Logger log = Bukkit.getLogger();
     public Permission permission;
-    public HashMap<String, Skill> skills = new HashMap<String, Skill>();
-    public HashSet<String> categories = new HashSet<String>();
-    public FileConfiguration sConfig;
+    
     private SkillRentTask task;
     private SkillPlayerManager pmanager;
     private FileConfiguration config;
+    private FileConfiguration sConfig;
+    private Map<String, Skill> skills = new HashMap<String, Skill>();
+    private Set<String> categories = new HashSet<String>();
     
-    public int skillcap = 0;
-    public long updatetime = 6000;
-    public int skillsperpage = 5;
+    private int skillcap = 0;
+    private long updatetime = 6000;
+    private int skillsperpage = 5;
     
     @Override
     public void onEnable()
@@ -63,11 +66,19 @@ public class BuySkills extends JavaPlugin
         task.cancel();
     }
     
+    /**
+     * Get the player manager
+     * 
+     * @return the SkillPlayerManager object
+     */
     public SkillPlayerManager getPlayerManager()
     {
         return pmanager;
     }
     
+    /**
+     * (Re)Load the config files
+     */
     public void loadConfigurations()
     {
         if (!new File(getDataFolder().getPath() + File.separatorChar + "config.yml").exists())
@@ -76,10 +87,75 @@ public class BuySkills extends JavaPlugin
         reloadConfig();
         sConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "skills.yml"));
         config = getConfig();
-
+        
         SkillLanguage.loadStrings(config);
         loadConfig();
         loadSkills();
+    }
+    
+    /**
+     * Get the skill with the given name
+     * 
+     * @param name the name of the skill
+     * @return the Skill object with the given name, null if no skill was found
+     */
+    public Skill getSkill(String name)
+    {
+        return skills.get(name.toLowerCase());
+    }
+    
+    /**
+     * Check if a skill with the given name exists
+     * 
+     * @param name the name of the skill
+     * @return true when the skill exists, false if not
+     */
+    public boolean hasSkill(String name)
+    {
+        return skills.containsKey(name.toLowerCase());
+    }
+    
+    /**
+     * Get the Map of all registered skills
+     * 
+     * @return the Map of all registered Skills with their name as key
+     */
+    public Map<String, Skill> getSkillMap()
+    {
+        return skills;
+    }
+    
+    /**
+     * Get the Set of all registered Categories
+     * 
+     * @return the Set of all registered Skills
+     */
+    public Set<String> getCategories()
+    {
+        return categories;
+    }
+    
+    /**
+     * Get the maximum number of skills per player, 0 means unlimited skills
+     * allowed
+     * Note: the value can differ from player to player, depending on their
+     * bonuscap
+     * 
+     * @return the maximum number of skills per player
+     */
+    public int getSkillCap()
+    {
+        return skillcap;
+    }
+    
+    /**
+     * Get the number of skills per /list page
+     * 
+     * @return the number of skills per /list page
+     */
+    public int getSkillsPerPage()
+    {
+        return skillsperpage;
     }
     
     private void loadConfig()
@@ -126,7 +202,7 @@ public class BuySkills extends JavaPlugin
         skill.setBuyable(sConfig.getBoolean(key + ".buyable", false));
         skill.setRentable(sConfig.getBoolean(key + ".rentable", false));
         
-        skill.setRentTime(sConfig.getLong(key + ".renttime", 0));
+        skill.setRentTime(sConfig.getLong(key + ".renttime", 0) * 1000);
         skill.setSkillsNeeded(sConfig.getInt(key + ".skills_needed", 0));
         
         HashMap<String, Object> buyHelpMap = new HashMap<String, Object>();
@@ -153,25 +229,5 @@ public class BuySkills extends JavaPlugin
         skill.setRentNeed(rentNeedHelpMap);
         
         return skill;
-    }
-    
-    public void removeSkill(String key)
-    {
-        sConfig.set(key, null);
-    }
-    
-    public Skill getSkill(String name)
-    {
-        return skills.get(name.toLowerCase());
-    }
-    
-    public boolean hasSkill(String name)
-    {
-        return skills.containsKey(name.toLowerCase());
-    }
-    
-    public static void debug(String string)
-    {
-        log.info(string);
     }
 }

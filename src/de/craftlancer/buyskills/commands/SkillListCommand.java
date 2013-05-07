@@ -13,6 +13,9 @@ import de.craftlancer.buyskills.Skill;
 import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillUtils;
 
+/**
+ * Handles the /skill list command
+ */
 public class SkillListCommand extends SkillSubCommand
 {
     public SkillListCommand(String perm, BuySkills plugin)
@@ -21,7 +24,7 @@ public class SkillListCommand extends SkillSubCommand
     }
     
     @Override
-    public void execute(CommandSender sender, Command cmd, String label, String[] args)
+    protected void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
@@ -52,24 +55,38 @@ public class SkillListCommand extends SkillSubCommand
                 if (SkillUtils.arrayContains(args, "all"))
                     all = true;
                 
-                cat = SkillUtils.arrayContains(args, plugin.categories);
+                cat = SkillUtils.retainFromArray(args, plugin.getCategories());
             }
             
             List<Skill> skill = getAvaibleSkills((Player) sender, rentable, buyable, all, cat);
             
-            for (int i = 0; i < plugin.skillsperpage; i++)
+            for (int i = 0; i < plugin.getSkillsPerPage(); i++)
             {
-                if (skill.size() <= page * plugin.skillsperpage + i)
+                if (skill.size() <= page * plugin.getSkillsPerPage() + i)
                     break;
                 
-                sender.sendMessage(SkillUtils.replaceValues(skill.get(page * plugin.skillsperpage + i), SkillLanguage.LIST_DEFAULT_STRING));
+                sender.sendMessage(SkillUtils.replaceValues(skill.get(page * plugin.getSkillsPerPage() + i), SkillLanguage.LIST_DEFAULT_STRING));
             }
+        }
+    }
+    
+    @Override
+    protected List<String> onTabComplete(String[] args)
+    {
+        switch (args.length)
+        {
+            case 1:
+                return null;
+            default:
+                List<String> a = SkillUtils.getMatches(args[args.length - 1], plugin.getCategories());
+                a.addAll(SkillUtils.getMatches(args[args.length - 1], new String[] { "rent", "buy", "all" }));
+                return a;
         }
     }
     
     private List<Skill> getAvaibleSkills(Player sender, boolean rentable, boolean buyable, boolean all, String cat)
     {
-        Collection<Skill> initList = plugin.skills.values();
+        Collection<Skill> initList = plugin.getSkillMap().values();
         List<Skill> returnList = new ArrayList<Skill>();
         
         for (Skill s : initList)
@@ -78,19 +95,5 @@ public class SkillListCommand extends SkillSubCommand
                     returnList.add(s);
         
         return returnList;
-    }
-    
-    @Override
-    public List<String> onTabComplete(String[] args)
-    {
-        switch (args.length)
-        {
-            case 1:
-                return null;
-            default:
-                List<String> a = SkillUtils.getMatches(args[args.length - 1], plugin.categories);
-                a.addAll(SkillUtils.getMatches(args[args.length - 1], new String[] { "rent", "buy", "all" }));
-                return a;
-        }
     }
 }

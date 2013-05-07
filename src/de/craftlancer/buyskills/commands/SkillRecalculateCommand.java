@@ -9,9 +9,11 @@ import org.bukkit.entity.Player;
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
 
+/**
+ * Handles the /skill recalculate command
+ */
 public class SkillRecalculateCommand extends SkillSubCommand
 {
-    
     public SkillRecalculateCommand(String perm, BuySkills plugin)
     {
         super(perm, plugin);
@@ -41,5 +43,4 @@ public class SkillRecalculateCommand extends SkillSubCommand
     {
         return null;
     }
-    
 }

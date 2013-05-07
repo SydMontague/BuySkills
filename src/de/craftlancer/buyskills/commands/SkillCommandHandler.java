@@ -10,9 +10,12 @@ import org.bukkit.command.TabExecutor;
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillUtils;
 
+/**
+ * Handles all /skill commands
+ */
 public class SkillCommandHandler implements TabExecutor
 {
-    public HashMap<String, SkillSubCommand> commands = new HashMap<String, SkillSubCommand>();
+    private HashMap<String, SkillSubCommand> commands = new HashMap<String, SkillSubCommand>();
     
     public SkillCommandHandler(BuySkills plugin)
     {

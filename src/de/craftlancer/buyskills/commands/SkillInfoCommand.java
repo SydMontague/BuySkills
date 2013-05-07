@@ -10,6 +10,9 @@ import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillUtils;
 
+/**
+ * Handles the /skill info command
+ */
 public class SkillInfoCommand extends SkillSubCommand
 {
     public SkillInfoCommand(String perm, BuySkills plugin)
@@ -18,7 +21,7 @@ public class SkillInfoCommand extends SkillSubCommand
     }
     
     @Override
-    public void execute(CommandSender sender, Command cmd, String label, String[] args)
+    protected void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
@@ -31,12 +34,12 @@ public class SkillInfoCommand extends SkillSubCommand
     }
     
     @Override
-    public List<String> onTabComplete(String[] args)
+    protected List<String> onTabComplete(String[] args)
     {
         switch (args.length)
         {
             case 2:
-                return SkillUtils.getMatches(args[1], plugin.skills.keySet());
+                return SkillUtils.getMatches(args[1], plugin.getSkillMap().keySet());
             default:
                 return null;
         }

@@ -10,6 +10,9 @@ import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillUtils;
 
+/**
+ * Handles the /skill help command
+ */
 public class SkillHelpCommand extends SkillSubCommand
 {
     private static String[] cmdList = { "help", "buy", "current", "grant", "info", "list", "recalculate", "reload", "rent", "rented", "reset", "revoke" };
@@ -20,7 +23,7 @@ public class SkillHelpCommand extends SkillSubCommand
     }
     
     @Override
-    public void execute(CommandSender sender, Command cmd, String label, String[] args)
+    protected void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
@@ -51,7 +54,7 @@ public class SkillHelpCommand extends SkillSubCommand
     }
     
     @Override
-    public List<String> onTabComplete(String[] args)
+    protected List<String> onTabComplete(String[] args)
     {
         switch (args.length)
         {

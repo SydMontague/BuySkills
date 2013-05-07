@@ -10,8 +10,11 @@ import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.Skill;
 import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillUtils;
-import de.craftlancer.buyskills.api.event.BuySkillsBuyEvent;
+import de.craftlancer.buyskills.event.BuySkillsBuyEvent;
 
+/**
+ * Handles the /skill buy command
+ */
 public class SkillBuyCommand extends SkillSubCommand
 {
     public SkillBuyCommand(String perm, BuySkills plugin)
@@ -20,7 +23,7 @@ public class SkillBuyCommand extends SkillSubCommand
     }
     
     @Override
-    public void execute(CommandSender sender, Command cmd, String label, String[] args)
+    protected void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
@@ -32,7 +35,7 @@ public class SkillBuyCommand extends SkillSubCommand
             sender.sendMessage(SkillLanguage.COMMAND_SKILL_NOT_EXIST);
         else if (!plugin.getSkill(args[1]).isBuyable())
             sender.sendMessage(SkillLanguage.BUY_NOT_BUYABLE);
-        else if (plugin.skillcap != 0 && plugin.skillcap <= plugin.getPlayerManager().getSkills(sender.getName()).size() - plugin.getPlayerManager().getBonusCap(sender.getName()))
+        else if (plugin.getSkillCap() != 0 && plugin.getSkillCap() <= plugin.getPlayerManager().getSkills(sender.getName()).size() - plugin.getPlayerManager().getBonusCap(sender.getName()))
             sender.sendMessage(SkillLanguage.BUYRENT_SKILLCAP_REACHED);
         else if (plugin.getPlayerManager().getSkills(sender.getName()).contains(args[1]))
             sender.sendMessage(SkillLanguage.BUYRENT_ALREADY_OWN);
@@ -72,12 +75,12 @@ public class SkillBuyCommand extends SkillSubCommand
     }
     
     @Override
-    public List<String> onTabComplete(String[] args)
+    protected List<String> onTabComplete(String[] args)
     {
         switch (args.length)
         {
             case 2:
-                return SkillUtils.getMatches(args[1], plugin.skills.keySet());
+                return SkillUtils.getMatches(args[1], plugin.getSkillMap().keySet());
             default:
                 return null;
         }

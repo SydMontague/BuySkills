@@ -23,7 +23,7 @@ public abstract class SkillSubCommand
         return permission;
     }
     
-    public abstract void execute(CommandSender sender, Command cmd, String label, String[] args);
+    protected abstract void execute(CommandSender sender, Command cmd, String label, String[] args);
     
-    public abstract List<String> onTabComplete(String[] args);
+    protected abstract List<String> onTabComplete(String[] args);
 }

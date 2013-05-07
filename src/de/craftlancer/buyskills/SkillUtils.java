@@ -1,7 +1,7 @@
 package de.craftlancer.buyskills;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -11,9 +11,19 @@ import org.bukkit.entity.Player;
 
 import de.craftlancer.currencyhandler.CurrencyHandler;
 
+/**
+ * Supports a lot of static utility methods
+ */
 public class SkillUtils
 {
-    public static String arrayContains(String[] array, Collection<String> col)
+    /**
+     * Checks if a String array contains a value of a String Collection
+     * 
+     * @param array the array
+     * @param col the Collection
+     * @return the first value which is in both, the array and the Collection
+     */
+    public static String retainFromArray(String[] array, Collection<String> col)
     {
         for (String value : col)
             if (arrayContains(array, value))
@@ -22,6 +32,14 @@ public class SkillUtils
         return null;
     }
     
+    /**
+     * Check if a String array contains a String
+     * The check is case sensitive
+     * 
+     * @param array the array
+     * @param string the String
+     * @return true if the array contains the string, false if not
+     */
     public static boolean arrayContains(String[] array, String string)
     {
         if (array != null && array.length != 0)
@@ -96,18 +114,13 @@ public class SkillUtils
         return string;
     }
     
-    private static String getHandlerValues(Map<String, Object> map)
-    {
-        String str = "";
-        
-        for (Entry<String, Object> set : map.entrySet())
-            if (CurrencyHandler.hasHandler(set.getKey()))
-                if (CurrencyHandler.getHandler(set.getKey()).checkInputClass(set.getValue()))
-                    str = str + CurrencyHandler.getHandler(set.getKey()).getFormatedString(set.getValue());
-        
-        return str;
-    }
-    
+    /**
+     * Get the string of the difference to the given time
+     * Format: <HOURS> <MINUTES> <SECONDS>
+     * 
+     * @param value a time in the future which's differnce string you want
+     * @return the difference string
+     */
     public static String getTimeDiffString(Long value)
     {
         long time = (value - System.currentTimeMillis()) / 1000;
@@ -119,9 +132,16 @@ public class SkillUtils
         return h + "h " + min + "min " + s + "s";
     }
     
+    /**
+     * Get all values of a String Collection which start with a given String
+     * 
+     * @param value the given String
+     * @param list the Collection
+     * @return a List of all matches
+     */
     public static List<String> getMatches(String value, Collection<String> list)
     {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new LinkedList<String>();
         
         for (String str : list)
             if (str.startsWith(value))
@@ -130,9 +150,16 @@ public class SkillUtils
         return result;
     }
     
+    /**
+     * Get all values of a String array which start with a given String
+     * 
+     * @param value the given String
+     * @param list the array
+     * @return a List of all matches
+     */
     public static List<String> getMatches(String value, String[] list)
     {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new LinkedList<String>();
         
         for (String str : list)
             if (str.startsWith(value))
@@ -141,6 +168,13 @@ public class SkillUtils
         return result;
     }
     
+    /**
+     * Withdraw all currencies from the player
+     * Uses the CurrencyHandler plugin
+     * 
+     * @param p the player
+     * @param input the currencies
+     */
     public static void withdraw(Player p, Set<Entry<String, Object>> input)
     {
         for (Entry<String, Object> set : input)
@@ -149,6 +183,14 @@ public class SkillUtils
                     CurrencyHandler.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
     }
     
+    /**
+     * Check if a player has enough currencies
+     * Uses the CurrencyHandler plugin
+     * 
+     * @param p the player
+     * @param s the currencies
+     * @return true if the player has the currencyies, false if not
+     */
     public static boolean hasCurrency(Player p, Map<String, Object> s)
     {
         for (Entry<String, Object> set : s.entrySet())
@@ -158,5 +200,17 @@ public class SkillUtils
                         return false;
         
         return true;
+    }
+    
+    private static String getHandlerValues(Map<String, Object> map)
+    {
+        String str = "";
+        
+        for (Entry<String, Object> set : map.entrySet())
+            if (CurrencyHandler.hasHandler(set.getKey()))
+                if (CurrencyHandler.getHandler(set.getKey()).checkInputClass(set.getValue()))
+                    str = str + CurrencyHandler.getHandler(set.getKey()).getFormatedString(set.getValue());
+        
+        return str;
     }
 }

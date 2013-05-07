@@ -5,8 +5,11 @@ import java.util.Map.Entry;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import de.craftlancer.buyskills.api.event.BuySkillsRentExpireEvent;
+import de.craftlancer.buyskills.event.BuySkillsRentExpireEvent;
 
+/**
+ * Handles the expiration of rented skills
+ */
 public class SkillRentTask extends BukkitRunnable
 {
     private BuySkills plugin;

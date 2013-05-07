@@ -10,8 +10,11 @@ import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.Skill;
 import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillUtils;
-import de.craftlancer.buyskills.api.event.BuySkillsRentEvent;
+import de.craftlancer.buyskills.event.BuySkillsRentEvent;
 
+/**
+ * Handles the /skill rent command
+ */
 public class SkillRentCommand extends SkillSubCommand
 {
     public SkillRentCommand(String perm, BuySkills plugin)
@@ -32,7 +35,7 @@ public class SkillRentCommand extends SkillSubCommand
             sender.sendMessage(SkillLanguage.COMMAND_SKILL_NOT_EXIST);
         else if (!plugin.getSkill(args[1]).isRentable())
             sender.sendMessage(SkillLanguage.RENT_NOT_RENTABLE);
-        else if (plugin.skillcap != 0 && plugin.skillcap <= plugin.getPlayerManager().getSkills(sender.getName()).size() - plugin.getPlayerManager().getBonusCap(sender.getName()))
+        else if (plugin.getSkillCap() != 0 && plugin.getSkillCap() <= plugin.getPlayerManager().getSkills(sender.getName()).size() - plugin.getPlayerManager().getBonusCap(sender.getName()))
             sender.sendMessage(SkillLanguage.BUYRENT_SKILLCAP_REACHED);
         else if (plugin.getPlayerManager().getSkills(sender.getName()).contains(args[1]))
             sender.sendMessage(SkillLanguage.BUYRENT_ALREADY_OWN);
@@ -77,7 +80,7 @@ public class SkillRentCommand extends SkillSubCommand
         switch (args.length)
         {
             case 2:
-                return SkillUtils.getMatches(args[1], plugin.skills.keySet());
+                return SkillUtils.getMatches(args[1], plugin.getSkillMap().keySet());
             default:
                 return null;
         }

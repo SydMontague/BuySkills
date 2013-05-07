@@ -9,11 +9,13 @@ import org.bukkit.entity.Player;
 
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
-import de.craftlancer.buyskills.api.event.BuySkillsResetEvent;
+import de.craftlancer.buyskills.event.BuySkillsResetEvent;
 
+/**
+ * Handles the /skill reset command
+ */
 public class SkillResetCommand extends SkillSubCommand
 {
-    
     public SkillResetCommand(String perm, BuySkills plugin)
     {
         super(perm, plugin);
@@ -48,5 +50,4 @@ public class SkillResetCommand extends SkillSubCommand
     {
         return null;
     }
-    
 }
