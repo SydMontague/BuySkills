@@ -22,6 +22,7 @@ testskill:
     revoke_perm: false
     regrant_perm: false
     regrant_group: false
+    regrant_cost: false
     buyable: true
     rentable: true
     renttime: 200

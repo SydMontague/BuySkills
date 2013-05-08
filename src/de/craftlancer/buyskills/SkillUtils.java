@@ -169,7 +169,7 @@ public class SkillUtils
     }
     
     /**
-     * Withdraw all currencies from the player
+     * Withdraw all given currencies from the player
      * Uses the CurrencyHandler plugin
      * 
      * @param p the player
@@ -179,8 +179,23 @@ public class SkillUtils
     {
         for (Entry<String, Object> set : input)
             if (CurrencyHandler.hasHandler(set.getKey()))
-                if (CurrencyHandler.getHandler(set.getKey()).checkInputClass(set.getValue()))
+                if (CurrencyHandler.getHandler(set.getKey()).checkInputObject(set.getValue()))
                     CurrencyHandler.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
+    }
+    
+    /**
+     * Give all given currencies to the player
+     * Uses the CurrencyHandler plugin
+     * 
+     * @param p the player
+     * @param input the currencies
+     */
+    public static void give(Player p, Set<Entry<String, Object>> input)
+    {
+        for (Entry<String, Object> set : input)
+            if (CurrencyHandler.hasHandler(set.getKey()))
+                if (CurrencyHandler.getHandler(set.getKey()).checkInputObject(set.getValue()))
+                    CurrencyHandler.getHandler(set.getKey()).giveCurrency(p, set.getValue());
     }
     
     /**
@@ -195,7 +210,7 @@ public class SkillUtils
     {
         for (Entry<String, Object> set : s.entrySet())
             if (CurrencyHandler.hasHandler(set.getKey()))
-                if (CurrencyHandler.getHandler(set.getKey()).checkInputClass(set.getValue()))
+                if (CurrencyHandler.getHandler(set.getKey()).checkInputObject(set.getValue()))
                     if (!CurrencyHandler.getHandler(set.getKey()).hasCurrency(p, set.getValue()))
                         return false;
         
@@ -208,7 +223,7 @@ public class SkillUtils
         
         for (Entry<String, Object> set : map.entrySet())
             if (CurrencyHandler.hasHandler(set.getKey()))
-                if (CurrencyHandler.getHandler(set.getKey()).checkInputClass(set.getValue()))
+                if (CurrencyHandler.getHandler(set.getKey()).checkInputObject(set.getValue()))
                     str = str + CurrencyHandler.getHandler(set.getKey()).getFormatedString(set.getValue());
         
         return str;

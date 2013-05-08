@@ -234,6 +234,9 @@ public class SkillPlayerManager
             if (s.isRegrantPerm())
                 for (String perm : s.getPermNeed())
                     plugin.permission.playerAdd(world, player, perm);
+            
+            if (s.isRegrantCost())
+                SkillUtils.give(plugin.getServer().getPlayerExact(player), s.getRentCosts().entrySet());            
         }
     }
     

@@ -30,6 +30,7 @@ public class Skill
     private boolean revokePerm;
     private boolean regrantGroup;
     private boolean regrantPerm;
+    private boolean regrantCost;
     
     private boolean buyable;
     private boolean rentable;
@@ -407,5 +408,25 @@ public class Skill
     public void setWorlds(List<String> worlds)
     {
         this.worlds = worlds;
+    }
+
+    /**
+     * Get if costs are regranted when this skill is revoked
+     * 
+     * @return true if they are regranted, false if not
+     */
+    public boolean isRegrantCost()
+    {
+        return regrantCost;
+    }
+
+    /**
+     * Set whether costs are regranted when this skill is revoked
+     * 
+     * @param bool true if they are regranted, false if not 
+     */
+    public void setRegrantCost(boolean bool)
+    {
+        this.regrantCost = bool;
     }
 }
