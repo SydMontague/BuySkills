@@ -23,7 +23,7 @@ public class SkillCurrentCommand extends SkillSubCommand
     @Override
     protected void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
+        if (!sender.hasPermission(getPermission()) && sender instanceof Player)
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
         else if (!(sender instanceof Player) && args.length <= 1)
             sender.sendMessage(SkillLanguage.COMMAND_ARGUMENTS);
@@ -38,13 +38,13 @@ public class SkillCurrentCommand extends SkillSubCommand
                 p = (Player) sender;
             
             List<String> skills = plugin.getPlayerManager().getSkills(p);
-            String msg = SkillLanguage.CURRENT_DEFAULT_STRING.replace("%player%", p.getName());
+            String msg = SkillLanguage.CURRENT_DEFAULT_STRING.replace("%player%", p.getName()) + "\n";
             
             for (int i = 0; i < skills.size(); i++)
             {
-                msg = msg + skills.get(i) + " ";
+                msg += skills.get(i) + " ";
                 if (i % 3 == 0 && i != 0)
-                    msg = msg + "\n";
+                    msg += "\n";
             }
             
             sender.sendMessage(msg.split("\n"));

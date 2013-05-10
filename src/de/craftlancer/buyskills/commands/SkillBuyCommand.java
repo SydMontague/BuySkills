@@ -25,7 +25,7 @@ public class SkillBuyCommand extends SkillSubCommand
     @Override
     protected void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
+        if (!sender.hasPermission(getPermission()) && sender instanceof Player)
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
         else if (!(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PLAYERONLY);
@@ -62,7 +62,7 @@ public class SkillBuyCommand extends SkillSubCommand
                 plugin.getServer().getPluginManager().callEvent(event);
                 
                 if (event.isCancelled())
-                    sender.sendMessage(SkillLanguage.BUY_CANCELLED);
+                    sender.sendMessage(SkillLanguage.BUYRENT_CANCELLED);
                 else
                 {
                     SkillUtils.withdraw(p, s.getBuyCosts().entrySet());

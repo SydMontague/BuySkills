@@ -224,7 +224,7 @@ public class SkillUtils
         for (Entry<String, Object> set : map.entrySet())
             if (CurrencyHandler.hasHandler(set.getKey()))
                 if (CurrencyHandler.getHandler(set.getKey()).checkInputObject(set.getValue()))
-                    str = str + CurrencyHandler.getHandler(set.getKey()).getFormatedString(set.getValue());
+                    str += " " + CurrencyHandler.getHandler(set.getKey()).getFormatedString(set.getValue());
         
         return str;
     }

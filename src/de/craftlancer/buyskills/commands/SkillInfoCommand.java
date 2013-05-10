@@ -23,7 +23,7 @@ public class SkillInfoCommand extends SkillSubCommand
     @Override
     protected void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
+        if (!sender.hasPermission(getPermission()) && sender instanceof Player)
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
         else if (args.length <= 1)
             sender.sendMessage(SkillLanguage.HELP_COMMAND_INFO);

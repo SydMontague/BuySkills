@@ -3,8 +3,6 @@ package de.craftlancer.buyskills;
 import java.util.List;
 import java.util.Map;
 
-// TODO set() JavaDocs
-
 /**
  * Represents a buyable and/or rentable skill
  */
@@ -85,6 +83,11 @@ public class Skill
         return desc;
     }
     
+    /**
+     * Set the description of the skill.
+     * 
+     * @param desc the new description
+     */
     public void setDescription(String desc)
     {
         this.desc = desc;
@@ -100,6 +103,11 @@ public class Skill
         return info;
     }
     
+    /**
+     * Set the infostring of the skill
+     * 
+     * @param info the new infostring
+     */
     public void setInfo(String info)
     {
         this.info = info;
@@ -115,6 +123,11 @@ public class Skill
         return categories;
     }
     
+    /**
+     * Set the categories of the skill
+     * 
+     * @param categories the new List of categories
+     */
     public void setCategories(List<String> categories)
     {
         this.categories = categories;
@@ -130,6 +143,11 @@ public class Skill
         return buyCosts;
     }
     
+    /**
+     * Set the costs to buy this skill
+     * 
+     * @param buy_costs new new costs
+     */
     public void setBuyCosts(Map<String, Object> buy_costs)
     {
         buyCosts = buy_costs;
@@ -145,6 +163,11 @@ public class Skill
         return rentCosts;
     }
     
+    /**
+     * Set the costs to rent this skill
+     * 
+     * @param rent_costs the new costs
+     */
     public void setRentCosts(Map<String, Object> rent_costs)
     {
         rentCosts = rent_costs;
@@ -160,6 +183,11 @@ public class Skill
         return permNeed;
     }
     
+    /**
+     * Set the needed permissions for this skill
+     * 
+     * @param perm_need a list of all needed permissions
+     */
     public void setPermNeed(List<String> perm_need)
     {
         permNeed = perm_need;
@@ -175,6 +203,11 @@ public class Skill
         return permEarn;
     }
     
+    /**
+     * Set the earned permissions for this skill
+     * 
+     * @param permEarn a list of all earned permissions
+     */
     public void setPermEarn(List<String> permEarn)
     {
         this.permEarn = permEarn;
@@ -190,6 +223,11 @@ public class Skill
         return groupNeed;
     }
     
+    /**
+     * Set the needed groups of this skill
+     * 
+     * @param groupNeed a list of needed groups
+     */
     public void setGroupNeed(List<String> groupNeed)
     {
         this.groupNeed = groupNeed;
@@ -205,6 +243,11 @@ public class Skill
         return groupEarn;
     }
     
+    /**
+     * Set the earned groups of this skill
+     * 
+     * @param groupEarn a list of all earned groups
+     */
     public void setGroupEarn(List<String> groupEarn)
     {
         this.groupEarn = groupEarn;
@@ -220,6 +263,11 @@ public class Skill
         return revokeGroup;
     }
     
+    /**
+     * Set whether the needed groups should be revoked when this skill is granted
+     * 
+     * @param revokeGroup true if yes, false if not
+     */
     public void setRevokeGroup(boolean revokeGroup)
     {
         this.revokeGroup = revokeGroup;
@@ -235,6 +283,11 @@ public class Skill
         return revokePerm;
     }
     
+    /**
+     * Set whether the needed permissions should be revoked when this skill is granted
+     * 
+     * @param revokePerm true if yes, false if not
+     */
     public void setRevokePerm(boolean revokePerm)
     {
         this.revokePerm = revokePerm;
@@ -250,6 +303,11 @@ public class Skill
         return regrantGroup;
     }
     
+    /**
+     * Set whether the needed groups are regranted when this skill is revoked
+     * 
+     * @param regrantGroup true if yes, false if not
+     */
     public void setRegrantGroup(boolean regrantGroup)
     {
         this.regrantGroup = regrantGroup;
@@ -266,6 +324,11 @@ public class Skill
         return regrantPerm;
     }
     
+    /**
+     * Set whether the needed permissions are regranted when this skill is revoked
+     * 
+     * @param regrantPerm true if yes, false if not
+     */
     public void setRegrantPerm(boolean regrantPerm)
     {
         this.regrantPerm = regrantPerm;
@@ -281,6 +344,11 @@ public class Skill
         return buyable;
     }
     
+    /**
+     * Set if this skill is avaible via /skill buy
+     * 
+     * @param buyable true if yes, false if not
+     */
     public void setBuyable(boolean buyable)
     {
         this.buyable = buyable;
@@ -296,6 +364,11 @@ public class Skill
         return rentable;
     }
     
+    /**
+     * Set if this skill is avaible via /skill rent
+     * 
+     * @param rentable true if yes, false if not
+     */
     public void setRentable(boolean rentable)
     {
         this.rentable = rentable;
@@ -311,6 +384,11 @@ public class Skill
         return renttime;
     }
     
+    /**
+     * Set the amount of time the skill is rented for
+     * 
+     * @param renttime the time in ms
+     */
     public void setRentTime(long renttime)
     {
         this.renttime = renttime;
@@ -326,6 +404,11 @@ public class Skill
         return skillsNeed;
     }
     
+    /**
+     * Set the skills, needed to buy this skill
+     * 
+     * @param skillsNeed a list of needed skills
+     */
     public void setSkillsNeed(List<String> skillsNeed)
     {
         this.skillsNeed = skillsNeed;
@@ -341,6 +424,11 @@ public class Skill
         return skillsIllegal;
     }
     
+    /**
+     * Set the forbidden skills to get this skill
+     * 
+     * @param skillsIllegal a list of forbidden skills
+     */
     public void setSkillsIllegal(List<String> skillsIllegal)
     {
         this.skillsIllegal = skillsIllegal;
@@ -357,6 +445,11 @@ public class Skill
         return skillsNeeded;
     }
     
+    /**
+     * Set the number of skills of the SkillsNeed List which are needed to buy this skill
+     * 
+     * @param skillsNeeded the number of needed skills
+     */
     public void setSkillsNeeded(int skillsNeeded)
     {
         this.skillsNeeded = skillsNeeded;
@@ -373,6 +466,12 @@ public class Skill
         return buyNeed;
     }
     
+    /**
+     * Set the extra requirements to buy this skill
+     * Used with CustomCurrency
+     * 
+     * @param buyNeed a map of all requirements
+     */
     public void setBuyNeed(Map<String, Object> buyNeed)
     {
         this.buyNeed = buyNeed;
@@ -389,6 +488,12 @@ public class Skill
         return rentNeed;
     }
     
+    /**
+     * Set the extra requirement to rent this skill
+     * Used with CustomCurrency
+     * 
+     * @param rentNeed a map of all requirements
+     */
     public void setRentNeed(Map<String, Object> rentNeed)
     {
         this.rentNeed = rentNeed;
@@ -405,6 +510,11 @@ public class Skill
         return worlds;
     }
     
+    /**
+     * Set a the worlds the skill is valid for
+     * 
+     * @param worlds a list of worlds, null/empty for global
+     */
     public void setWorlds(List<String> worlds)
     {
         this.worlds = worlds;

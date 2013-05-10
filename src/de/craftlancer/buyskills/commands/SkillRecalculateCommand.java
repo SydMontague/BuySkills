@@ -22,7 +22,7 @@ public class SkillRecalculateCommand extends SkillSubCommand
     @Override
     public void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
+        if (!sender.hasPermission(getPermission()) && sender instanceof Player)
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
         else if (args.length < 2)
             sender.sendMessage(SkillLanguage.COMMAND_ARGUMENTS);

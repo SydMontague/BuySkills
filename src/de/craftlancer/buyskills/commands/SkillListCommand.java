@@ -26,15 +26,15 @@ public class SkillListCommand extends SkillSubCommand
     @Override
     protected void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
+        if (!sender.hasPermission(getPermission()) && sender instanceof Player)
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
         else if (!(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PLAYERONLY);
         else
         {
             int page = 0;
-            boolean rentable = true;
-            boolean buyable = true;
+            boolean rentable = false;
+            boolean buyable = false;
             boolean all = false;
             String cat = null;
             
@@ -56,6 +56,12 @@ public class SkillListCommand extends SkillSubCommand
                     all = true;
                 
                 cat = SkillUtils.retainFromArray(args, plugin.getCategories());
+            }
+            
+            if(!buyable && !rentable)
+            {
+                buyable = true;
+                rentable = true;
             }
             
             List<Skill> skill = getAvaibleSkills((Player) sender, rentable, buyable, all, cat);

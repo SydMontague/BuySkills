@@ -18,10 +18,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.craftlancer.buyskills.commands.SkillCommandHandler;
 
 /*
- * TODO JavaDocs
- * TOTEST the whole plugin (edge cases)
- * TODO extend OO, especially in Command classes
- * TODO extend Events
+ * TODO try to extend OO
+ * TODO extend Events + JavaDocs
  */
 
 public class BuySkills extends JavaPlugin

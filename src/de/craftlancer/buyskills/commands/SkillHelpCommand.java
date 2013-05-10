@@ -25,10 +25,14 @@ public class SkillHelpCommand extends SkillSubCommand
     @Override
     protected void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
+        if (!sender.hasPermission(getPermission()) && sender instanceof Player)
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
         else if (args.length >= 1 || args[1].equalsIgnoreCase("help"))
+        {
             sender.sendMessage(SkillLanguage.HELP_COMMAND_HELP);
+            if(sender.hasPermission("buyskills.admin") || !(sender instanceof Player))
+                sender.sendMessage(SkillLanguage.HELP_COMMAND_HELP_ADMIN);
+        }
         else if (args[1].equalsIgnoreCase("buy"))
             sender.sendMessage(SkillLanguage.HELP_COMMAND_BUY);
         else if (args[1].equalsIgnoreCase("current"))

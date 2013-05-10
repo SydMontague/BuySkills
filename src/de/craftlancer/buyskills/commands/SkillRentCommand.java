@@ -25,7 +25,7 @@ public class SkillRentCommand extends SkillSubCommand
     @Override
     public void execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!sender.hasPermission(getPermission()) || !(sender instanceof Player))
+        if (!sender.hasPermission(getPermission()) && sender instanceof Player)
             sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
         else if (!(sender instanceof Player))
             sender.sendMessage(SkillLanguage.COMMAND_PLAYERONLY);
@@ -62,7 +62,7 @@ public class SkillRentCommand extends SkillSubCommand
                 plugin.getServer().getPluginManager().callEvent(event);
                 
                 if (event.isCancelled())
-                    sender.sendMessage(SkillLanguage.RENT_CANCELLED);
+                    sender.sendMessage(SkillLanguage.BUYRENT_CANCELLED);
                 else
                 {
                     SkillUtils.withdraw(p, s.getRentCosts().entrySet());
