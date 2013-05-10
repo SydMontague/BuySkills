@@ -264,7 +264,8 @@ public class Skill
     }
     
     /**
-     * Set whether the needed groups should be revoked when this skill is granted
+     * Set whether the needed groups should be revoked when this skill is
+     * granted
      * 
      * @param revokeGroup true if yes, false if not
      */
@@ -284,7 +285,8 @@ public class Skill
     }
     
     /**
-     * Set whether the needed permissions should be revoked when this skill is granted
+     * Set whether the needed permissions should be revoked when this skill is
+     * granted
      * 
      * @param revokePerm true if yes, false if not
      */
@@ -325,7 +327,8 @@ public class Skill
     }
     
     /**
-     * Set whether the needed permissions are regranted when this skill is revoked
+     * Set whether the needed permissions are regranted when this skill is
+     * revoked
      * 
      * @param regrantPerm true if yes, false if not
      */
@@ -446,7 +449,8 @@ public class Skill
     }
     
     /**
-     * Set the number of skills of the SkillsNeed List which are needed to buy this skill
+     * Set the number of skills of the SkillsNeed List which are needed to buy
+     * this skill
      * 
      * @param skillsNeeded the number of needed skills
      */
@@ -519,7 +523,7 @@ public class Skill
     {
         this.worlds = worlds;
     }
-
+    
     /**
      * Get if costs are regranted when this skill is revoked
      * 
@@ -529,14 +533,14 @@ public class Skill
     {
         return regrantCost;
     }
-
+    
     /**
      * Set whether costs are regranted when this skill is revoked
      * 
-     * @param bool true if they are regranted, false if not 
+     * @param bool true if they are regranted, false if not
      */
     public void setRegrantCost(boolean bool)
     {
-        this.regrantCost = bool;
+        regrantCost = bool;
     }
 }

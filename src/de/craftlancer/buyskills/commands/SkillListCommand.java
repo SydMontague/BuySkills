@@ -58,7 +58,7 @@ public class SkillListCommand extends SkillSubCommand
                 cat = SkillUtils.retainFromArray(args, plugin.getCategories());
             }
             
-            if(!buyable && !rentable)
+            if (!buyable && !rentable)
             {
                 buyable = true;
                 rentable = true;

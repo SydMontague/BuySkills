@@ -34,7 +34,7 @@ public class SkillLanguage
     public static String BUYRENT_NOT_AFFORD;
     public static String BUYRENT_SKILLCAP_REACHED;
     public static String BUYRENT_WRONG_WORLD;
-    public static String BUYRENT_NOT_CURRENCYS;    
+    public static String BUYRENT_NOT_CURRENCYS;
     public static String BUYRENT_CANCELLED;
     
     public static String BUY_SUCCESS;

@@ -30,7 +30,7 @@ public class SkillHelpCommand extends SkillSubCommand
         else if (args.length >= 1 || args[1].equalsIgnoreCase("help"))
         {
             sender.sendMessage(SkillLanguage.HELP_COMMAND_HELP);
-            if(sender.hasPermission("buyskills.admin") || !(sender instanceof Player))
+            if (sender.hasPermission("buyskills.admin") || !(sender instanceof Player))
                 sender.sendMessage(SkillLanguage.HELP_COMMAND_HELP_ADMIN);
         }
         else if (args[1].equalsIgnoreCase("buy"))

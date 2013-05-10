@@ -236,7 +236,7 @@ public class SkillPlayerManager
                     plugin.permission.playerAdd(world, player, perm);
             
             if (s.isRegrantCost())
-                SkillUtils.give(plugin.getServer().getPlayerExact(player), s.getRentCosts().entrySet());            
+                SkillUtils.give(plugin.getServer().getPlayerExact(player), s.getRentCosts().entrySet());
         }
     }
     
