@@ -7,7 +7,7 @@ description: Buy permission nodes and groups with money, and other currencies!
 depend: [Vault, CurrencyHandler]
 commands:
     skill:
-        description: Gives out XP and current Level    
+        description: Root command for BuySkills   
         usage: |
             /skill help [command] - get help for this plugin
             /skill list <page> <filter> - list available skills
@@ -18,40 +18,40 @@ commands:
             /skill rented - show's your rented skills
 permissions:
     buyskills.command.help:
-        description: Grant access to /help command
+        description: Grant access to /skill help subcommand
         default: false
     buyskills.command.list:
-        description: Grant access to /list command
+        description: Grant access to /skill list subcommand
         default: false
     buyskills.command.info:
-        description: Grant access to /info command
+        description: Grant access to /skill info subcommand
         default: false
     buyskills.command.buy:
-        description: Grant access to /buy command
+        description: Grant access to /skill buy subcommand
         default: false
     buyskills.command.rent:
-        description: Grant access to /rent command
+        description: Grant access to /skill rent subcommand
         default: false
     buyskills.command.current:
-        description: Grant access to /current command
+        description: Grant access to /skill current subcommand
         default: false
     buyskills.command.rented:
-        description: Grant access to /rented command
+        description: Grant access to /skill rented subcommand
         default: false
     buyskills.command.recalculate:
-        description: Grant access to /recalculate command
+        description: Grant access to /skill recalculate subcommand
         default: false
     buyskills.command.reload:
-        description: Grant access to /reload command
+        description: Grant access to /skill reload subcommand
         default: false
     buyskills.command.reset:  
-        description: Grant access to /reset command
+        description: Grant access to /skill reset subcommand
         default: false
     buyskills.command.revoke:
-        description: Grant access to /revoke command
+        description: Grant access to /skill revoke subcommand
         default: false
     buyskills.command.grant:
-        description: Grant access to /grant command
+        description: Grant access to /skill grant subcommand
         default: false
     buyskills.user:
         default: false
