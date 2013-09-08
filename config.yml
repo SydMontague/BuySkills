@@ -74,10 +74,10 @@ string:
                     Description: %desc%
     INFO_DEFAULT_STRING: |
                     Name: %name%
-                    Info: %info%°
-                    Buycosts: %buycost%°~
-                    Rentcosts: %rentcost%~°
-                    Needed to buy: %buyneed%°~
+                    Info: %info%^
+                    Buycosts: %buycost%^~
+                    Rentcosts: %rentcost%~^
+                    Needed to buy: %buyneed%^~
                     Needed to rent: %rentneed%
                     Renttime: %renttime%~
                     Skills needed: %skillneed%

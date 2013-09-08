@@ -9,8 +9,8 @@ import de.craftlancer.buyskills.BuySkills;
 
 public abstract class SkillSubCommand
 {
-    String permission = "";
-    BuySkills plugin;
+    private String permission = "";
+    protected BuySkills plugin;
     
     public SkillSubCommand(String permission, BuySkills plugin)
     {

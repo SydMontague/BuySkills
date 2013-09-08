@@ -18,7 +18,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.craftlancer.buyskills.commands.SkillCommandHandler;
 
 /*
- * TODO try to extend OO
  * TODO extend Events + JavaDocs
  */
 
@@ -79,8 +78,11 @@ public class BuySkills extends JavaPlugin
      */
     public void loadConfigurations()
     {
-        if (!new File(getDataFolder().getPath() + File.separatorChar + "config.yml").exists())
+        if (!new File(getDataFolder(), "config.yml").exists())
             saveDefaultConfig();
+        
+        if (!new File(getDataFolder(), "skills.yml").exists())
+            saveResource("skills.yml", false);
         
         reloadConfig();
         sConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "skills.yml"));
@@ -94,7 +96,8 @@ public class BuySkills extends JavaPlugin
     /**
      * Get the skill with the given name
      * 
-     * @param name the name of the skill
+     * @param name
+     *            the name of the skill
      * @return the Skill object with the given name, null if no skill was found
      */
     public Skill getSkill(String name)
@@ -105,7 +108,8 @@ public class BuySkills extends JavaPlugin
     /**
      * Check if a skill with the given name exists
      * 
-     * @param name the name of the skill
+     * @param name
+     *            the name of the skill
      * @return true when the skill exists, false if not
      */
     public boolean hasSkill(String name)
@@ -209,17 +213,21 @@ public class BuySkills extends JavaPlugin
         HashMap<String, Object> buyNeedHelpMap = new HashMap<String, Object>();
         HashMap<String, Object> rentNeedHelpMap = new HashMap<String, Object>();
         
-        for (String vkey : sConfig.getConfigurationSection(key + ".buy_costs").getKeys(false))
-            buyHelpMap.put(vkey, sConfig.get(key + ".buy_costs." + vkey));
+        if (sConfig.isConfigurationSection(key + ".buy_costs"))
+            for (String vkey : sConfig.getConfigurationSection(key + ".buy_costs").getKeys(false))
+                buyHelpMap.put(vkey, sConfig.get(key + ".buy_costs." + vkey));
         
-        for (String vkey : sConfig.getConfigurationSection(key + ".rent_costs").getKeys(false))
-            rentHelpMap.put(vkey, sConfig.get(key + ".rent_costs." + vkey));
+        if (sConfig.isConfigurationSection(key + ".rent_costs"))
+            for (String vkey : sConfig.getConfigurationSection(key + ".rent_costs").getKeys(false))
+                rentHelpMap.put(vkey, sConfig.get(key + ".rent_costs." + vkey));
         
-        for (String vkey : sConfig.getConfigurationSection(key + ".buy_need").getKeys(false))
-            buyNeedHelpMap.put(vkey, sConfig.get(key + ".buy_need." + vkey));
+        if (sConfig.isConfigurationSection(key + ".buy_need"))
+            for (String vkey : sConfig.getConfigurationSection(key + ".buy_need").getKeys(false))
+                buyNeedHelpMap.put(vkey, sConfig.get(key + ".buy_need." + vkey));
         
-        for (String vkey : sConfig.getConfigurationSection(key + ".rent_need").getKeys(false))
-            rentNeedHelpMap.put(vkey, sConfig.get(key + ".rent_need." + vkey));
+        if (sConfig.isConfigurationSection(key + ".rent_need"))
+            for (String vkey : sConfig.getConfigurationSection(key + ".rent_need").getKeys(false))
+                rentNeedHelpMap.put(vkey, sConfig.get(key + ".rent_need." + vkey));
         
         skill.setBuyCosts(buyHelpMap);
         skill.setRentCosts(rentHelpMap);

@@ -56,7 +56,7 @@ public class SkillUtils
      * %name%, %desc%, %info%, %categories%, %buycost%, %rentcost%, %buyneed%,
      * %rentneed%, %worlds%, %rentable%, %buyable%, %renttime%, %skillsneed%,
      * %skillsillegal%, %skillsneeded%
-     * Strings surrounded by � are only shown when the skill is buyable
+     * Strings surrounded by ^ are only shown when the skill is buyable
      * Strings surrounded by ~ are only shown when the skill is rentable
      * 
      * @param skill
@@ -68,10 +68,10 @@ public class SkillUtils
     public static String replaceValues(Skill skill, String string)
     {
         if (!skill.isBuyable())
-            while (string.contains("�"))
+            while (string.contains("^"))
             {
-                int i1 = string.indexOf("�");
-                int i2 = string.indexOf("�", i1 + 1) + 1;
+                int i1 = string.indexOf("^");
+                int i2 = string.indexOf("^", i1 + 1) + 1;
                 
                 if (i2 == -1)
                     break;
@@ -79,7 +79,7 @@ public class SkillUtils
                 string = string.replace(string.substring(i1, i2), "");
             }
         else
-            string = string.replace("�", "");
+            string = string.replace("^", "");
         
         if (!skill.isRentable())
             while (string.contains("~"))
@@ -175,7 +175,6 @@ public class SkillUtils
      * @param p the player
      * @param input the currencies
      */
-    @SuppressWarnings("unchecked")
     public static void withdraw(Player p, Set<Entry<String, Object>> input)
     {
         for (Entry<String, Object> set : input)
@@ -191,7 +190,6 @@ public class SkillUtils
      * @param p the player
      * @param input the currencies
      */
-    @SuppressWarnings("unchecked")
     public static void give(Player p, Set<Entry<String, Object>> input)
     {
         for (Entry<String, Object> set : input)
@@ -208,7 +206,6 @@ public class SkillUtils
      * @param s the currencies
      * @return true if the player has the currencyies, false if not
      */
-    @SuppressWarnings("unchecked")
     public static boolean hasCurrency(Player p, Map<String, Object> s)
     {
         for (Entry<String, Object> set : s.entrySet())
@@ -220,7 +217,6 @@ public class SkillUtils
         return true;
     }
 
-    @SuppressWarnings("unchecked")
     private static String getHandlerValues(Map<String, Object> map)
     {
         String str = "";

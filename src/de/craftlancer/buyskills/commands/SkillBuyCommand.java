@@ -44,11 +44,11 @@ public class SkillBuyCommand extends SkillSubCommand
             Player p = (Player) sender;
             Skill s = plugin.getSkill(args[1]);
             
-            if (!s.getWorlds().contains(p.getWorld().getName()))
+            if (!s.getWorlds().isEmpty() && !s.getWorlds().contains(p.getWorld().getName()))
                 sender.sendMessage(SkillLanguage.BUYRENT_WRONG_WORLD);
-            else if (plugin.getPlayerManager().hasPermNeed(p, s))
+            else if (!plugin.getPlayerManager().hasPermNeed(p, s))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_PERMISSION);
-            else if (plugin.getPlayerManager().hasPermNeed(p, s))
+            else if (!plugin.getPlayerManager().hasGroupNeed(p, s))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_GROUP);
             else if (!plugin.getPlayerManager().followsSkilltree(p, s))
                 sender.sendMessage(SkillLanguage.BUYRENT_NOT_SKILLTREE);
