@@ -1,6 +1,7 @@
 package de.craftlancer.buyskills;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.craftlancer.buyskills.commands.SkillCommandHandler;
+import de.craftlancer.buyskills.metrics.Metrics;
 
 /*
  * TODO extend Events + JavaDocs
@@ -55,6 +57,15 @@ public class BuySkills extends JavaPlugin
         
         task = new SkillRentTask(this);
         task.runTaskTimer(this, updatetime, updatetime);
+        
+        try
+        {
+            Metrics metrics = new Metrics(this);
+            metrics.start();
+        }
+        catch (IOException e)
+        {
+        }
     }
     
     @Override
