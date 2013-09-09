@@ -10,8 +10,8 @@ public class SkillEvent extends Event
 {
     private static final HandlerList handlers = new HandlerList();
     
-    Skill skill;
-    Player player;
+    protected Skill skill;
+    protected Player player;
     
     public SkillEvent(Skill skill, Player player)
     {

@@ -1,6 +1,6 @@
 name: BuySkills
 main: de.craftlancer.buyskills.BuySkills
-version: Beta2
+version: Beta3
 author: SydMontague
 dev-url: http://dev.bukkit.org/server-mods/expskills/
 description: Buy permission nodes and groups with money, and other currencies!

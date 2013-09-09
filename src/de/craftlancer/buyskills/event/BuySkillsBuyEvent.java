@@ -7,7 +7,7 @@ import de.craftlancer.buyskills.Skill;
 
 public class BuySkillsBuyEvent extends SkillEvent implements Cancellable
 {
-    boolean cancel = false;
+    private boolean cancel = false;
     
     public BuySkillsBuyEvent(Skill skill, Player player)
     {
