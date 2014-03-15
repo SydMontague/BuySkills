@@ -6,14 +6,14 @@ import org.bukkit.event.HandlerList;
 
 import de.craftlancer.buyskills.Skill;
 
-public class SkillEvent extends Event
+public class BuySkillEvent extends Event
 {
     private static final HandlerList handlers = new HandlerList();
     
     protected Skill skill;
     protected Player player;
     
-    public SkillEvent(Skill skill, Player player)
+    public BuySkillEvent(Skill skill, Player player)
     {
         this.skill = skill;
         this.player = player;

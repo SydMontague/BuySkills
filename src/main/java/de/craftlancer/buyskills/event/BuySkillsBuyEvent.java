@@ -5,7 +5,7 @@ import org.bukkit.event.Cancellable;
 
 import de.craftlancer.buyskills.Skill;
 
-public class BuySkillsBuyEvent extends SkillEvent implements Cancellable
+public class BuySkillsBuyEvent extends BuySkillEvent implements Cancellable
 {
     private boolean cancel = false;
     

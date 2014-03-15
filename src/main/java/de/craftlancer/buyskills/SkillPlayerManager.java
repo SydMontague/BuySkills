@@ -222,18 +222,18 @@ public class SkillPlayerManager
         for (String world : worlds)
         {
             for (String permission : s.getPermEarn())
-                plugin.permission.playerRemove(world, player, permission);
+                plugin.getPermissions().playerRemove(world, player, permission);
             
             for (String group : s.getGroupEarn())
-                plugin.permission.playerRemoveGroup(world, player, group);
+                plugin.getPermissions().playerRemoveGroup(world, player, group);
             
             if (s.isRegrantGroup())
                 for (String group : s.getGroupNeed())
-                    plugin.permission.playerAddGroup(world, player, group);
+                    plugin.getPermissions().playerAddGroup(world, player, group);
             
             if (s.isRegrantPerm())
                 for (String perm : s.getPermNeed())
-                    plugin.permission.playerAdd(world, player, perm);
+                    plugin.getPermissions().playerAdd(world, player, perm);
             
             if (s.isRegrantCost())
                 SkillUtils.give(plugin.getServer().getPlayerExact(player), s.getRentCosts().entrySet());
@@ -262,18 +262,18 @@ public class SkillPlayerManager
         for (String world : worlds)
         {
             for (String permission : s.getPermEarn())
-                plugin.permission.playerAdd(world, player, permission);
+                plugin.getPermissions().playerAdd(world, player, permission);
             
             for (String group : s.getGroupEarn())
-                plugin.permission.playerAddGroup(world, player, group);
+                plugin.getPermissions().playerAddGroup(world, player, group);
             
             if (s.isRevokeGroup())
                 for (String group : s.getGroupNeed())
-                    plugin.permission.playerRemoveGroup(world, player, group);
+                    plugin.getPermissions().playerRemoveGroup(world, player, group);
             
             if (s.isRevokePerm())
                 for (String perm : s.getPermNeed())
-                    plugin.permission.playerRemove(world, player, perm);
+                    plugin.getPermissions().playerRemove(world, player, perm);
         }
     }
     
@@ -330,7 +330,7 @@ public class SkillPlayerManager
     public boolean hasGroupNeed(Player p, Skill s)
     {
         for (String str : s.getGroupNeed())
-            if (!plugin.permission.playerInGroup(p, str))
+            if (!plugin.getPermissions().playerInGroup(p, str))
                 return false;
         
         return true;

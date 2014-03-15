@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 
 import de.craftlancer.buyskills.Skill;
 
-public class BuySkillsRentExpireEvent extends SkillEvent
+public class BuySkillsRentExpireEvent extends BuySkillEvent
 {
     public BuySkillsRentExpireEvent(Skill skill, Player player)
     {

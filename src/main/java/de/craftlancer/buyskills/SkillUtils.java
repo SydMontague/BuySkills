@@ -23,9 +23,9 @@ public class SkillUtils
      * @param col the Collection
      * @return the first value which is in both, the array and the Collection
      */
-    public static String retainFromArray(String[] array, Collection<String> col)
+    public static <T> T retainFirstFromArray(T[] array, Collection<T> col)
     {
-        for (String value : col)
+        for (T value : col)
             if (arrayContains(array, value))
                 return value;
         
@@ -40,10 +40,10 @@ public class SkillUtils
      * @param string the String
      * @return true if the array contains the string, false if not
      */
-    public static boolean arrayContains(String[] array, String string)
+    public static <T> boolean arrayContains(T[] array, T string)
     {
         if (array != null && array.length != 0)
-            for (String value : array)
+            for (T value : array)
                 if (value.equals(string))
                     return true;
         
@@ -121,7 +121,7 @@ public class SkillUtils
      * @param value a time in the future which's differnce string you want
      * @return the difference string
      */
-    public static String getTimeDiffString(Long value)
+    public static String getTimeDiffString(long value)
     {
         long time = (value - System.currentTimeMillis()) / 1000;
         
@@ -175,6 +175,7 @@ public class SkillUtils
      * @param p the player
      * @param input the currencies
      */
+    @SuppressWarnings("unchecked")
     public static void withdraw(Player p, Set<Entry<String, Object>> input)
     {
         for (Entry<String, Object> set : input)
@@ -190,6 +191,7 @@ public class SkillUtils
      * @param p the player
      * @param input the currencies
      */
+    @SuppressWarnings("unchecked")
     public static void give(Player p, Set<Entry<String, Object>> input)
     {
         for (Entry<String, Object> set : input)
@@ -206,6 +208,7 @@ public class SkillUtils
      * @param s the currencies
      * @return true if the player has the currencyies, false if not
      */
+    @SuppressWarnings("unchecked")
     public static boolean hasCurrency(Player p, Map<String, Object> s)
     {
         for (Entry<String, Object> set : s.entrySet())
@@ -217,15 +220,16 @@ public class SkillUtils
         return true;
     }
 
+    @SuppressWarnings("unchecked")
     private static String getHandlerValues(Map<String, Object> map)
     {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         
         for (Entry<String, Object> set : map.entrySet())
             if (CurrencyHandler.hasHandler(set.getKey()))
                 if (CurrencyHandler.getHandler(set.getKey()).checkInputObject(set.getValue()))
-                    str += " " + CurrencyHandler.getHandler(set.getKey()).getFormatedString(set.getValue());
+                    str.append(" " + CurrencyHandler.getHandler(set.getKey()).getFormatedString(set.getValue()));
         
-        return str;
+        return str.toString();
     }
 }

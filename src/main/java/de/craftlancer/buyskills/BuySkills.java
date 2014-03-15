@@ -21,12 +21,14 @@ import de.craftlancer.buyskills.commands.SkillCommandHandler;
 
 /*
  * TODO extend Events + JavaDocs
+ * TODO switch to UUID instead of playernames -> requires a getUUID(OfflinePlayer) method!
+ * TODO update commands to the latest version of my command system
  */
 
 public class BuySkills extends JavaPlugin
 {
     public static Logger log = Bukkit.getLogger();
-    public Permission permission;
+    private Permission permission;
     
     private SkillRentTask task;
     private SkillPlayerManager pmanager;
@@ -72,6 +74,11 @@ public class BuySkills extends JavaPlugin
     public void onDisable()
     {
         task.cancel();
+    }
+    
+    public Permission getPermissions()
+    {
+        return permission;
     }
     
     /**

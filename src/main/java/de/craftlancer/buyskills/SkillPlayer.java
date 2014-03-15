@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+// TODO merge SkillPlayerManager with SkillPlayer as much as possible
 /**
  * Represents a Player
  */
