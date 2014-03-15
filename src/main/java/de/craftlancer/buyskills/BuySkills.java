@@ -15,9 +15,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 import de.craftlancer.buyskills.commands.SkillCommandHandler;
-import de.craftlancer.buyskills.metrics.Metrics;
 
 /*
  * TODO extend Events + JavaDocs
