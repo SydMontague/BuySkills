@@ -12,6 +12,7 @@ import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillPlayer;
 import de.craftlancer.buyskills.SkillUtils;
 import de.craftlancer.buyskills.event.BuySkillsBuyEvent;
+import de.craftlancer.currencyhandler.CurrencyHandler;
 
 /**
  * Handles the /skill buy command
@@ -55,9 +56,9 @@ public class SkillBuyCommand extends SkillSubCommand
             return SkillLanguage.BUYRENT_NOT_GROUP.getString();
         if (!skillPlayer.followsSkilltree(skill))
             return SkillLanguage.BUYRENT_NOT_SKILLTREE.getString();
-        if (!SkillUtils.hasCurrency(player, skill.getBuyNeed()))
+        if (!CurrencyHandler.hasCurrencies(player, skill.getBuyNeed()))
             return SkillLanguage.BUYRENT_NOT_CURRENCYS.getString();
-        if (!SkillUtils.hasCurrency(player, skill.getBuyCosts()))
+        if (!CurrencyHandler.hasCurrencies(player, skill.getBuyCosts()))
             return SkillLanguage.BUYRENT_NOT_AFFORD.getString();
         
         BuySkillsBuyEvent event = new BuySkillsBuyEvent(skill, skillPlayer);
@@ -66,7 +67,7 @@ public class SkillBuyCommand extends SkillSubCommand
         if (event.isCancelled())
             return SkillLanguage.BUYRENT_CANCELLED.getString();
         
-        SkillUtils.withdraw(player, skill.getBuyCosts());
+        CurrencyHandler.withdrawCurrencies(player, skill.getBuyCosts());
         
         skillPlayer.grantSkill(skill);
         return SkillLanguage.BUY_SUCCESS.getString();

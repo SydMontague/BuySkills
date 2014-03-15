@@ -12,6 +12,7 @@ import de.craftlancer.buyskills.SkillLanguage;
 import de.craftlancer.buyskills.SkillPlayer;
 import de.craftlancer.buyskills.SkillUtils;
 import de.craftlancer.buyskills.event.BuySkillsGrantEvent;
+import de.craftlancer.currencyhandler.CurrencyHandler;
 
 /**
  * Handles the /skill grant command
@@ -45,10 +46,10 @@ public class SkillGrantCommand extends SkillSubCommand
         boolean rent = SkillUtils.arrayContains(args, "rent");
         
         if (SkillUtils.arrayContains(args, "charge"))
-            if (p == null || !SkillUtils.hasCurrency(p, (rent) ? skill.getRentCosts() : skill.getBuyCosts()))
+            if (p == null || !CurrencyHandler.hasCurrencies(p, (rent) ? skill.getRentCosts() : skill.getBuyCosts()))
                 return SkillLanguage.GRANT_NOT_AFFORD.getString();
             else
-                SkillUtils.withdraw(p, (rent) ? skill.getRentCosts() : skill.getBuyCosts());
+                CurrencyHandler.withdrawCurrencies(p, (rent) ? skill.getRentCosts() : skill.getBuyCosts());
         
         if (rent)
             skillPlayer.grantRented(skill, skill.getRenttime());

@@ -1,7 +1,7 @@
 testskill:
     name: Test
-    description: "Das ist eine Testbeschreibung"
-    info: "Das ist eine Testinfo"
+    description: "This is a test description"
+    info: "DThis is a test info"
     category:
     - testskill
     - foo

@@ -168,61 +168,6 @@ public class SkillUtils
         return result;
     }
     
-    /**
-     * Withdraw all given currencies from the player
-     * Uses the CurrencyHandler plugin
-     * 
-     * @param p the player
-     * @param input the currencies
-     */
-    @SuppressWarnings("unchecked")
-    public static void withdraw(Player p, Map<String, Object> input)
-    {
-        for (Entry<String, Object> set : input.entrySet())
-            if (CurrencyHandler.hasHandler(set.getKey()))
-                if (CurrencyHandler.getHandler(set.getKey()).checkInputObject(set.getValue()))
-                    CurrencyHandler.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
-    }
-    
-    /**
-     * Give all given currencies to the player
-     * Uses the CurrencyHandler plugin
-     * 
-     * @param p the player
-     * @param input the currencies
-     */
-    @SuppressWarnings("unchecked")
-    public static void give(Player p, Set<Entry<String, Object>> input)
-    {
-        if(p == null)
-            return;
-        
-        for (Entry<String, Object> set : input)
-            if (CurrencyHandler.hasHandler(set.getKey()))
-                if (CurrencyHandler.getHandler(set.getKey()).checkInputObject(set.getValue()))
-                    CurrencyHandler.getHandler(set.getKey()).giveCurrency(p, set.getValue());
-    }
-    
-    /**
-     * Check if a player has enough currencies
-     * Uses the CurrencyHandler plugin
-     * 
-     * @param p the player
-     * @param s the currencies
-     * @return true if the player has the currencyies, false if not
-     */
-    @SuppressWarnings("unchecked")
-    public static boolean hasCurrency(Player p, Map<String, Object> s)
-    {
-        for (Entry<String, Object> set : s.entrySet())
-            if (CurrencyHandler.hasHandler(set.getKey()))
-                if (CurrencyHandler.getHandler(set.getKey()).checkInputObject(set.getValue()))
-                    if (!CurrencyHandler.getHandler(set.getKey()).hasCurrency(p, set.getValue()))
-                        return false;
-        
-        return true;
-    }
-
     @SuppressWarnings("unchecked")
     private static String getHandlerValues(Map<String, Object> map)
     {

@@ -10,6 +10,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import de.craftlancer.currencyhandler.CurrencyHandler;
+
 /**
  * Represents a Player
  */
@@ -331,7 +333,7 @@ public class SkillPlayer
                     plugin.getPermissions().playerAdd(world, getName(), perm);
             
             if (s.isRegrantCost())
-                SkillUtils.give(plugin.getServer().getPlayerExact(getName()), s.getRentCosts().entrySet());
+                CurrencyHandler.giveCurrencies(plugin.getServer().getPlayerExact(getName()), s.getRentCosts());
         }
     }
     
