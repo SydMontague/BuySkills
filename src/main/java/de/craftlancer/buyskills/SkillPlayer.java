@@ -15,11 +15,14 @@ import org.bukkit.entity.Player;
  */
 public class SkillPlayer
 {
+    private boolean hasChanged = false;
     private BuySkills plugin;
     private String name;
     private List<String> skills = new ArrayList<String>();
     private HashMap<String, Long> rented = new HashMap<String, Long>();
     private int bonuscap = 0;
+    private File file;
+    private FileConfiguration conf;
     
     public SkillPlayer(BuySkills plugin, String name, List<String> skills, HashMap<String, Long> rented, int bonuscap)
     {
@@ -27,7 +30,9 @@ public class SkillPlayer
         this.name = name;
         this.skills = skills;
         this.rented = rented;
-        setBonusCap(bonuscap);
+        this.bonuscap = bonuscap;
+        this.file = new File(plugin.getDataFolder(), "players" + File.separator + getName() + ".yml");
+        this.conf = YamlConfiguration.loadConfiguration(file);
     }
     
     /**
@@ -96,6 +101,9 @@ public class SkillPlayer
      */
     public void setBonusCap(int bonuscap)
     {
+        if(this.bonuscap != bonuscap)
+            hasChanged = true;
+        
         this.bonuscap = bonuscap;
     }
     
@@ -334,11 +342,13 @@ public class SkillPlayer
     
     private void addSkill(String s)
     {
+        hasChanged = true;
         skills.add(s);
     }
     
     private void removeSkill(String s)
     {
+        hasChanged = true;
         skills.remove(s);
     }
     
@@ -349,8 +359,8 @@ public class SkillPlayer
     
     protected void save()
     {
-        File file = new File(plugin.getDataFolder(), "players" + File.separator + getName() + ".yml");
-        FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
+        if (!hasChanged)
+            return;
         
         if (getBoughtSkills().isEmpty() && getBonusCap() == 0 && file.exists())
         {
@@ -369,6 +379,8 @@ public class SkillPlayer
         {
             e.printStackTrace();
         }
+        
+        hasChanged = false;
     }
     
     protected void saveRented()
