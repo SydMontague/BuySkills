@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.Skill;
 import de.craftlancer.buyskills.SkillLanguage;
+import de.craftlancer.buyskills.SkillPlayer;
 import de.craftlancer.buyskills.SkillUtils;
 import de.craftlancer.buyskills.event.BuySkillsBuyEvent;
 
@@ -23,55 +24,52 @@ public class SkillBuyCommand extends SkillSubCommand
     }
     
     @Override
-    protected void execute(CommandSender sender, Command cmd, String label, String[] args)
+    protected String execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!sender.hasPermission(getPermission()) && sender instanceof Player)
-            sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
-        else if (!(sender instanceof Player))
-            sender.sendMessage(SkillLanguage.COMMAND_PLAYERONLY);
-        else if (args.length < 2)
-            sender.sendMessage(SkillLanguage.COMMAND_ARGUMENTS);
-        else if (!plugin.hasSkill(args[1]))
-            sender.sendMessage(SkillLanguage.COMMAND_SKILL_NOT_EXIST);
-        else if (!plugin.getSkill(args[1]).isBuyable())
-            sender.sendMessage(SkillLanguage.BUY_NOT_BUYABLE);
-        else if (plugin.getSkillCap() != 0 && plugin.getSkillCap() <= plugin.getPlayerManager().getSkills(sender.getName()).size() - plugin.getPlayerManager().getBonusCap(sender.getName()))
-            sender.sendMessage(SkillLanguage.BUYRENT_SKILLCAP_REACHED);
-        else if (plugin.getPlayerManager().getSkills(sender.getName()).contains(args[1]))
-            sender.sendMessage(SkillLanguage.BUYRENT_ALREADY_OWN);
-        else
-        {
-            Player p = (Player) sender;
-            Skill s = plugin.getSkill(args[1]);
-            
-            if (!s.getWorlds().isEmpty() && !s.getWorlds().contains(p.getWorld().getName()))
-                sender.sendMessage(SkillLanguage.BUYRENT_WRONG_WORLD);
-            else if (!plugin.getPlayerManager().hasPermNeed(p, s))
-                sender.sendMessage(SkillLanguage.BUYRENT_NOT_PERMISSION);
-            else if (!plugin.getPlayerManager().hasGroupNeed(p, s))
-                sender.sendMessage(SkillLanguage.BUYRENT_NOT_GROUP);
-            else if (!plugin.getPlayerManager().followsSkilltree(p, s))
-                sender.sendMessage(SkillLanguage.BUYRENT_NOT_SKILLTREE);
-            else if (!SkillUtils.hasCurrency(p, s.getBuyNeed()))
-                sender.sendMessage(SkillLanguage.BUYRENT_NOT_CURRENCYS);
-            else if (!SkillUtils.hasCurrency(p, s.getBuyCosts()))
-                sender.sendMessage(SkillLanguage.BUYRENT_NOT_AFFORD);
-            else
-            {
-                BuySkillsBuyEvent event = new BuySkillsBuyEvent(s, p);
-                plugin.getServer().getPluginManager().callEvent(event);
-                
-                if (event.isCancelled())
-                    sender.sendMessage(SkillLanguage.BUYRENT_CANCELLED);
-                else
-                {
-                    SkillUtils.withdraw(p, s.getBuyCosts().entrySet());
-                    
-                    plugin.getPlayerManager().grantSkill(p, s);
-                    sender.sendMessage(SkillLanguage.BUY_SUCCESS);
-                }
-            }
-        }
+        if (!sender.hasPermission(getPermission()))
+            return SkillLanguage.COMMAND_PERMISSION.getString();
+        if (!(sender instanceof Player))
+            return SkillLanguage.COMMAND_PLAYERONLY.getString();
+        
+        Player player = (Player) sender;
+        SkillPlayer skillPlayer = plugin.getSkillPlayer(player);
+        
+        if (args.length < 2)
+            return SkillLanguage.COMMAND_ARGUMENTS.getString();
+        if (!plugin.hasSkill(args[1]))
+            return SkillLanguage.COMMAND_SKILL_NOT_EXIST.getString();
+        if (!plugin.getSkill(args[1]).isBuyable())
+            return SkillLanguage.BUY_NOT_BUYABLE.getString();
+        if (plugin.getSkillCap() != 0 && plugin.getSkillCap() <= skillPlayer.getSkills().size() - skillPlayer.getBonusCap())
+            return SkillLanguage.BUYRENT_SKILLCAP_REACHED.getString();
+        if (plugin.getSkillPlayer(sender.getName()).getSkills().contains(args[1]))
+            return SkillLanguage.BUYRENT_ALREADY_OWN.getString();
+        
+        Skill skill = plugin.getSkill(args[1]);
+        
+        if (!skill.getWorlds().isEmpty() && !skill.getWorlds().contains(player.getWorld().getName()))
+            return SkillLanguage.BUYRENT_WRONG_WORLD.getString();
+        if (!skillPlayer.hasPermNeed(skill))
+            return SkillLanguage.BUYRENT_NOT_PERMISSION.getString();
+        if (!skillPlayer.hasGroupNeed(skill))
+            return SkillLanguage.BUYRENT_NOT_GROUP.getString();
+        if (!skillPlayer.followsSkilltree(skill))
+            return SkillLanguage.BUYRENT_NOT_SKILLTREE.getString();
+        if (!SkillUtils.hasCurrency(player, skill.getBuyNeed()))
+            return SkillLanguage.BUYRENT_NOT_CURRENCYS.getString();
+        if (!SkillUtils.hasCurrency(player, skill.getBuyCosts()))
+            return SkillLanguage.BUYRENT_NOT_AFFORD.getString();
+        
+        BuySkillsBuyEvent event = new BuySkillsBuyEvent(skill, skillPlayer);
+        plugin.getServer().getPluginManager().callEvent(event);
+        
+        if (event.isCancelled())
+            return SkillLanguage.BUYRENT_CANCELLED.getString();
+        
+        SkillUtils.withdraw(player, skill.getBuyCosts());
+        
+        skillPlayer.grantSkill(skill);
+        return SkillLanguage.BUY_SUCCESS.getString();
     }
     
     @Override
@@ -84,5 +82,11 @@ public class SkillBuyCommand extends SkillSubCommand
             default:
                 return null;
         }
+    }
+    
+    @Override
+    public void help(CommandSender sender)
+    {
+        sender.sendMessage(SkillLanguage.HELP_COMMAND_BUY.getString());
     }
 }

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.Skill;
 import de.craftlancer.buyskills.SkillLanguage;
+import de.craftlancer.buyskills.SkillPlayer;
 import de.craftlancer.buyskills.SkillUtils;
 import de.craftlancer.buyskills.event.BuySkillsGrantEvent;
 
@@ -23,37 +24,44 @@ public class SkillGrantCommand extends SkillSubCommand
     }
     
     @Override
-    protected void execute(CommandSender sender, Command cmd, String label, String[] args)
+    protected String execute(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (!sender.hasPermission(getPermission()) && sender instanceof Player)
-            sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
-        else if (args.length < 3)
-            sender.sendMessage(SkillLanguage.COMMAND_ARGUMENTS);
-        else if (plugin.getServer().getPlayerExact(args[1]) == null)
-            sender.sendMessage(SkillLanguage.COMMAND_PLAYER_NOT_EXIST);
-        else if (!plugin.hasSkill(args[2]))
-            sender.sendMessage(SkillLanguage.COMMAND_SKILL_NOT_EXIST);
-        else if (plugin.getPlayerManager().getSkills(args[1]).contains(args[2]))
-            sender.sendMessage(SkillLanguage.GRANT_ALREADY_OWN);
-        else
-        {
-            Player p = plugin.getServer().getPlayerExact(args[1]);
-            Skill s = plugin.getSkill(args[2]);
-            boolean rent = SkillUtils.arrayContains(args, "rent");
-            
-            if (SkillUtils.arrayContains(args, "charge"))
-                SkillUtils.withdraw(p, ((rent) ? s.getRentCosts().entrySet() : s.getBuyCosts().entrySet()));
-            
-            if (rent)
-                plugin.getPlayerManager().grantRented(p, s, s.getRenttime());
+            return SkillLanguage.COMMAND_PERMISSION.getString();
+        if (args.length < 3)
+            return SkillLanguage.COMMAND_ARGUMENTS.getString();
+        
+        SkillPlayer skillPlayer = plugin.getSkillPlayer(args[1]);
+        
+        if (skillPlayer == null)
+            return SkillLanguage.COMMAND_PLAYER_NOT_EXIST.getString();
+        if (!plugin.hasSkill(args[2]))
+            return SkillLanguage.COMMAND_SKILL_NOT_EXIST.getString();
+        if (skillPlayer.hasSkill(args[2]))
+            return SkillLanguage.GRANT_ALREADY_OWN.getString();
+        
+        Player p = plugin.getServer().getPlayerExact(args[1]);
+        Skill skill = plugin.getSkill(args[2]);
+        boolean rent = SkillUtils.arrayContains(args, "rent");
+        
+        if (SkillUtils.arrayContains(args, "charge"))
+            if (p == null || !SkillUtils.hasCurrency(p, (rent) ? skill.getRentCosts() : skill.getBuyCosts()))
+                return SkillLanguage.GRANT_NOT_AFFORD.getString();
             else
-                plugin.getPlayerManager().grantSkill(p, s);
-            
-            plugin.getServer().getPluginManager().callEvent(new BuySkillsGrantEvent(s, p));
-            
-            sender.sendMessage(SkillLanguage.GRANT_SUCCESS);
-            p.sendMessage(SkillLanguage.GRANT_NOTIFY.replace("%skill%", args[2]));
-        }
+                SkillUtils.withdraw(p, (rent) ? skill.getRentCosts() : skill.getBuyCosts());
+        
+        if (rent)
+            skillPlayer.grantRented(skill, skill.getRenttime());
+        else
+            skillPlayer.grantSkill(skill);
+        
+        plugin.getServer().getPluginManager().callEvent(new BuySkillsGrantEvent(skill, skillPlayer));
+        
+        if (p != null)
+            p.sendMessage(SkillLanguage.GRANT_NOTIFY.getString().replace("%skill%", args[2]));
+        
+        return SkillLanguage.GRANT_SUCCESS.getString();
+        
     }
     
     @Override
@@ -68,5 +76,11 @@ public class SkillGrantCommand extends SkillSubCommand
             default:
                 return SkillUtils.getMatches(args[args.length - 1], new String[] { "rent", "charge" });
         }
+    }
+    
+    @Override
+    public void help(CommandSender sender)
+    {
+        sender.sendMessage(SkillLanguage.HELP_COMMAND_GRANT.getString());
     }
 }

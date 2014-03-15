@@ -23,7 +23,14 @@ public abstract class SkillSubCommand
         return permission;
     }
     
-    protected abstract void execute(CommandSender sender, Command cmd, String label, String[] args);
+    public BuySkills getPlugin()
+    {
+        return plugin;
+    }
+    
+    protected abstract String execute(CommandSender sender, Command cmd, String label, String[] args);
     
     protected abstract List<String> onTabComplete(String[] args);
+    
+    public abstract void help(CommandSender sender);
 }

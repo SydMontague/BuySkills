@@ -21,16 +21,16 @@ public class SkillInfoCommand extends SkillSubCommand
     }
     
     @Override
-    protected void execute(CommandSender sender, Command cmd, String label, String[] args)
+    protected String execute(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (!sender.hasPermission(getPermission()) && sender instanceof Player)
-            sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
-        else if (args.length <= 1)
-            sender.sendMessage(SkillLanguage.HELP_COMMAND_INFO);
-        else if (!plugin.hasSkill(args[1]))
-            sender.sendMessage(SkillLanguage.COMMAND_SKILL_NOT_EXIST);
-        else
-            sender.sendMessage(SkillUtils.replaceValues(plugin.getSkill(args[1]), SkillLanguage.INFO_DEFAULT_STRING));
+            return SkillLanguage.COMMAND_PERMISSION.getString();
+        if (args.length <= 1)
+            return SkillLanguage.HELP_COMMAND_INFO.getString();
+        if (!plugin.hasSkill(args[1]))
+            return SkillLanguage.COMMAND_SKILL_NOT_EXIST.getString();
+        
+        return SkillUtils.replaceValues(plugin.getSkill(args[1]), SkillLanguage.INFO_DEFAULT_STRING.getString());
     }
     
     @Override
@@ -43,5 +43,11 @@ public class SkillInfoCommand extends SkillSubCommand
             default:
                 return null;
         }
+    }
+
+    @Override
+    public void help(CommandSender sender)
+    {
+        sender.sendMessage(SkillLanguage.HELP_COMMAND_INFO.getString());
     }
 }

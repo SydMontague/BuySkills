@@ -1,12 +1,11 @@
 package de.craftlancer.buyskills.event;
 
-import org.bukkit.entity.Player;
-
 import de.craftlancer.buyskills.Skill;
+import de.craftlancer.buyskills.SkillPlayer;
 
 public class BuySkillsRevokeEvent extends BuySkillEvent
 {
-    public BuySkillsRevokeEvent(Skill skill, Player player)
+    public BuySkillsRevokeEvent(Skill skill, SkillPlayer player)
     {
         super(skill, player);
     }

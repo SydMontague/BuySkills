@@ -176,9 +176,9 @@ public class SkillUtils
      * @param input the currencies
      */
     @SuppressWarnings("unchecked")
-    public static void withdraw(Player p, Set<Entry<String, Object>> input)
+    public static void withdraw(Player p, Map<String, Object> input)
     {
-        for (Entry<String, Object> set : input)
+        for (Entry<String, Object> set : input.entrySet())
             if (CurrencyHandler.hasHandler(set.getKey()))
                 if (CurrencyHandler.getHandler(set.getKey()).checkInputObject(set.getValue()))
                     CurrencyHandler.getHandler(set.getKey()).withdrawCurrency(p, set.getValue());
@@ -194,6 +194,9 @@ public class SkillUtils
     @SuppressWarnings("unchecked")
     public static void give(Player p, Set<Entry<String, Object>> input)
     {
+        if(p == null)
+            return;
+        
         for (Entry<String, Object> set : input)
             if (CurrencyHandler.hasHandler(set.getKey()))
                 if (CurrencyHandler.getHandler(set.getKey()).checkInputObject(set.getValue()))

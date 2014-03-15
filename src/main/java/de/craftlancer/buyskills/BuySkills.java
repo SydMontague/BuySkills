@@ -2,8 +2,10 @@ package de.craftlancer.buyskills;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -13,6 +15,7 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
@@ -22,24 +25,31 @@ import de.craftlancer.buyskills.commands.SkillCommandHandler;
 /*
  * TODO extend Events + JavaDocs
  * TODO switch to UUID instead of playernames -> requires a getUUID(OfflinePlayer) method!
- * TODO update commands to the latest version of my command system
  */
 
 public class BuySkills extends JavaPlugin
 {
+    private static BuySkills instance;
     public static Logger log = Bukkit.getLogger();
     private Permission permission;
     
-    private SkillRentTask task;
-    private SkillPlayerManager pmanager;
     private FileConfiguration config;
     private FileConfiguration sConfig;
+    private FileConfiguration rentedConfig;
+    private File rentedFile;
     private Map<String, Skill> skills = new HashMap<String, Skill>();
+    private Map<String, Skill> skillsByKey = new HashMap<String, Skill>();
+    private HashMap<String, SkillPlayer> playerMap = new HashMap<String, SkillPlayer>();
     private Set<String> categories = new HashSet<String>();
     
     private int skillcap = 0;
-    private long updatetime = 6000;
+    private long updatetime = 6000L;
+    private long saveTime = 12000L;
     private int skillsperpage = 5;
+    
+    {
+        instance = this;
+    }
     
     @Override
     public void onEnable()
@@ -47,7 +57,6 @@ public class BuySkills extends JavaPlugin
         log = getLogger();
         
         loadConfigurations();
-        pmanager = new SkillPlayerManager(this);
         getCommand("skill").setExecutor(new SkillCommandHandler(this));
         
         if (getServer().getPluginManager().getPlugin("Vault") != null)
@@ -57,8 +66,8 @@ public class BuySkills extends JavaPlugin
                 permission = permissionProvider.getProvider();
         }
         
-        task = new SkillRentTask(this);
-        task.runTaskTimer(this, updatetime, updatetime);
+        new SkillRentTask(this).runTaskTimer(this, updatetime, updatetime);
+        new SkillSaveTask(this).runTaskTimer(this, saveTime, saveTime);
         
         try
         {
@@ -73,7 +82,8 @@ public class BuySkills extends JavaPlugin
     @Override
     public void onDisable()
     {
-        task.cancel();
+        getServer().getScheduler().cancelTasks(this);
+        save();
     }
     
     public Permission getPermissions()
@@ -81,16 +91,35 @@ public class BuySkills extends JavaPlugin
         return permission;
     }
     
-    /**
-     * Get the player manager
-     * 
-     * @return the SkillPlayerManager object
-     */
-    public SkillPlayerManager getPlayerManager()
+    public SkillPlayer getSkillPlayer(Player p)
     {
-        return pmanager;
+        return getSkillPlayer(p.getName());
     }
     
+    public SkillPlayer getSkillPlayer(String name)
+    {
+        if (!playerMap.containsKey(name))
+            loadPlayer(name);
+        
+        return playerMap.get(name);
+    }
+    
+    private void loadPlayer(String player)
+    {
+        File file = new File(getDataFolder(), "players" + File.separator + player + ".yml");
+        FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
+        
+        List<String> skills = conf.getStringList("skills");
+        int bonuscap = conf.getInt("bonuscap", 0);
+        HashMap<String, Long> rent = new HashMap<String, Long>();
+        
+        if (rentedConfig.getConfigurationSection(player) != null)
+            for (String key : rentedConfig.getConfigurationSection(player).getKeys(false))
+                rent.put(key, rentedConfig.getLong(player + "." + key));
+        
+        playerMap.put(player, new SkillPlayer(this, player, skills, rent, bonuscap));
+    }
+        
     /**
      * (Re)Load the config files
      */
@@ -106,9 +135,22 @@ public class BuySkills extends JavaPlugin
         sConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "skills.yml"));
         config = getConfig();
         
-        SkillLanguage.loadStrings(config);
+        //SkillLanguage.loadStrings(config);
         loadConfig();
         loadSkills();
+        
+        rentedFile = new File(getDataFolder(), "rented.yml");
+        if (!rentedFile.exists())
+            try
+            {
+                rentedFile.createNewFile();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        
+        rentedConfig = YamlConfiguration.loadConfiguration(rentedFile);
     }
     
     /**
@@ -121,6 +163,11 @@ public class BuySkills extends JavaPlugin
     public Skill getSkill(String name)
     {
         return skills.get(name.toLowerCase());
+    }
+    
+    public Skill getSkillByKey(String key)
+    {
+        return skillsByKey.get(key);
     }
     
     /**
@@ -181,6 +228,7 @@ public class BuySkills extends JavaPlugin
     private void loadConfig()
     {
         updatetime = Math.max(1, config.getLong("general.updatetime", 300)) * 20;
+        saveTime = Math.max(1, config.getLong("general.updatetime", 600)) * 20;
         skillcap = config.getInt("general.skillcap", 0);
         skillsperpage = Math.max(1, config.getInt("general.skillsperpage", 5));
     }
@@ -191,67 +239,49 @@ public class BuySkills extends JavaPlugin
         
         for (String key : sConfig.getKeys(false))
         {
-            Skill skill = loadSkill(key);
+            Skill skill = new Skill(key, sConfig);
             skills.put(skill.getName().toLowerCase(), skill);
+            skillsByKey.put(key, skill);
             for (String cat : skill.getCategories())
                 categories.add(cat);
         }
     }
     
-    private Skill loadSkill(String key)
+    public FileConfiguration getRentedConfig()
     {
-        Skill skill = new Skill(key);
+        return rentedConfig;
+    }
+    
+    public File getRentedFile()
+    {
+        return rentedFile;
+    }
+    
+    public static BuySkills getInstance()
+    {
+        return instance;
+    }
+
+    public Collection<SkillPlayer> getSkillPlayers()
+    {
+        return playerMap.values();
+    }
+
+    public void save()
+    {
+        for (SkillPlayer skillPlayer : getSkillPlayers())
+        {
+            skillPlayer.save();
+            skillPlayer.saveRented();
+        }
         
-        skill.setName(sConfig.getString(key + ".name", ""));
-        skill.setDescription(sConfig.getString(key + ".description", ""));
-        skill.setInfo(sConfig.getString(key + ".info", ""));
-        
-        skill.setCategories(sConfig.getStringList(key + ".category"));
-        skill.setPermEarn(sConfig.getStringList(key + ".perm_earn"));
-        skill.setPermNeed(sConfig.getStringList(key + ".perm_need"));
-        skill.setGroupEarn(sConfig.getStringList(key + ".group_earn"));
-        skill.setGroupNeed(sConfig.getStringList(key + ".group_need"));
-        skill.setSkillsNeed(sConfig.getStringList(key + ".skill_need"));
-        skill.setSkillsIllegal(sConfig.getStringList(key + ".skill_earn"));
-        skill.setWorlds(sConfig.getStringList(key + ".worlds"));
-        
-        skill.setRevokeGroup(sConfig.getBoolean(key + ".revoke_group", false));
-        skill.setRevokePerm(sConfig.getBoolean(key + ".revoke_perm", false));
-        skill.setRegrantGroup(sConfig.getBoolean(key + ".regrant_group", true));
-        skill.setRegrantPerm(sConfig.getBoolean(key + ".regrant_perm", true));
-        skill.setBuyable(sConfig.getBoolean(key + ".buyable", false));
-        skill.setRentable(sConfig.getBoolean(key + ".rentable", false));
-        
-        skill.setRentTime(sConfig.getLong(key + ".renttime", 0) * 1000);
-        skill.setSkillsNeeded(sConfig.getInt(key + ".skills_needed", 0));
-        
-        HashMap<String, Object> buyHelpMap = new HashMap<String, Object>();
-        HashMap<String, Object> rentHelpMap = new HashMap<String, Object>();
-        
-        HashMap<String, Object> buyNeedHelpMap = new HashMap<String, Object>();
-        HashMap<String, Object> rentNeedHelpMap = new HashMap<String, Object>();
-        
-        if (sConfig.isConfigurationSection(key + ".buy_costs"))
-            for (String vkey : sConfig.getConfigurationSection(key + ".buy_costs").getKeys(false))
-                buyHelpMap.put(vkey, sConfig.get(key + ".buy_costs." + vkey));
-        
-        if (sConfig.isConfigurationSection(key + ".rent_costs"))
-            for (String vkey : sConfig.getConfigurationSection(key + ".rent_costs").getKeys(false))
-                rentHelpMap.put(vkey, sConfig.get(key + ".rent_costs." + vkey));
-        
-        if (sConfig.isConfigurationSection(key + ".buy_need"))
-            for (String vkey : sConfig.getConfigurationSection(key + ".buy_need").getKeys(false))
-                buyNeedHelpMap.put(vkey, sConfig.get(key + ".buy_need." + vkey));
-        
-        if (sConfig.isConfigurationSection(key + ".rent_need"))
-            for (String vkey : sConfig.getConfigurationSection(key + ".rent_need").getKeys(false))
-                rentNeedHelpMap.put(vkey, sConfig.get(key + ".rent_need." + vkey));
-        
-        skill.setBuyCosts(buyHelpMap);
-        skill.setRentCosts(rentHelpMap);
-        skill.setBuyNeed(buyNeedHelpMap);
-        skill.setRentNeed(rentNeedHelpMap);
-        
-        return skill;
+        try
+        {
+            getRentedConfig().save(getRentedFile());
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
+import de.craftlancer.buyskills.SkillPlayer;
 
 /**
  * Handles the /skill current command
@@ -21,39 +22,41 @@ public class SkillCurrentCommand extends SkillSubCommand
     }
     
     @Override
-    protected void execute(CommandSender sender, Command cmd, String label, String[] args)
+    protected String execute(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (!sender.hasPermission(getPermission()) && sender instanceof Player)
-            sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
-        else if (!(sender instanceof Player) && args.length <= 1)
-            sender.sendMessage(SkillLanguage.COMMAND_ARGUMENTS);
-        else if (args.length >= 2 && Bukkit.getPlayerExact(args[1]) == null)
-            sender.sendMessage(SkillLanguage.COMMAND_PLAYER_NOT_EXIST);
-        else
+            return SkillLanguage.COMMAND_PERMISSION.getString();
+        if (!(sender instanceof Player) && args.length <= 1)
+            return SkillLanguage.COMMAND_ARGUMENTS.getString();
+        if (args.length >= 2 && Bukkit.getPlayerExact(args[1]) == null)
+            return SkillLanguage.COMMAND_PLAYER_NOT_EXIST.getString();
+        
+        SkillPlayer skillPlayer = plugin.getSkillPlayer(sender.getName());
+        
+        List<String> skills = skillPlayer.getSkills();
+        StringBuilder msg = new StringBuilder(SkillLanguage.CURRENT_DEFAULT_STRING.getString().replace("%player%", skillPlayer.getName()) + "\n");
+        
+        for (int i = 0; i < skills.size(); i++)
         {
-            Player p;
-            if (args.length >= 2)
-                p = Bukkit.getPlayerExact(args[1]);
-            else
-                p = (Player) sender;
-            
-            List<String> skills = plugin.getPlayerManager().getSkills(p);
-            String msg = SkillLanguage.CURRENT_DEFAULT_STRING.replace("%player%", p.getName()) + "\n";
-            
-            for (int i = 0; i < skills.size(); i++)
-            {
-                msg += skills.get(i) + " ";
-                if (i % 3 == 0 && i != 0)
-                    msg += "\n";
-            }
-            
-            sender.sendMessage(msg.split("\n"));
+            msg.append(skills.get(i) + " ");
+            if (i % 3 == 0 && i != 0)
+                msg.append("\n");
         }
+        
+        // TOTEST is split needed?
+        sender.sendMessage(msg.toString().split("\n"));
+        return null;
     }
     
     @Override
     protected List<String> onTabComplete(String[] args)
     {
         return null;
+    }
+    
+    @Override
+    public void help(CommandSender sender)
+    {
+        sender.sendMessage(SkillLanguage.HELP_COMMAND_CURRENT.getString());
     }
 }

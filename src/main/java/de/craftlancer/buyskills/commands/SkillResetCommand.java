@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import de.craftlancer.buyskills.BuySkills;
 import de.craftlancer.buyskills.SkillLanguage;
+import de.craftlancer.buyskills.SkillPlayer;
 import de.craftlancer.buyskills.event.BuySkillsResetEvent;
 
 /**
@@ -22,32 +23,41 @@ public class SkillResetCommand extends SkillSubCommand
     }
     
     @Override
-    public void execute(CommandSender sender, Command cmd, String label, String[] args)
+    public String execute(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (!sender.hasPermission(getPermission()) && sender instanceof Player)
-            sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
-        else if (args.length < 2)
-            sender.sendMessage(SkillLanguage.COMMAND_ARGUMENTS);
-        else if (plugin.getServer().getPlayerExact(args[1]) == null)
-            sender.sendMessage(SkillLanguage.COMMAND_PLAYER_NOT_EXIST);
-        else
-        {
-            plugin.getServer().getPluginManager().callEvent(new BuySkillsResetEvent(plugin.getServer().getPlayerExact(args[1])));
-            
-            for (String s : plugin.getPlayerManager().getRentedSkills(args[1]).keySet())
-                plugin.getPlayerManager().revokeRented(args[1], s);
-            
-            for (String s : new ArrayList<String>(plugin.getPlayerManager().getBoughtSkills(args[1])))
-                plugin.getPlayerManager().revokeSkill(args[1], s);
-            
-            sender.sendMessage(SkillLanguage.RESET_SUCCESS);
-            plugin.getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.RESET_NOTIFY);
-        }
+            return SkillLanguage.COMMAND_PERMISSION.getString();
+        if (args.length < 2)
+            return SkillLanguage.COMMAND_ARGUMENTS.getString();
+        
+        SkillPlayer skillPlayer = plugin.getSkillPlayer(args[1]);
+        
+        if (skillPlayer == null)
+            return SkillLanguage.COMMAND_PLAYER_NOT_EXIST.getString();
+        
+        plugin.getServer().getPluginManager().callEvent(new BuySkillsResetEvent(skillPlayer));
+        
+        for (String s : skillPlayer.getRented().keySet())
+            skillPlayer.revokeRented(plugin.getSkillByKey(s));
+        
+        for (String s : new ArrayList<String>(skillPlayer.getBoughtSkills()))
+            skillPlayer.revokeSkill(plugin.getSkillByKey(s));
+        
+        if (plugin.getServer().getPlayerExact(args[1]) != null)
+            plugin.getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.RESET_NOTIFY.getString());
+        
+        return SkillLanguage.RESET_SUCCESS.getString();
     }
     
     @Override
     public List<String> onTabComplete(String[] args)
     {
         return null;
+    }
+
+    @Override
+    public void help(CommandSender sender)
+    {
+        sender.sendMessage(SkillLanguage.HELP_COMMAND_RESET.getString());
     }
 }

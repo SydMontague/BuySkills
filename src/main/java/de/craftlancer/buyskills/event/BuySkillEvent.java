@@ -1,19 +1,19 @@
 package de.craftlancer.buyskills.event;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import de.craftlancer.buyskills.Skill;
+import de.craftlancer.buyskills.SkillPlayer;
 
 public class BuySkillEvent extends Event
 {
     private static final HandlerList handlers = new HandlerList();
     
     protected Skill skill;
-    protected Player player;
+    protected SkillPlayer player;
     
-    public BuySkillEvent(Skill skill, Player player)
+    public BuySkillEvent(Skill skill, SkillPlayer player)
     {
         this.skill = skill;
         this.player = player;
@@ -24,7 +24,7 @@ public class BuySkillEvent extends Event
         return skill;
     }
     
-    public Player getPlayer()
+    public SkillPlayer getPlayer()
     {
         return player;
     }

@@ -23,27 +23,31 @@ public class SkillRentedCommand extends SkillSubCommand
     }
     
     @Override
-    public void execute(CommandSender sender, Command cmd, String label, String[] args)
+    public String execute(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (!sender.hasPermission(getPermission()) && sender instanceof Player)
-            sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
-        else if (!(sender instanceof Player))
-            sender.sendMessage(SkillLanguage.COMMAND_PLAYERONLY);
-        else
-        {
-            Player p = (Player) sender;
-            
-            Map<String, Long> skills = plugin.getPlayerManager().getRentedSkills(p);
-            
-            sender.sendMessage(SkillLanguage.RENTED_DEFAULT_STRING);
-            for (Entry<String, Long> entry : skills.entrySet())
-                sender.sendMessage(entry.getKey() + " : " + SkillUtils.getTimeDiffString(entry.getValue()));
-        }
+        if (!sender.hasPermission(getPermission()))
+            return SkillLanguage.COMMAND_PERMISSION.getString();
+        if (!(sender instanceof Player))
+            return SkillLanguage.COMMAND_PLAYERONLY.getString();
+        
+        Map<String, Long> skills = plugin.getSkillPlayer(sender.getName()).getRented();
+        
+        sender.sendMessage(SkillLanguage.RENTED_DEFAULT_STRING.getString());
+        for (Entry<String, Long> entry : skills.entrySet())
+            sender.sendMessage(entry.getKey() + " : " + SkillUtils.getTimeDiffString(entry.getValue()));
+        
+        return null;
     }
     
     @Override
     public List<String> onTabComplete(String[] args)
     {
         return null;
+    }
+
+    @Override
+    public void help(CommandSender sender)
+    {
+        sender.sendMessage(SkillLanguage.HELP_COMMAND_RENTED.getString());
     }
 }

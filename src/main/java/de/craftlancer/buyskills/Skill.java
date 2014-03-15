@@ -1,7 +1,10 @@
 package de.craftlancer.buyskills;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * Represents a buyable and/or rentable skill
@@ -38,9 +41,59 @@ public class Skill
     private List<String> skillsIllegal;
     private int skillsNeeded;
     
-    public Skill(String key)
+    public Skill(String key, FileConfiguration sConfig)
     {
         this.key = key;
+        
+        setName(sConfig.getString(key + ".name", ""));
+        setDescription(sConfig.getString(key + ".description", ""));
+        setInfo(sConfig.getString(key + ".info", ""));
+        
+        setCategories(sConfig.getStringList(key + ".category"));
+        setPermEarn(sConfig.getStringList(key + ".perm_earn"));
+        setPermNeed(sConfig.getStringList(key + ".perm_need"));
+        setGroupEarn(sConfig.getStringList(key + ".group_earn"));
+        setGroupNeed(sConfig.getStringList(key + ".group_need"));
+        setSkillsNeed(sConfig.getStringList(key + ".skill_need"));
+        setSkillsIllegal(sConfig.getStringList(key + ".skill_earn"));
+        setWorlds(sConfig.getStringList(key + ".worlds"));
+        
+        setRevokeGroup(sConfig.getBoolean(key + ".revoke_group", false));
+        setRevokePerm(sConfig.getBoolean(key + ".revoke_perm", false));
+        setRegrantGroup(sConfig.getBoolean(key + ".regrant_group", true));
+        setRegrantPerm(sConfig.getBoolean(key + ".regrant_perm", true));
+        setBuyable(sConfig.getBoolean(key + ".buyable", false));
+        setRentable(sConfig.getBoolean(key + ".rentable", false));
+        
+        setRentTime(sConfig.getLong(key + ".renttime", 0) * 1000);
+        setSkillsNeeded(sConfig.getInt(key + ".skills_needed", 0));
+        
+        HashMap<String, Object> buyHelpMap = new HashMap<String, Object>();
+        HashMap<String, Object> rentHelpMap = new HashMap<String, Object>();
+        
+        HashMap<String, Object> buyNeedHelpMap = new HashMap<String, Object>();
+        HashMap<String, Object> rentNeedHelpMap = new HashMap<String, Object>();
+        
+        if (sConfig.isConfigurationSection(key + ".buy_costs"))
+            for (String vkey : sConfig.getConfigurationSection(key + ".buy_costs").getKeys(false))
+                buyHelpMap.put(vkey, sConfig.get(key + ".buy_costs." + vkey));
+        
+        if (sConfig.isConfigurationSection(key + ".rent_costs"))
+            for (String vkey : sConfig.getConfigurationSection(key + ".rent_costs").getKeys(false))
+                rentHelpMap.put(vkey, sConfig.get(key + ".rent_costs." + vkey));
+        
+        if (sConfig.isConfigurationSection(key + ".buy_need"))
+            for (String vkey : sConfig.getConfigurationSection(key + ".buy_need").getKeys(false))
+                buyNeedHelpMap.put(vkey, sConfig.get(key + ".buy_need." + vkey));
+        
+        if (sConfig.isConfigurationSection(key + ".rent_need"))
+            for (String vkey : sConfig.getConfigurationSection(key + ".rent_need").getKeys(false))
+                rentNeedHelpMap.put(vkey, sConfig.get(key + ".rent_need." + vkey));
+        
+        setBuyCosts(buyHelpMap);
+        setRentCosts(rentHelpMap);
+        setBuyNeed(buyNeedHelpMap);
+        setRentNeed(rentNeedHelpMap);
     }
     
     /**
@@ -66,7 +119,8 @@ public class Skill
     /**
      * Set the name of the skill
      * 
-     * @param name the new name of the skill
+     * @param name
+     *            the new name of the skill
      */
     public void setName(String name)
     {
@@ -86,7 +140,8 @@ public class Skill
     /**
      * Set the description of the skill.
      * 
-     * @param desc the new description
+     * @param desc
+     *            the new description
      */
     public void setDescription(String desc)
     {
@@ -106,7 +161,8 @@ public class Skill
     /**
      * Set the infostring of the skill
      * 
-     * @param info the new infostring
+     * @param info
+     *            the new infostring
      */
     public void setInfo(String info)
     {
@@ -126,7 +182,8 @@ public class Skill
     /**
      * Set the categories of the skill
      * 
-     * @param categories the new List of categories
+     * @param categories
+     *            the new List of categories
      */
     public void setCategories(List<String> categories)
     {
@@ -146,7 +203,8 @@ public class Skill
     /**
      * Set the costs to buy this skill
      * 
-     * @param buy_costs new new costs
+     * @param buy_costs
+     *            new new costs
      */
     public void setBuyCosts(Map<String, Object> buy_costs)
     {
@@ -166,7 +224,8 @@ public class Skill
     /**
      * Set the costs to rent this skill
      * 
-     * @param rent_costs the new costs
+     * @param rent_costs
+     *            the new costs
      */
     public void setRentCosts(Map<String, Object> rent_costs)
     {
@@ -186,7 +245,8 @@ public class Skill
     /**
      * Set the needed permissions for this skill
      * 
-     * @param perm_need a list of all needed permissions
+     * @param perm_need
+     *            a list of all needed permissions
      */
     public void setPermNeed(List<String> perm_need)
     {
@@ -206,7 +266,8 @@ public class Skill
     /**
      * Set the earned permissions for this skill
      * 
-     * @param permEarn a list of all earned permissions
+     * @param permEarn
+     *            a list of all earned permissions
      */
     public void setPermEarn(List<String> permEarn)
     {
@@ -226,7 +287,8 @@ public class Skill
     /**
      * Set the needed groups of this skill
      * 
-     * @param groupNeed a list of needed groups
+     * @param groupNeed
+     *            a list of needed groups
      */
     public void setGroupNeed(List<String> groupNeed)
     {
@@ -246,7 +308,8 @@ public class Skill
     /**
      * Set the earned groups of this skill
      * 
-     * @param groupEarn a list of all earned groups
+     * @param groupEarn
+     *            a list of all earned groups
      */
     public void setGroupEarn(List<String> groupEarn)
     {
@@ -267,7 +330,8 @@ public class Skill
      * Set whether the needed groups should be revoked when this skill is
      * granted
      * 
-     * @param revokeGroup true if yes, false if not
+     * @param revokeGroup
+     *            true if yes, false if not
      */
     public void setRevokeGroup(boolean revokeGroup)
     {
@@ -288,7 +352,8 @@ public class Skill
      * Set whether the needed permissions should be revoked when this skill is
      * granted
      * 
-     * @param revokePerm true if yes, false if not
+     * @param revokePerm
+     *            true if yes, false if not
      */
     public void setRevokePerm(boolean revokePerm)
     {
@@ -308,7 +373,8 @@ public class Skill
     /**
      * Set whether the needed groups are regranted when this skill is revoked
      * 
-     * @param regrantGroup true if yes, false if not
+     * @param regrantGroup
+     *            true if yes, false if not
      */
     public void setRegrantGroup(boolean regrantGroup)
     {
@@ -330,7 +396,8 @@ public class Skill
      * Set whether the needed permissions are regranted when this skill is
      * revoked
      * 
-     * @param regrantPerm true if yes, false if not
+     * @param regrantPerm
+     *            true if yes, false if not
      */
     public void setRegrantPerm(boolean regrantPerm)
     {
@@ -350,7 +417,8 @@ public class Skill
     /**
      * Set if this skill is avaible via /skill buy
      * 
-     * @param buyable true if yes, false if not
+     * @param buyable
+     *            true if yes, false if not
      */
     public void setBuyable(boolean buyable)
     {
@@ -370,7 +438,8 @@ public class Skill
     /**
      * Set if this skill is avaible via /skill rent
      * 
-     * @param rentable true if yes, false if not
+     * @param rentable
+     *            true if yes, false if not
      */
     public void setRentable(boolean rentable)
     {
@@ -390,7 +459,8 @@ public class Skill
     /**
      * Set the amount of time the skill is rented for
      * 
-     * @param renttime the time in ms
+     * @param renttime
+     *            the time in ms
      */
     public void setRentTime(long renttime)
     {
@@ -410,7 +480,8 @@ public class Skill
     /**
      * Set the skills, needed to buy this skill
      * 
-     * @param skillsNeed a list of needed skills
+     * @param skillsNeed
+     *            a list of needed skills
      */
     public void setSkillsNeed(List<String> skillsNeed)
     {
@@ -430,7 +501,8 @@ public class Skill
     /**
      * Set the forbidden skills to get this skill
      * 
-     * @param skillsIllegal a list of forbidden skills
+     * @param skillsIllegal
+     *            a list of forbidden skills
      */
     public void setSkillsIllegal(List<String> skillsIllegal)
     {
@@ -452,7 +524,8 @@ public class Skill
      * Set the number of skills of the SkillsNeed List which are needed to buy
      * this skill
      * 
-     * @param skillsNeeded the number of needed skills
+     * @param skillsNeeded
+     *            the number of needed skills
      */
     public void setSkillsNeeded(int skillsNeeded)
     {
@@ -474,7 +547,8 @@ public class Skill
      * Set the extra requirements to buy this skill
      * Used with CustomCurrency
      * 
-     * @param buyNeed a map of all requirements
+     * @param buyNeed
+     *            a map of all requirements
      */
     public void setBuyNeed(Map<String, Object> buyNeed)
     {
@@ -496,7 +570,8 @@ public class Skill
      * Set the extra requirement to rent this skill
      * Used with CustomCurrency
      * 
-     * @param rentNeed a map of all requirements
+     * @param rentNeed
+     *            a map of all requirements
      */
     public void setRentNeed(Map<String, Object> rentNeed)
     {
@@ -517,7 +592,8 @@ public class Skill
     /**
      * Set a the worlds the skill is valid for
      * 
-     * @param worlds a list of worlds, null/empty for global
+     * @param worlds
+     *            a list of worlds, null/empty for global
      */
     public void setWorlds(List<String> worlds)
     {
@@ -537,7 +613,8 @@ public class Skill
     /**
      * Set whether costs are regranted when this skill is revoked
      * 
-     * @param bool true if they are regranted, false if not
+     * @param bool
+     *            true if they are regranted, false if not
      */
     public void setRegrantCost(boolean bool)
     {

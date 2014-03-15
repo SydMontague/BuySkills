@@ -20,20 +20,24 @@ public class SkillReloadCommand extends SkillSubCommand
     }
     
     @Override
-    public void execute(CommandSender sender, Command cmd, String label, String[] args)
+    public String execute(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (!sender.hasPermission(getPermission()) && sender instanceof Player)
-            sender.sendMessage(SkillLanguage.COMMAND_PERMISSION);
-        else
-        {
+            return SkillLanguage.COMMAND_PERMISSION.getString();
+        
             plugin.loadConfigurations();
-            sender.sendMessage(SkillLanguage.RELOAD_SUCCESS);
-        }
+            return SkillLanguage.RELOAD_SUCCESS.getString();
     }
     
     @Override
     public List<String> onTabComplete(String[] args)
     {
         return null;
+    }
+
+    @Override
+    public void help(CommandSender sender)
+    {
+        sender.sendMessage(SkillLanguage.HELP_COMMAND_RELOAD.getString());
     }
 }

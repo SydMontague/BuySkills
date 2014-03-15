@@ -1,15 +1,15 @@
 package de.craftlancer.buyskills.event;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 import de.craftlancer.buyskills.Skill;
+import de.craftlancer.buyskills.SkillPlayer;
 
 public class BuySkillsRentEvent extends BuySkillEvent implements Cancellable
 {
     private boolean cancel = false;
     
-    public BuySkillsRentEvent(Skill skill, Player player)
+    public BuySkillsRentEvent(Skill skill, SkillPlayer player)
     {
         super(skill, player);
     }
