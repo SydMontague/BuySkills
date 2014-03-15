@@ -101,7 +101,7 @@ public class SkillPlayer
      */
     public void setBonusCap(int bonuscap)
     {
-        if(this.bonuscap != bonuscap)
+        if (this.bonuscap != bonuscap)
             hasChanged = true;
         
         this.bonuscap = bonuscap;
@@ -259,6 +259,43 @@ public class SkillPlayer
     }
     
     /**
+     * Handle the permission side of granting a skill
+     * 
+     * @param skill
+     *            the skill
+     */
+    public void handleSkillGrant(Skill skill)
+    {
+        List<String> worlds;
+        if (skill.getWorlds().isEmpty())
+        {
+            worlds = new ArrayList<String>();
+            // add null world to force use of global permissions
+            worlds.add((String) null);
+            
+        }
+        else
+            worlds = skill.getWorlds();
+        
+        for (String world : worlds)
+        {
+            for (String permission : skill.getPermEarn())
+                plugin.getPermissions().playerAdd(world, getName(), permission);
+            
+            for (String group : skill.getGroupEarn())
+                plugin.getPermissions().playerAddGroup(world, getName(), group);
+            
+            if (skill.isRevokeGroup())
+                for (String group : skill.getGroupNeed())
+                    plugin.getPermissions().playerRemoveGroup(world, getName(), group);
+            
+            if (skill.isRevokePerm())
+                for (String perm : skill.getPermNeed())
+                    plugin.getPermissions().playerRemove(world, getName(), perm);
+        }
+    }
+    
+    /**
      * Handle the permission side of revoking a skill
      * 
      * @param player
@@ -295,43 +332,6 @@ public class SkillPlayer
             
             if (s.isRegrantCost())
                 SkillUtils.give(plugin.getServer().getPlayerExact(getName()), s.getRentCosts().entrySet());
-        }
-    }
-    
-    /**
-     * Handle the permission side of granting a skill
-     * 
-     * @param skill
-     *            the skill
-     */
-    public void handleSkillGrant(Skill skill)
-    {
-        List<String> worlds;
-        if (skill.getWorlds().isEmpty())
-        {
-            worlds = new ArrayList<String>();
-            // add null world to force use of global permissions
-            worlds.add((String) null);
-            
-        }
-        else
-            worlds = skill.getWorlds();
-        
-        for (String world : worlds)
-        {
-            for (String permission : skill.getPermEarn())
-                plugin.getPermissions().playerAdd(world, getName(), permission);
-            
-            for (String group : skill.getGroupEarn())
-                plugin.getPermissions().playerAddGroup(world, getName(), group);
-            
-            if (skill.isRevokeGroup())
-                for (String group : skill.getGroupNeed())
-                    plugin.getPermissions().playerRemoveGroup(world, getName(), group);
-            
-            if (skill.isRevokePerm())
-                for (String perm : skill.getPermNeed())
-                    plugin.getPermissions().playerRemove(world, getName(), perm);
         }
     }
     

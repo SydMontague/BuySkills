@@ -86,71 +86,31 @@ public class BuySkills extends JavaPlugin
         save();
     }
     
-    public Permission getPermissions()
+    /**
+     * Get a SkillPlayer by his Player object
+     * 
+     * @param player
+     *            the player
+     * @return the SkillPlayer
+     */
+    public SkillPlayer getSkillPlayer(Player player)
     {
-        return permission;
+        return getSkillPlayer(player.getName());
     }
     
-    public SkillPlayer getSkillPlayer(Player p)
-    {
-        return getSkillPlayer(p.getName());
-    }
-    
+    /**
+     * Get a SkillPlayer by his name
+     * 
+     * @param name
+     *            the name
+     * @return the SkillPlayer
+     */
     public SkillPlayer getSkillPlayer(String name)
     {
         if (!playerMap.containsKey(name))
             loadPlayer(name);
         
         return playerMap.get(name);
-    }
-    
-    private void loadPlayer(String player)
-    {
-        File file = new File(getDataFolder(), "players" + File.separator + player + ".yml");
-        FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
-        
-        List<String> skills = conf.getStringList("skills");
-        int bonuscap = conf.getInt("bonuscap", 0);
-        HashMap<String, Long> rent = new HashMap<String, Long>();
-        
-        if (rentedConfig.getConfigurationSection(player) != null)
-            for (String key : rentedConfig.getConfigurationSection(player).getKeys(false))
-                rent.put(key, rentedConfig.getLong(player + "." + key));
-        
-        playerMap.put(player, new SkillPlayer(this, player, skills, rent, bonuscap));
-    }
-        
-    /**
-     * (Re)Load the config files
-     */
-    public void loadConfigurations()
-    {
-        if (!new File(getDataFolder(), "config.yml").exists())
-            saveDefaultConfig();
-        
-        if (!new File(getDataFolder(), "skills.yml").exists())
-            saveResource("skills.yml", false);
-        
-        reloadConfig();
-        sConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "skills.yml"));
-        config = getConfig();
-        
-        //SkillLanguage.loadStrings(config);
-        loadConfig();
-        loadSkills();
-        
-        rentedFile = new File(getDataFolder(), "rented.yml");
-        if (!rentedFile.exists())
-            try
-            {
-                rentedFile.createNewFile();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        
-        rentedConfig = YamlConfiguration.loadConfiguration(rentedFile);
     }
     
     /**
@@ -165,6 +125,13 @@ public class BuySkills extends JavaPlugin
         return skills.get(name.toLowerCase());
     }
     
+    /**
+     * Get the skill with the given key
+     * 
+     * @param key
+     *            the key of the skill
+     * @return the Skill object with the given key, null if no skill was found
+     */
     public Skill getSkillByKey(String key)
     {
         return skillsByKey.get(key);
@@ -225,12 +192,90 @@ public class BuySkills extends JavaPlugin
         return skillsperpage;
     }
     
-    private void loadConfig()
+    /**
+     * Get the plugin's instance
+     * 
+     * @return the instance of the plugin
+     */
+    public static BuySkills getInstance()
     {
-        updatetime = Math.max(1, config.getLong("general.updatetime", 300)) * 20;
-        saveTime = Math.max(1, config.getLong("general.updatetime", 600)) * 20;
-        skillcap = config.getInt("general.skillcap", 0);
-        skillsperpage = Math.max(1, config.getInt("general.skillsperpage", 5));
+        return instance;
+    }
+    
+    /**
+     * Get a Collection of all active SkillPlayers
+     * SkillPlayers are loaded lazy into this collection, meaning they are only loaded if they are actually needed.
+     * 
+     * @return a Collection of SkillPlayers
+     */
+    public Collection<SkillPlayer> getSkillPlayers()
+    {
+        return playerMap.values();
+    }
+    
+    /**
+     * (Re)Load the config files
+     */
+    public void loadConfigurations()
+    {
+        if (!new File(getDataFolder(), "config.yml").exists())
+            saveDefaultConfig();
+        
+        if (!new File(getDataFolder(), "skills.yml").exists())
+            saveResource("skills.yml", false);
+        
+        reloadConfig();
+        sConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "skills.yml"));
+        config = getConfig();
+        
+        loadConfig();
+        loadSkills();
+        
+        rentedFile = new File(getDataFolder(), "rented.yml");
+        if (!rentedFile.exists())
+            try
+            {
+                rentedFile.createNewFile();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        
+        rentedConfig = YamlConfiguration.loadConfiguration(rentedFile);
+    }
+    
+    protected FileConfiguration getRentedConfig()
+    {
+        return rentedConfig;
+    }
+    
+    protected File getRentedFile()
+    {
+        return rentedFile;
+    }
+    
+    protected void save()
+    {
+        for (SkillPlayer skillPlayer : getSkillPlayers())
+        {
+            skillPlayer.save();
+            skillPlayer.saveRented();
+        }
+        
+        try
+        {
+            getRentedConfig().save(getRentedFile());
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    protected Permission getPermissions()
+    {
+        return permission;
     }
     
     private void loadSkills()
@@ -247,41 +292,27 @@ public class BuySkills extends JavaPlugin
         }
     }
     
-    public FileConfiguration getRentedConfig()
+    private void loadConfig()
     {
-        return rentedConfig;
+        updatetime = Math.max(1, config.getLong("general.updatetime", 300)) * 20;
+        saveTime = Math.max(1, config.getLong("general.updatetime", 600)) * 20;
+        skillcap = config.getInt("general.skillcap", 0);
+        skillsperpage = Math.max(1, config.getInt("general.skillsperpage", 5));
     }
     
-    public File getRentedFile()
+    private void loadPlayer(String player)
     {
-        return rentedFile;
-    }
-    
-    public static BuySkills getInstance()
-    {
-        return instance;
-    }
-
-    public Collection<SkillPlayer> getSkillPlayers()
-    {
-        return playerMap.values();
-    }
-
-    public void save()
-    {
-        for (SkillPlayer skillPlayer : getSkillPlayers())
-        {
-            skillPlayer.save();
-            skillPlayer.saveRented();
-        }
+        File file = new File(getDataFolder(), "players" + File.separator + player + ".yml");
+        FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
         
-        try
-        {
-            getRentedConfig().save(getRentedFile());
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        List<String> skills = conf.getStringList("skills");
+        int bonuscap = conf.getInt("bonuscap", 0);
+        HashMap<String, Long> rent = new HashMap<String, Long>();
+        
+        if (rentedConfig.getConfigurationSection(player) != null)
+            for (String key : rentedConfig.getConfigurationSection(player).getKeys(false))
+                rent.put(key, rentedConfig.getLong(player + "." + key));
+        
+        playerMap.put(player, new SkillPlayer(this, player, skills, rent, bonuscap));
     }
 }
