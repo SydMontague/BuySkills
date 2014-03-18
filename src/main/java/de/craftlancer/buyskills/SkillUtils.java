@@ -5,10 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-
-import org.bukkit.entity.Player;
-
 import de.craftlancer.currencyhandler.CurrencyHandler;
 
 /**
@@ -19,8 +15,10 @@ public class SkillUtils
     /**
      * Checks if a String array contains a value of a String Collection
      * 
-     * @param array the array
-     * @param col the Collection
+     * @param array
+     *            the array
+     * @param col
+     *            the Collection
      * @return the first value which is in both, the array and the Collection
      */
     public static <T> T retainFirstFromArray(T[] array, Collection<T> col)
@@ -36,8 +34,10 @@ public class SkillUtils
      * Check if a String array contains a String
      * The check is case sensitive
      * 
-     * @param array the array
-     * @param string the String
+     * @param array
+     *            the array
+     * @param string
+     *            the String
      * @return true if the array contains the string, false if not
      */
     public static <T> boolean arrayContains(T[] array, T string)
@@ -118,7 +118,8 @@ public class SkillUtils
      * Get the string of the difference to the given time
      * Format: <HOURS> <MINUTES> <SECONDS>
      * 
-     * @param value a time in the future which's differnce string you want
+     * @param value
+     *            a time in the future which's differnce string you want
      * @return the difference string
      */
     public static String getTimeDiffString(long value)
@@ -135,8 +136,10 @@ public class SkillUtils
     /**
      * Get all values of a String Collection which start with a given String
      * 
-     * @param value the given String
-     * @param list the Collection
+     * @param value
+     *            the given String
+     * @param list
+     *            the Collection
      * @return a List of all matches
      */
     public static List<String> getMatches(String value, Collection<String> list)
@@ -153,8 +156,10 @@ public class SkillUtils
     /**
      * Get all values of a String array which start with a given String
      * 
-     * @param value the given String
-     * @param list the array
+     * @param value
+     *            the given String
+     * @param list
+     *            the array
      * @return a List of all matches
      */
     public static List<String> getMatches(String value, String[] list)

@@ -31,7 +31,7 @@ public class SkillCurrentCommand extends SkillSubCommand
         if (args.length >= 2 && Bukkit.getPlayerExact(args[1]) == null)
             return SkillLanguage.COMMAND_PLAYER_NOT_EXIST.getString();
         
-        SkillPlayer skillPlayer = plugin.getSkillPlayer(sender.getName());
+        SkillPlayer skillPlayer = getPlugin().getSkillPlayer(sender.getName());
         
         List<String> skills = skillPlayer.getSkills();
         StringBuilder msg = new StringBuilder(SkillLanguage.CURRENT_DEFAULT_STRING.getString().replace("%player%", skillPlayer.getName()) + "\n");

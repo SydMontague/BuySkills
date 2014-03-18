@@ -30,24 +30,24 @@ public class SkillRevokeCommand extends SkillSubCommand
         if (args.length < 3)
             return SkillLanguage.COMMAND_ARGUMENTS.getString();
         
-        SkillPlayer skillPlayer = plugin.getSkillPlayer(args[1]);
+        SkillPlayer skillPlayer = getPlugin().getSkillPlayer(args[1]);
         
         if (skillPlayer == null)
             return SkillLanguage.COMMAND_PLAYER_NOT_EXIST.getString();
-        if (!plugin.hasSkill(args[2]))
+        if (!getPlugin().hasSkill(args[2]))
             return SkillLanguage.COMMAND_SKILL_NOT_EXIST.getString();
         if (!skillPlayer.hasSkill(args[2]))
             return SkillLanguage.REVOKE_NOT_OWN.getString();
         
         if (skillPlayer.getRented().containsKey(args[2]))
-            skillPlayer.revokeRented(plugin.getSkill(args[2]));
+            skillPlayer.revokeRented(getPlugin().getSkill(args[2]));
         else
-            skillPlayer.revokeSkill(plugin.getSkill(args[2]));
+            skillPlayer.revokeSkill(getPlugin().getSkill(args[2]));
         
-        plugin.getServer().getPluginManager().callEvent(new BuySkillsRevokeEvent(plugin.getSkill(args[2]), skillPlayer));
+        getPlugin().getServer().getPluginManager().callEvent(new BuySkillsRevokeEvent(getPlugin().getSkill(args[2]), skillPlayer));
         
-        if (plugin.getServer().getPlayerExact(args[1]) != null)
-            plugin.getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.REVOKE_NOTIFY.getString().replace("%skill%", args[2]));
+        if (getPlugin().getServer().getPlayerExact(args[1]) != null)
+            getPlugin().getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.REVOKE_NOTIFY.getString().replace("%skill%", args[2]));
         
         return SkillLanguage.REVOKE_SUCCESS.getString();
     }
@@ -58,12 +58,12 @@ public class SkillRevokeCommand extends SkillSubCommand
         switch (args.length)
         {
             case 3:
-                return SkillUtils.getMatches(args[2], plugin.getSkillMap().keySet());
+                return SkillUtils.getMatches(args[2], getPlugin().getSkillMap().keySet());
             default:
                 return null;
         }
     }
-
+    
     @Override
     public void help(CommandSender sender)
     {

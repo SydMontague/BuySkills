@@ -27,10 +27,10 @@ public class SkillInfoCommand extends SkillSubCommand
             return SkillLanguage.COMMAND_PERMISSION.getString();
         if (args.length <= 1)
             return SkillLanguage.HELP_COMMAND_INFO.getString();
-        if (!plugin.hasSkill(args[1]))
+        if (!getPlugin().hasSkill(args[1]))
             return SkillLanguage.COMMAND_SKILL_NOT_EXIST.getString();
         
-        return SkillUtils.replaceValues(plugin.getSkill(args[1]), SkillLanguage.INFO_DEFAULT_STRING.getString());
+        return SkillUtils.replaceValues(getPlugin().getSkill(args[1]), SkillLanguage.INFO_DEFAULT_STRING.getString());
     }
     
     @Override
@@ -39,12 +39,12 @@ public class SkillInfoCommand extends SkillSubCommand
         switch (args.length)
         {
             case 2:
-                return SkillUtils.getMatches(args[1], plugin.getSkillMap().keySet());
+                return SkillUtils.getMatches(args[1], getPlugin().getSkillMap().keySet());
             default:
                 return null;
         }
     }
-
+    
     @Override
     public void help(CommandSender sender)
     {

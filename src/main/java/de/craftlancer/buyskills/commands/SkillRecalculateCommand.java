@@ -28,16 +28,16 @@ public class SkillRecalculateCommand extends SkillSubCommand
         if (args.length < 2)
             return SkillLanguage.COMMAND_ARGUMENTS.getString();
         
-        SkillPlayer skillPlayer = plugin.getSkillPlayer(args[1]);
+        SkillPlayer skillPlayer = getPlugin().getSkillPlayer(args[1]);
         
         if (skillPlayer == null)
             return SkillLanguage.COMMAND_PLAYER_NOT_EXIST.getString();
         
         for (String s : skillPlayer.getSkills())
-            skillPlayer.handleSkillGrant(plugin.getSkillByKey(s));
+            skillPlayer.handleSkillGrant(getPlugin().getSkillByKey(s));
         
-        if (plugin.getServer().getPlayerExact(args[1]) != null)
-            plugin.getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.RECALC_NOTIFY.getString());
+        if (getPlugin().getServer().getPlayerExact(args[1]) != null)
+            getPlugin().getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.RECALC_NOTIFY.getString());
         
         return SkillLanguage.RECALC_SUCCESS.getString();
     }

@@ -32,17 +32,17 @@ public class SkillGrantCommand extends SkillSubCommand
         if (args.length < 3)
             return SkillLanguage.COMMAND_ARGUMENTS.getString();
         
-        SkillPlayer skillPlayer = plugin.getSkillPlayer(args[1]);
+        SkillPlayer skillPlayer = getPlugin().getSkillPlayer(args[1]);
         
         if (skillPlayer == null)
             return SkillLanguage.COMMAND_PLAYER_NOT_EXIST.getString();
-        if (!plugin.hasSkill(args[2]))
+        if (!getPlugin().hasSkill(args[2]))
             return SkillLanguage.COMMAND_SKILL_NOT_EXIST.getString();
         if (skillPlayer.hasSkill(args[2]))
             return SkillLanguage.GRANT_ALREADY_OWN.getString();
         
-        Player p = plugin.getServer().getPlayerExact(args[1]);
-        Skill skill = plugin.getSkill(args[2]);
+        Player p = getPlugin().getServer().getPlayerExact(args[1]);
+        Skill skill = getPlugin().getSkill(args[2]);
         boolean rent = SkillUtils.arrayContains(args, "rent");
         
         if (SkillUtils.arrayContains(args, "charge"))
@@ -56,7 +56,7 @@ public class SkillGrantCommand extends SkillSubCommand
         else
             skillPlayer.grantSkill(skill);
         
-        plugin.getServer().getPluginManager().callEvent(new BuySkillsGrantEvent(skill, skillPlayer));
+        getPlugin().getServer().getPluginManager().callEvent(new BuySkillsGrantEvent(skill, skillPlayer));
         
         if (p != null)
             p.sendMessage(SkillLanguage.GRANT_NOTIFY.getString().replace("%skill%", args[2]));
@@ -73,7 +73,7 @@ public class SkillGrantCommand extends SkillSubCommand
             case 2:
                 return null;
             case 3:
-                return SkillUtils.getMatches(args[2], plugin.getSkillMap().keySet());
+                return SkillUtils.getMatches(args[2], getPlugin().getSkillMap().keySet());
             default:
                 return SkillUtils.getMatches(args[args.length - 1], new String[] { "rent", "charge" });
         }

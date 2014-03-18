@@ -41,32 +41,32 @@ public class Skill
     private List<String> skillsIllegal;
     private int skillsNeeded;
     
-    public Skill(String key, FileConfiguration sConfig)
+    public Skill(String key, FileConfiguration config)
     {
         this.key = key;
         
-        setName(sConfig.getString(key + ".name", ""));
-        setDescription(sConfig.getString(key + ".description", ""));
-        setInfo(sConfig.getString(key + ".info", ""));
+        setName(config.getString(key + ".name", ""));
+        setDescription(config.getString(key + ".description", ""));
+        setInfo(config.getString(key + ".info", ""));
         
-        setCategories(sConfig.getStringList(key + ".category"));
-        setPermEarn(sConfig.getStringList(key + ".perm_earn"));
-        setPermNeed(sConfig.getStringList(key + ".perm_need"));
-        setGroupEarn(sConfig.getStringList(key + ".group_earn"));
-        setGroupNeed(sConfig.getStringList(key + ".group_need"));
-        setSkillsNeed(sConfig.getStringList(key + ".skill_need"));
-        setSkillsIllegal(sConfig.getStringList(key + ".skill_earn"));
-        setWorlds(sConfig.getStringList(key + ".worlds"));
+        setCategories(config.getStringList(key + ".category"));
+        setPermEarn(config.getStringList(key + ".perm_earn"));
+        setPermNeed(config.getStringList(key + ".perm_need"));
+        setGroupEarn(config.getStringList(key + ".group_earn"));
+        setGroupNeed(config.getStringList(key + ".group_need"));
+        setSkillsNeed(config.getStringList(key + ".skill_need"));
+        setSkillsIllegal(config.getStringList(key + ".skill_earn"));
+        setWorlds(config.getStringList(key + ".worlds"));
         
-        setRevokeGroup(sConfig.getBoolean(key + ".revoke_group", false));
-        setRevokePerm(sConfig.getBoolean(key + ".revoke_perm", false));
-        setRegrantGroup(sConfig.getBoolean(key + ".regrant_group", true));
-        setRegrantPerm(sConfig.getBoolean(key + ".regrant_perm", true));
-        setBuyable(sConfig.getBoolean(key + ".buyable", false));
-        setRentable(sConfig.getBoolean(key + ".rentable", false));
+        setRevokeGroup(config.getBoolean(key + ".revoke_group", false));
+        setRevokePerm(config.getBoolean(key + ".revoke_perm", false));
+        setRegrantGroup(config.getBoolean(key + ".regrant_group", true));
+        setRegrantPerm(config.getBoolean(key + ".regrant_perm", true));
+        setBuyable(config.getBoolean(key + ".buyable", false));
+        setRentable(config.getBoolean(key + ".rentable", false));
         
-        setRentTime(sConfig.getLong(key + ".renttime", 0) * 1000);
-        setSkillsNeeded(sConfig.getInt(key + ".skills_needed", 0));
+        setRentTime(config.getLong(key + ".renttime", 0) * 1000);
+        setSkillsNeeded(config.getInt(key + ".skills_needed", 0));
         
         HashMap<String, Object> buyHelpMap = new HashMap<String, Object>();
         HashMap<String, Object> rentHelpMap = new HashMap<String, Object>();
@@ -74,21 +74,21 @@ public class Skill
         HashMap<String, Object> buyNeedHelpMap = new HashMap<String, Object>();
         HashMap<String, Object> rentNeedHelpMap = new HashMap<String, Object>();
         
-        if (sConfig.isConfigurationSection(key + ".buy_costs"))
-            for (String vkey : sConfig.getConfigurationSection(key + ".buy_costs").getKeys(false))
-                buyHelpMap.put(vkey, sConfig.get(key + ".buy_costs." + vkey));
+        if (config.isConfigurationSection(key + ".buy_costs"))
+            for (String vkey : config.getConfigurationSection(key + ".buy_costs").getKeys(false))
+                buyHelpMap.put(vkey, config.get(key + ".buy_costs." + vkey));
         
-        if (sConfig.isConfigurationSection(key + ".rent_costs"))
-            for (String vkey : sConfig.getConfigurationSection(key + ".rent_costs").getKeys(false))
-                rentHelpMap.put(vkey, sConfig.get(key + ".rent_costs." + vkey));
+        if (config.isConfigurationSection(key + ".rent_costs"))
+            for (String vkey : config.getConfigurationSection(key + ".rent_costs").getKeys(false))
+                rentHelpMap.put(vkey, config.get(key + ".rent_costs." + vkey));
         
-        if (sConfig.isConfigurationSection(key + ".buy_need"))
-            for (String vkey : sConfig.getConfigurationSection(key + ".buy_need").getKeys(false))
-                buyNeedHelpMap.put(vkey, sConfig.get(key + ".buy_need." + vkey));
+        if (config.isConfigurationSection(key + ".buy_need"))
+            for (String vkey : config.getConfigurationSection(key + ".buy_need").getKeys(false))
+                buyNeedHelpMap.put(vkey, config.get(key + ".buy_need." + vkey));
         
-        if (sConfig.isConfigurationSection(key + ".rent_need"))
-            for (String vkey : sConfig.getConfigurationSection(key + ".rent_need").getKeys(false))
-                rentNeedHelpMap.put(vkey, sConfig.get(key + ".rent_need." + vkey));
+        if (config.isConfigurationSection(key + ".rent_need"))
+            for (String vkey : config.getConfigurationSection(key + ".rent_need").getKeys(false))
+                rentNeedHelpMap.put(vkey, config.get(key + ".rent_need." + vkey));
         
         setBuyCosts(buyHelpMap);
         setRentCosts(rentHelpMap);

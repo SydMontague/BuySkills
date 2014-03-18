@@ -31,18 +31,18 @@ public class SkillRentCommand extends SkillSubCommand
             return SkillLanguage.COMMAND_PERMISSION.getString();
         if (!(sender instanceof Player))
             return SkillLanguage.COMMAND_PLAYERONLY.getString();
-        else if (args.length < 2)
+        if (args.length < 2)
             return SkillLanguage.COMMAND_ARGUMENTS.getString();
-        else if (!plugin.hasSkill(args[1]))
+        if (!getPlugin().hasSkill(args[1]))
             return SkillLanguage.COMMAND_SKILL_NOT_EXIST.getString();
-        else if (!plugin.getSkill(args[1]).isRentable())
+        if (!getPlugin().getSkill(args[1]).isRentable())
             return SkillLanguage.RENT_NOT_RENTABLE.getString();
         
         Player player = (Player) sender;
-        SkillPlayer skillPlayer = plugin.getSkillPlayer(player);
-        Skill skill = plugin.getSkill(args[1]);
+        SkillPlayer skillPlayer = getPlugin().getSkillPlayer(player);
+        Skill skill = getPlugin().getSkill(args[1]);
         
-        if (plugin.getSkillCap() != 0 && plugin.getSkillCap() <= skillPlayer.getSkills().size() - skillPlayer.getBonusCap())
+        if (getPlugin().getSkillCap() != 0 && getPlugin().getSkillCap() <= skillPlayer.getSkills().size() - skillPlayer.getBonusCap())
             return SkillLanguage.BUYRENT_SKILLCAP_REACHED.getString();
         if (skillPlayer.hasSkill(args[1]))
             return SkillLanguage.BUYRENT_ALREADY_OWN.getString();
@@ -60,7 +60,7 @@ public class SkillRentCommand extends SkillSubCommand
             return SkillLanguage.BUYRENT_NOT_AFFORD.getString();
         
         BuySkillsRentEvent event = new BuySkillsRentEvent(skill, skillPlayer);
-        plugin.getServer().getPluginManager().callEvent(event);
+        getPlugin().getServer().getPluginManager().callEvent(event);
         
         if (event.isCancelled())
             return SkillLanguage.BUYRENT_CANCELLED.getString();
@@ -77,12 +77,12 @@ public class SkillRentCommand extends SkillSubCommand
         switch (args.length)
         {
             case 2:
-                return SkillUtils.getMatches(args[1], plugin.getSkillMap().keySet());
+                return SkillUtils.getMatches(args[1], getPlugin().getSkillMap().keySet());
             default:
                 return null;
         }
     }
-
+    
     @Override
     public void help(CommandSender sender)
     {

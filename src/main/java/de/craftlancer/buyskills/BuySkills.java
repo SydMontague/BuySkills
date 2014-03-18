@@ -204,7 +204,8 @@ public class BuySkills extends JavaPlugin
     
     /**
      * Get a Collection of all active SkillPlayers
-     * SkillPlayers are loaded lazy into this collection, meaning they are only loaded if they are actually needed.
+     * SkillPlayers are loaded lazy into this collection, meaning they are only
+     * loaded if they are actually needed.
      * 
      * @return a Collection of SkillPlayers
      */

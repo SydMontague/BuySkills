@@ -30,21 +30,21 @@ public class SkillResetCommand extends SkillSubCommand
         if (args.length < 2)
             return SkillLanguage.COMMAND_ARGUMENTS.getString();
         
-        SkillPlayer skillPlayer = plugin.getSkillPlayer(args[1]);
+        SkillPlayer skillPlayer = getPlugin().getSkillPlayer(args[1]);
         
         if (skillPlayer == null)
             return SkillLanguage.COMMAND_PLAYER_NOT_EXIST.getString();
         
-        plugin.getServer().getPluginManager().callEvent(new BuySkillsResetEvent(skillPlayer));
+        getPlugin().getServer().getPluginManager().callEvent(new BuySkillsResetEvent(skillPlayer));
         
         for (String s : skillPlayer.getRented().keySet())
-            skillPlayer.revokeRented(plugin.getSkillByKey(s));
+            skillPlayer.revokeRented(getPlugin().getSkillByKey(s));
         
         for (String s : new ArrayList<String>(skillPlayer.getBoughtSkills()))
-            skillPlayer.revokeSkill(plugin.getSkillByKey(s));
+            skillPlayer.revokeSkill(getPlugin().getSkillByKey(s));
         
-        if (plugin.getServer().getPlayerExact(args[1]) != null)
-            plugin.getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.RESET_NOTIFY.getString());
+        if (getPlugin().getServer().getPlayerExact(args[1]) != null)
+            getPlugin().getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.RESET_NOTIFY.getString());
         
         return SkillLanguage.RESET_SUCCESS.getString();
     }
@@ -54,7 +54,7 @@ public class SkillResetCommand extends SkillSubCommand
     {
         return null;
     }
-
+    
     @Override
     public void help(CommandSender sender)
     {

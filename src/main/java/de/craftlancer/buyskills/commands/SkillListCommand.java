@@ -54,7 +54,7 @@ public class SkillListCommand extends SkillSubCommand
             if (SkillUtils.arrayContains(args, "all"))
                 all = true;
             
-            cat = SkillUtils.retainFirstFromArray(args, plugin.getCategories());
+            cat = SkillUtils.retainFirstFromArray(args, getPlugin().getCategories());
         }
         
         if (!buyable && !rentable)
@@ -65,12 +65,12 @@ public class SkillListCommand extends SkillSubCommand
         
         List<Skill> skill = getAvaibleSkills((Player) sender, rentable, buyable, all, cat);
         
-        for (int i = 0; i < plugin.getSkillsPerPage(); i++)
+        for (int i = 0; i < getPlugin().getSkillsPerPage(); i++)
         {
-            if (skill.size() <= page * plugin.getSkillsPerPage() + i)
+            if (skill.size() <= page * getPlugin().getSkillsPerPage() + i)
                 break;
             
-            sender.sendMessage(SkillUtils.replaceValues(skill.get(page * plugin.getSkillsPerPage() + i), SkillLanguage.LIST_DEFAULT_STRING.getString()));
+            sender.sendMessage(SkillUtils.replaceValues(skill.get(page * getPlugin().getSkillsPerPage() + i), SkillLanguage.LIST_DEFAULT_STRING.getString()));
         }
         
         return null;
@@ -84,7 +84,7 @@ public class SkillListCommand extends SkillSubCommand
             case 1:
                 return null;
             default:
-                List<String> a = SkillUtils.getMatches(args[args.length - 1], plugin.getCategories());
+                List<String> a = SkillUtils.getMatches(args[args.length - 1], getPlugin().getCategories());
                 a.addAll(SkillUtils.getMatches(args[args.length - 1], new String[] { "rent", "buy", "all" }));
                 return a;
         }
@@ -92,17 +92,17 @@ public class SkillListCommand extends SkillSubCommand
     
     private List<Skill> getAvaibleSkills(Player sender, boolean rentable, boolean buyable, boolean all, String cat)
     {
-        Collection<Skill> initList = plugin.getSkillMap().values();
+        Collection<Skill> initList = getPlugin().getSkillMap().values();
         List<Skill> returnList = new ArrayList<Skill>();
         
         for (Skill s : initList)
             if (cat == null || s.getCategories().contains(cat))
-                if ((all || plugin.getSkillPlayer(sender).skillAvaible(s)) || (buyable && s.isBuyable()) || (rentable && s.isRentable()))
+                if ((all || getPlugin().getSkillPlayer(sender).skillAvaible(s)) || (buyable && s.isBuyable()) || (rentable && s.isRentable()))
                     returnList.add(s);
         
         return returnList;
     }
-
+    
     @Override
     public void help(CommandSender sender)
     {

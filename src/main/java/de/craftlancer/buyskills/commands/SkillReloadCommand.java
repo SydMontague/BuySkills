@@ -25,8 +25,8 @@ public class SkillReloadCommand extends SkillSubCommand
         if (!sender.hasPermission(getPermission()) && sender instanceof Player)
             return SkillLanguage.COMMAND_PERMISSION.getString();
         
-            plugin.loadConfigurations();
-            return SkillLanguage.RELOAD_SUCCESS.getString();
+        getPlugin().loadConfigurations();
+        return SkillLanguage.RELOAD_SUCCESS.getString();
     }
     
     @Override
@@ -34,7 +34,7 @@ public class SkillReloadCommand extends SkillSubCommand
     {
         return null;
     }
-
+    
     @Override
     public void help(CommandSender sender)
     {

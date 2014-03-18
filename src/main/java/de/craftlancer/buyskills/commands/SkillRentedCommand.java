@@ -30,7 +30,7 @@ public class SkillRentedCommand extends SkillSubCommand
         if (!(sender instanceof Player))
             return SkillLanguage.COMMAND_PLAYERONLY.getString();
         
-        Map<String, Long> skills = plugin.getSkillPlayer(sender.getName()).getRented();
+        Map<String, Long> skills = getPlugin().getSkillPlayer(sender.getName()).getRented();
         
         sender.sendMessage(SkillLanguage.RENTED_DEFAULT_STRING.getString());
         for (Entry<String, Long> entry : skills.entrySet())
@@ -44,7 +44,7 @@ public class SkillRentedCommand extends SkillSubCommand
     {
         return null;
     }
-
+    
     @Override
     public void help(CommandSender sender)
     {

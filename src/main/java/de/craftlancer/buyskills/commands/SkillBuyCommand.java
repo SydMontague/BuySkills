@@ -33,20 +33,20 @@ public class SkillBuyCommand extends SkillSubCommand
             return SkillLanguage.COMMAND_PLAYERONLY.getString();
         
         Player player = (Player) sender;
-        SkillPlayer skillPlayer = plugin.getSkillPlayer(player);
+        SkillPlayer skillPlayer = getPlugin().getSkillPlayer(player);
         
         if (args.length < 2)
             return SkillLanguage.COMMAND_ARGUMENTS.getString();
-        if (!plugin.hasSkill(args[1]))
+        if (!getPlugin().hasSkill(args[1]))
             return SkillLanguage.COMMAND_SKILL_NOT_EXIST.getString();
-        if (!plugin.getSkill(args[1]).isBuyable())
+        if (!getPlugin().getSkill(args[1]).isBuyable())
             return SkillLanguage.BUY_NOT_BUYABLE.getString();
-        if (plugin.getSkillCap() != 0 && plugin.getSkillCap() <= skillPlayer.getSkills().size() - skillPlayer.getBonusCap())
+        if (getPlugin().getSkillCap() != 0 && getPlugin().getSkillCap() <= skillPlayer.getSkills().size() - skillPlayer.getBonusCap())
             return SkillLanguage.BUYRENT_SKILLCAP_REACHED.getString();
-        if (plugin.getSkillPlayer(sender.getName()).getSkills().contains(args[1]))
+        if (getPlugin().getSkillPlayer(sender.getName()).getSkills().contains(args[1]))
             return SkillLanguage.BUYRENT_ALREADY_OWN.getString();
         
-        Skill skill = plugin.getSkill(args[1]);
+        Skill skill = getPlugin().getSkill(args[1]);
         
         if (!skill.getWorlds().isEmpty() && !skill.getWorlds().contains(player.getWorld().getName()))
             return SkillLanguage.BUYRENT_WRONG_WORLD.getString();
@@ -62,7 +62,7 @@ public class SkillBuyCommand extends SkillSubCommand
             return SkillLanguage.BUYRENT_NOT_AFFORD.getString();
         
         BuySkillsBuyEvent event = new BuySkillsBuyEvent(skill, skillPlayer);
-        plugin.getServer().getPluginManager().callEvent(event);
+        getPlugin().getServer().getPluginManager().callEvent(event);
         
         if (event.isCancelled())
             return SkillLanguage.BUYRENT_CANCELLED.getString();
@@ -79,7 +79,7 @@ public class SkillBuyCommand extends SkillSubCommand
         switch (args.length)
         {
             case 2:
-                return SkillUtils.getMatches(args[1], plugin.getSkillMap().keySet());
+                return SkillUtils.getMatches(args[1], getPlugin().getSkillMap().keySet());
             default:
                 return null;
         }
