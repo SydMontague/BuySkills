@@ -306,7 +306,7 @@ public class BuySkills extends JavaPlugin
         File file = new File(getDataFolder(), "players" + File.separator + player + ".yml");
         FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
         
-        List<String> skills = conf.getStringList("skills");
+        List<String> playerSkills = conf.getStringList("skills");
         int bonuscap = conf.getInt("bonuscap", 0);
         HashMap<String, Long> rent = new HashMap<String, Long>();
         
@@ -314,6 +314,6 @@ public class BuySkills extends JavaPlugin
             for (String key : rentedConfig.getConfigurationSection(player).getKeys(false))
                 rent.put(key, rentedConfig.getLong(player + "." + key));
         
-        playerMap.put(player, new SkillPlayer(this, player, skills, rent, bonuscap));
+        playerMap.put(player, new SkillPlayer(this, player, playerSkills, rent, bonuscap));
     }
 }
