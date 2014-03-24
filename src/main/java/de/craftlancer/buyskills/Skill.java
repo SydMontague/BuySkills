@@ -11,7 +11,7 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 public class Skill
 {
-    private String key;
+    private final String key;
     private String name;
     private String desc;
     private String info;
@@ -62,6 +62,7 @@ public class Skill
         setRevokePerm(config.getBoolean(key + ".revoke_perm", false));
         setRegrantGroup(config.getBoolean(key + ".regrant_group", true));
         setRegrantPerm(config.getBoolean(key + ".regrant_perm", true));
+        setRegrantCost(config.getBoolean(key + ".regrant_cost", false));
         setBuyable(config.getBoolean(key + ".buyable", false));
         setRentable(config.getBoolean(key + ".rentable", false));
         

@@ -10,8 +10,8 @@ public class BuySkillEvent extends Event
 {
     private static final HandlerList handlers = new HandlerList();
     
-    protected Skill skill;
-    protected SkillPlayer player;
+    private final Skill skill;
+    private final SkillPlayer player;
     
     public BuySkillEvent(Skill skill, SkillPlayer player)
     {

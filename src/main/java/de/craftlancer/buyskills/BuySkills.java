@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import net.milkbowl.vault.permission.Permission;
 
@@ -30,17 +29,16 @@ import de.craftlancer.buyskills.commands.SkillCommandHandler;
 public class BuySkills extends JavaPlugin
 {
     private static BuySkills instance;
-    public static Logger log = Bukkit.getLogger();
     private Permission permission;
     
     private FileConfiguration config;
     private FileConfiguration sConfig;
     private FileConfiguration rentedConfig;
     private File rentedFile;
-    private Map<String, Skill> skills = new HashMap<String, Skill>();
-    private Map<String, Skill> skillsByKey = new HashMap<String, Skill>();
-    private HashMap<String, SkillPlayer> playerMap = new HashMap<String, SkillPlayer>();
-    private Set<String> categories = new HashSet<String>();
+    private final Map<String, Skill> skills = new HashMap<String, Skill>();
+    private final Map<String, Skill> skillsByKey = new HashMap<String, Skill>();
+    private final HashMap<String, SkillPlayer> playerMap = new HashMap<String, SkillPlayer>();
+    private final Set<String> categories = new HashSet<String>();
     
     private int skillcap = 0;
     private long updatetime = 6000L;
@@ -50,12 +48,10 @@ public class BuySkills extends JavaPlugin
     {
         instance = this;
     }
-    
+
     @Override
     public void onEnable()
     {
-        log = getLogger();
-        
         loadConfigurations();
         getCommand("skill").setExecutor(new SkillCommandHandler(this));
         
@@ -76,6 +72,7 @@ public class BuySkills extends JavaPlugin
         }
         catch (IOException e)
         {
+            getLogger().info("Error while loading Metrics");
         }
     }
     
@@ -236,7 +233,8 @@ public class BuySkills extends JavaPlugin
         if (!rentedFile.exists())
             try
             {
-                rentedFile.createNewFile();
+                if(!rentedFile.createNewFile())
+                    getLogger().info("Failed to load rentedFile");
             }
             catch (IOException e)
             {

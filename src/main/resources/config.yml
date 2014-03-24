@@ -3,85 +3,85 @@ general:
     skillcap: 0
     skillsperpage: 5
 string:
-    COMMAND_PERMISSION: "You don't have enough permission to run this command."
-    COMMAND_PLAYERONLY: "You can't run this command from console."
-    COMMAND_SKILL_NOT_EXIST: "This skill does not exist."
-    COMMAND_PLAYER_NOT_EXIST: "This player does not exist."
-    COMMAND_ARGUMENTS: "You need to specify more arguments for this command."    
+    COMMAND_PERMISSION: "§3You don't have enough permission to run this command."
+    COMMAND_PLAYERONLY: "§3You can't run this command from console."
+    COMMAND_SKILL_NOT_EXIST: "§3This skill does not exist."
+    COMMAND_PLAYER_NOT_EXIST: "§3This player does not exist."
+    COMMAND_ARGUMENTS: "§3You need to specify more arguments for this command."    
     HELP_COMMAND_HELP: |
-            /skill help [command] - get help for this plugin
-            /skill list <page> <filter> - list available skills
-            /skill info <skill> - get information to a specific skill
-            /skill buy <skill> - buy a skill
-            /skill rent <skill> - rent a skill
-            /skill current [player] - shows bought skills
-            /skill rented - show's your rented skills
+            §3/skill help [command] - get help for this plugin
+            §3/skill list <page> <filter> - list available skills
+            §3/skill info <skill> - get information to a specific skill
+            §3/skill buy <skill> - buy a skill
+            §3/skill rent <skill> - rent a skill
+            §3/skill current [player] - shows bought skills
+            §3/skill rented - show's your rented skills
     HELP_COMMAND_HELP_ADMIN: |
-            /skill grant <player> <skill> [charge] [rent] - grant a skill
-            /skill recalculate <player> - recalculate permissions
-            /skill reload - reload config files
-            /skill reset <player> - reset all skills of a player
-            /skill revoke <player> <skill> - revoke a skill from a player
-    HELP_COMMAND_BUY: "Buy a skill permanently. For list of available skills look at /skill list"
-    HELP_COMMAND_CURRENT: "List of all currently owned skills of [player]"
+            §3/skill grant <player> <skill> [charge] [rent] - grant a skill
+            §3/skill recalculate <player> - recalculate permissions
+            §3/skill reload - reload config files
+            §3/skill reset <player> - reset all skills of a player
+            §3/skill revoke <player> <skill> - revoke a skill from a player
+    HELP_COMMAND_BUY: "§3Buy a skill permanently. For list of available skills look at /skill list"
+    HELP_COMMAND_CURRENT: "§3List of all currently owned skills of [player]"
     HELP_COMMAND_GRANT: |
-            Grant a skill to a player. 
-            Add 'rent' as argument to grant a rented skill.
-            Add 'charge' as argument to let the player pay for this skill.
-    HELP_COMMAND_INFO: "Shows more detailed information about the specified skill"
+            §3Grant a skill to a player. 
+            §3Add 'rent' as argument to grant a rented skill.
+            §3Add 'charge' as argument to let the player pay for this skill.
+    HELP_COMMAND_INFO: "§3Shows more detailed information about the specified skill"
     HELP_COMMAND_LIST: |
-            List all skills. By default only available skills.
-            Add 'buy' to show buyable skills.
-            Add 'rent' to show rentable skills.
-            Add 'all' to show all skills, despite their availability.
-            Add a category to show only skills from this category.
-    HELP_COMMAND_RECALCULATE: "Recalculates the permissions of the specified player."
-    HELP_COMMAND_RELOAD: "Reloads all config files."
-    HELP_COMMAND_RENT: "Rent a skill."
-    HELP_COMMAND_RENTED: "Show all rented skills and their remaining time."
-    HELP_COMMAND_RESET: "Reset all skills and their permission of the specified player."
-    HELP_COMMAND_REVOKE: "Revoke a skill from the specified player."
-    BUYRENT_ALREADY_OWN: "You already own this skill."
-    BUYRENT_NOT_PERMISSION: "You don't have the needed permissions for this skill."
-    BUYRENT_NOT_GROUP: "You don't have the needed groups for this skill."
-    BUYRENT_NOT_SKILLTREE: "You don't follow the skilltree."
-    BUYRENT_NOT_AFFORD: "You can't afford this skill."
-    BUYRENT_SKILLCAP_REACHED: "You reached the maximum number of skills you can own."
-    BUYRENT_WRONG_WORLD: "This skill is not available in this world."
-    BUYRENT_NOT_CURRENCYS: "You don't have the needed currencies for this skill."    
-    BUYRENT_CANCELLED: "This transaction was cancelled."
-    BUY_SUCCESS: "You successfully bought this skill."
-    BUY_NOT_BUYABLE: "This skill is not buyable"
-    RENT_SUCCESS: "You successfully rented this skill."
-    RENT_NOT_RENTABLE: "This skill is not rentable."
-    RENT_EXPIRED: "Your rental of %skill% has expired."
-    RENTED_DEFAULT_STRING: "Your rented skills:"
-    CURRENT_DEFAULT_STRING: "%player%'s currently owned skills:"    
-    RESET_SUCCESS: "Reset successful."
-    RESET_NOTIFY: "Your skills were reseted."    
-    RECALC_SUCCESS: "Recalculation successful."
-    RECALC_NOTIFY: "Your permissions were recalculated."    
-    RELOAD_SUCCESS: "Reload successful."    
-    REVOKE_SUCCESS: "Revoke successful."
-    REVOKE_NOTIFY: "Your skill %skill% was revoked by an admin."
-    REVOKE_NOT_OWN: "This player don't own this skill."    
-    GRANT_ALREADY_OWN: "This player already owns this skill."
-    GRANT_SUCCESS: "Skill successfully granted."
-    GRANT_NOTIFY: "You were granted the skill %skill% by an admin."
+            §3List all skills. By default only available skills.
+            §3Add 'buy' to show buyable skills.
+            §3Add 'rent' to show rentable skills.
+            §3Add 'all' to show all skills, despite their availability.
+            §3Add a category to show only skills from this category.
+    HELP_COMMAND_RECALCULATE: "§3Recalculates the permissions of the specified player."
+    HELP_COMMAND_RELOAD: "§3Reloads all config files."
+    HELP_COMMAND_RENT: "§3Rent a skill."
+    HELP_COMMAND_RENTED: "§3Show all rented skills and their remaining time."
+    HELP_COMMAND_RESET: "§3Reset all skills and their permission of the specified player."
+    HELP_COMMAND_REVOKE: "§3Revoke a skill from the specified player."
+    BUYRENT_ALREADY_OWN: "§3You already own this skill."
+    BUYRENT_NOT_PERMISSION: "§3You don't have the needed permissions for this skill."
+    BUYRENT_NOT_GROUP: "§3You don't have the needed groups for this skill."
+    BUYRENT_NOT_SKILLTREE: "§3You don't follow the skilltree."
+    BUYRENT_NOT_AFFORD: "§3You can't afford this skill."
+    BUYRENT_SKILLCAP_REACHED: "§3You reached the maximum number of skills you can own."
+    BUYRENT_WRONG_WORLD: "§3This skill is not available in this world."
+    BUYRENT_NOT_CURRENCYS: "§3You don't have the needed currencies for this skill."    
+    BUYRENT_CANCELLED: "§3This transaction was cancelled."
+    BUY_SUCCESS: "§3You successfully bought this skill."
+    BUY_NOT_BUYABLE: "§3This skill is not buyable"
+    RENT_SUCCESS: "§3You successfully rented this skill."
+    RENT_NOT_RENTABLE: "§3This skill is not rentable."
+    RENT_EXPIRED: "§3Your rental of %skill% has expired."
+    RENTED_DEFAULT_STRING: "§3Your rented skills:"
+    CURRENT_DEFAULT_STRING: "§3%player%'s currently owned skills:"    
+    RESET_SUCCESS: "§3Reset successful."
+    RESET_NOTIFY: "§3Your skills were reseted."    
+    RECALC_SUCCESS: "§3Recalculation successful."
+    RECALC_NOTIFY: "§3Your permissions were recalculated."    
+    RELOAD_SUCCESS: "§3Reload successful."    
+    REVOKE_SUCCESS: "§3Revoke successful."
+    REVOKE_NOTIFY: "§3Your skill %skill% was revoked by an admin."
+    REVOKE_NOT_OWN: "§3This player don't own this skill."    
+    GRANT_ALREADY_OWN: "§3This player already owns this skill."
+    GRANT_SUCCESS: "§3Skill successfully granted."
+    GRANT_NOTIFY: "§3You were granted the skill %skill% by an admin."
     LIST_DEFAULT_STRING: |
-                    =====================================================
-                    Name: %name%  | Buyable: %buyable% | Rentable: %rentable%
-                    Description: %desc%
+                    §3=====================================================
+                    §3Name: %name% | Buyable: %buyable% | Rentable: %rentable%
+                    §3Description: %desc%
     INFO_DEFAULT_STRING: |
-                    Name: %name%
-                    Info: %info%^
-                    Buycosts: %buycost%^~
-                    Rentcosts: %rentcost%~^
-                    Needed to buy: %buyneed%^~
-                    Needed to rent: %rentneed%
-                    Renttime: %renttime%~
-                    Skills needed: %skillneed%
-                    Skills forbidden: %skillillegal%
-                    Number of needed skills needed: %skillsneeded%
-                    Worlds: %worlds%
-                    Categories: %categories%
+                    §3Name:§r %name%
+                    §3Info:§r %info%^
+                    §3Buycosts:§r %buycost%^~
+                    §3Rentcosts:§r %rentcost%~^
+                    §3Needed to buy:§r %buyneed%^~
+                    §3Needed to rent:§r %rentneed%
+                    §3Renttime:§r %renttime%~
+                    §3Skills needed:§r %skillneed%
+                    §3Skills forbidden:§r %skillillegal%
+                    §3# of skills needed:§r %skillsneeded%
+                    §3Worlds:§r %worlds%
+                    §3Categories:§r %categories%

@@ -38,7 +38,7 @@ public class SkillCurrentCommand extends SkillSubCommand
         
         for (int i = 0; i < skills.size(); i++)
         {
-            msg.append(skills.get(i) + " ");
+            msg.append(skills.get(i)).append(" ");
             if (i % 3 == 0 && i != 0)
                 msg.append("\n");
         }

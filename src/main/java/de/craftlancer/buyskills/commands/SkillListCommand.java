@@ -45,6 +45,7 @@ public class SkillListCommand extends SkillSubCommand
             }
             catch (NumberFormatException e)
             {
+                page = 0;
             }
             
             if (SkillUtils.arrayContains(args, "rent"))

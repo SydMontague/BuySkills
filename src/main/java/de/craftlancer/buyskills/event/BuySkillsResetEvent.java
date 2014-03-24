@@ -8,7 +8,7 @@ import de.craftlancer.buyskills.SkillPlayer;
 public class BuySkillsResetEvent extends Event
 {
     private static final HandlerList handlers = new HandlerList();
-    private SkillPlayer player;
+    private final SkillPlayer player;
     
     public BuySkillsResetEvent(SkillPlayer player)
     {

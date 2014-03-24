@@ -16,7 +16,7 @@ import de.craftlancer.buyskills.SkillUtils;
  */
 public class SkillHelpCommand extends SkillSubCommand
 {
-    private Map<String, SkillSubCommand> commands;
+    private final Map<String, SkillSubCommand> commands;
     
     public SkillHelpCommand(String perm, BuySkills plugin, Map<String, SkillSubCommand> map)
     {

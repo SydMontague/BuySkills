@@ -5,6 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import de.craftlancer.currencyhandler.CurrencyHandler;
 
 /**
@@ -16,9 +21,9 @@ public class SkillUtils
      * Checks if a String array contains a value of a String Collection
      * 
      * @param array
-     *            the array
+     *        the array
      * @param col
-     *            the Collection
+     *        the Collection
      * @return the first value which is in both, the array and the Collection
      */
     public static <T> T retainFirstFromArray(T[] array, Collection<T> col)
@@ -35,9 +40,9 @@ public class SkillUtils
      * The check is case sensitive
      * 
      * @param array
-     *            the array
+     *        the array
      * @param string
-     *            the String
+     *        the String
      * @return true if the array contains the string, false if not
      */
     public static <T> boolean arrayContains(T[] array, T string)
@@ -60,9 +65,9 @@ public class SkillUtils
      * Strings surrounded by ~ are only shown when the skill is rentable
      * 
      * @param skill
-     *            the skill which's values will be used
+     *        the skill which's values will be used
      * @param string
-     *            the original string
+     *        the original string
      * @return the modified string
      */
     public static String replaceValues(Skill skill, String string)
@@ -106,7 +111,7 @@ public class SkillUtils
         string = string.replace("%worlds%", skill.getWorlds().toString().replace("[", "").replace("]", ""));
         string = string.replace("%rentable%", Boolean.toString(skill.isRentable()));
         string = string.replace("%buyable%", Boolean.toString(skill.isBuyable()));
-        string = string.replace("%renttime%", Long.toString(skill.getRenttime()));
+        string = string.replace("%renttime%", SkillUtils.getTimeDiffString(skill.getRenttime() / 1000));
         string = string.replace("%skillneed%", skill.getSkillsNeed().toString().replace("[", "").replace("]", ""));
         string = string.replace("%skillillegal%", skill.getSkillsIllegal().toString().replace("[", "").replace("]", ""));
         string = string.replace("%skillsneeded%", Integer.toString(skill.getSkillsNeeded()));
@@ -119,7 +124,7 @@ public class SkillUtils
      * Format: <HOURS> <MINUTES> <SECONDS>
      * 
      * @param value
-     *            a time in the future which's differnce string you want
+     *        a time in the future which's differnce string you want
      * @return the difference string
      */
     public static String getTimeDiffString(long value)
@@ -137,9 +142,9 @@ public class SkillUtils
      * Get all values of a String Collection which start with a given String
      * 
      * @param value
-     *            the given String
+     *        the given String
      * @param list
-     *            the Collection
+     *        the Collection
      * @return a List of all matches
      */
     public static List<String> getMatches(String value, Collection<String> list)
@@ -157,9 +162,9 @@ public class SkillUtils
      * Get all values of a String array which start with a given String
      * 
      * @param value
-     *            the given String
+     *        the given String
      * @param list
-     *            the array
+     *        the array
      * @return a List of all matches
      */
     public static List<String> getMatches(String value, String[] list)
@@ -181,7 +186,10 @@ public class SkillUtils
         for (Entry<String, Object> set : map.entrySet())
             if (CurrencyHandler.hasHandler(set.getKey()))
                 if (CurrencyHandler.getHandler(set.getKey()).checkInputObject(set.getValue()))
-                    str.append(" " + CurrencyHandler.getHandler(set.getKey()).getFormatedString(set.getValue()));
+                    str.append(CurrencyHandler.getHandler(set.getKey()).getFormatedString(set.getValue())).append(", ");
+        
+        if (str.length() != 0)
+            str.deleteCharAt(str.length() - 2);
         
         return str.toString();
     }

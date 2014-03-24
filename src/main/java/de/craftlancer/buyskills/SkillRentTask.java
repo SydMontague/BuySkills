@@ -12,7 +12,7 @@ import de.craftlancer.buyskills.event.BuySkillsRentExpireEvent;
  */
 public class SkillRentTask extends BukkitRunnable
 {
-    private BuySkills plugin;
+    private final BuySkills plugin;
     
     public SkillRentTask(BuySkills plugin)
     {

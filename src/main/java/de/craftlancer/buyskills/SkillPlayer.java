@@ -18,13 +18,13 @@ import de.craftlancer.currencyhandler.CurrencyHandler;
 public class SkillPlayer
 {
     private boolean hasChanged = false;
-    private BuySkills plugin;
-    private String name;
+    private final BuySkills plugin;
+    private final String name;
     private List<String> skills = new ArrayList<String>();
     private HashMap<String, Long> rented = new HashMap<String, Long>();
     private int bonuscap = 0;
-    private File file;
-    private FileConfiguration conf;
+    private final File file;
+    private final FileConfiguration conf;
     
     public SkillPlayer(BuySkills plugin, String name, List<String> skills, HashMap<String, Long> rented, int bonuscap)
     {
@@ -55,7 +55,7 @@ public class SkillPlayer
      * Check if a player has a certain skill
      * 
      * @param string
-     *            the name of the skill
+     *        the name of the skill
      * @return true when he has the skill, false when not
      */
     public boolean hasSkill(String string)
@@ -99,7 +99,7 @@ public class SkillPlayer
      * Negative values allow the player to have less skills
      * 
      * @param bonuscap
-     *            the amount of bonusskills
+     *        the amount of bonusskills
      */
     public void setBonusCap(int bonuscap)
     {
@@ -123,7 +123,7 @@ public class SkillPlayer
      * Check if a player has the needed permissions to buy this skill
      * 
      * @param s
-     *            the skill
+     *        the skill
      * @return true if he has the permissions, false if not
      */
     public boolean hasPermNeed(Skill s)
@@ -144,7 +144,7 @@ public class SkillPlayer
      * Check if a player has the needed groups to buy this skill
      * 
      * @param skill
-     *            the skill
+     *        the skill
      * @return true if he has the groups, false if not
      */
     public boolean hasGroupNeed(Skill skill)
@@ -165,7 +165,7 @@ public class SkillPlayer
      * Check if a player has the needed skilltree requirements to buy this skill
      * 
      * @param skill
-     *            the skill
+     *        the skill
      * @return true if he has the requirements, false if not
      */
     public boolean followsSkilltree(Skill skill)
@@ -190,7 +190,7 @@ public class SkillPlayer
      * Checks if a skill is available for this player
      * 
      * @param skill
-     *            the skill
+     *        the skill
      * @return true if it is available, false if not
      */
     public boolean skillAvaible(Skill skill)
@@ -214,7 +214,7 @@ public class SkillPlayer
      * Grant a bought skill
      * 
      * @param skill
-     *            the skill
+     *        the skill
      */
     public void grantSkill(Skill skill)
     {
@@ -226,7 +226,7 @@ public class SkillPlayer
      * Revoke a bought skill
      * 
      * @param skill
-     *            the skill
+     *        the skill
      */
     public void revokeSkill(Skill skill)
     {
@@ -238,9 +238,9 @@ public class SkillPlayer
      * Grant a rented skill
      * 
      * @param skill
-     *            the skill
+     *        the skill
      * @param time
-     *            the time in ms, the skill is granted for
+     *        the time in ms, the skill is granted for
      */
     public void grantRented(Skill skill, long time)
     {
@@ -252,7 +252,7 @@ public class SkillPlayer
      * Revoke a rented skill
      * 
      * @param skill
-     *            the skill
+     *        the skill
      */
     public void revokeRented(Skill skill)
     {
@@ -264,7 +264,7 @@ public class SkillPlayer
      * Handle the permission side of granting a skill
      * 
      * @param skill
-     *            the skill
+     *        the skill
      */
     public void handleSkillGrant(Skill skill)
     {
@@ -273,7 +273,7 @@ public class SkillPlayer
         {
             worlds = new ArrayList<String>();
             // add null world to force use of global permissions
-            worlds.add((String) null);
+            worlds.add(null);
             
         }
         else
@@ -299,41 +299,39 @@ public class SkillPlayer
     
     /**
      * Handle the permission side of revoking a skill
-     * 
-     * @param player
-     *            the player
-     * @param key
-     *            the skill
+     *
+     * @param skill
+     *        the skill
      */
-    private void handleSkillRevoke(Skill s)
+    private void handleSkillRevoke(Skill skill)
     {
         List<String> worlds;
-        if (s.getWorlds().isEmpty())
+        if (skill.getWorlds().isEmpty())
         {
             worlds = new ArrayList<String>();
-            worlds.add((String) null);
+            worlds.add(null);
         }
         else
-            worlds = s.getWorlds();
+            worlds = skill.getWorlds();
         
         for (String world : worlds)
         {
-            for (String permission : s.getPermEarn())
+            for (String permission : skill.getPermEarn())
                 plugin.getPermissions().playerRemove(world, getName(), permission);
             
-            for (String group : s.getGroupEarn())
+            for (String group : skill.getGroupEarn())
                 plugin.getPermissions().playerRemoveGroup(world, getName(), group);
             
-            if (s.isRegrantGroup())
-                for (String group : s.getGroupNeed())
+            if (skill.isRegrantGroup())
+                for (String group : skill.getGroupNeed())
                     plugin.getPermissions().playerAddGroup(world, getName(), group);
             
-            if (s.isRegrantPerm())
-                for (String perm : s.getPermNeed())
+            if (skill.isRegrantPerm())
+                for (String perm : skill.getPermNeed())
                     plugin.getPermissions().playerAdd(world, getName(), perm);
             
-            if (s.isRegrantCost())
-                CurrencyHandler.giveCurrencies(plugin.getServer().getPlayerExact(getName()), s.getRentCosts());
+            if (skill.isRegrantCost())
+                CurrencyHandler.giveCurrencies(plugin.getServer().getPlayerExact(getName()), skill.getRentCosts());
         }
     }
     
@@ -366,7 +364,8 @@ public class SkillPlayer
         
         if (getBoughtSkills().isEmpty() && getBonusCap() == 0 && file.exists())
         {
-            file.delete();
+            if (!file.delete())
+                plugin.getLogger().severe("Failed to delete player File!");
             return;
         }
         

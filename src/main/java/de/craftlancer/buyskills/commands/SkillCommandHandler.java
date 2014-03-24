@@ -20,7 +20,7 @@ public class SkillCommandHandler implements TabExecutor
 {
     private HashMap<String, SkillSubCommand> commands = new HashMap<String, SkillSubCommand>();
     
-    public static String[] parseArgumentStrings(String[] args)
+    private static String[] parseArgumentStrings(String[] args)
     {
         List<String> tmp = new ArrayList<String>();
         
@@ -98,7 +98,7 @@ public class SkillCommandHandler implements TabExecutor
     {
         args = parseArgumentStrings(args);
         
-        String message = null;
+        String message;
         
         if (args.length == 0 || !commands.containsKey(args[0]))
             if (commands.containsKey("help"))
@@ -125,7 +125,7 @@ public class SkillCommandHandler implements TabExecutor
                 List<String> l = SkillUtils.getMatches(args[0], commands.keySet());
                 for (String str : l)
                     if (!sender.hasPermission(commands.get(str).getPermission()))
-                        l.remove(l);
+                        l.remove(str);
                 return l;
             default:
                 if (!commands.containsKey(args[0]))

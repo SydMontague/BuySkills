@@ -4,7 +4,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class SkillSaveTask extends BukkitRunnable
 {
-    private BuySkills plugin;
+    private final BuySkills plugin;
     
     public SkillSaveTask(BuySkills plugin)
     {

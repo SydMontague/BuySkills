@@ -9,6 +9,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+    <scm>
+        <url>https://github.com/SydMontague/BuySkills</url>
+    </scm>
+
   <distributionManagement>
     <repository>
       <name>Craftlancer Releases</name>
