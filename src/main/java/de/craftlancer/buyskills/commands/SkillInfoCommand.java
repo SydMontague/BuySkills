@@ -25,7 +25,7 @@ public class SkillInfoCommand extends SkillSubCommand
     {
         if (!sender.hasPermission(getPermission()) && sender instanceof Player)
             return SkillLanguage.COMMAND_PERMISSION.getString();
-        if (args.length <= 1)
+        if (args.length < 2)
             return SkillLanguage.HELP_COMMAND_INFO.getString();
         if (!getPlugin().hasSkill(args[1]))
             return SkillLanguage.COMMAND_SKILL_NOT_EXIST.getString();

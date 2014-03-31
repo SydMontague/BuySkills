@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import net.milkbowl.vault.permission.Permission;
 
@@ -23,7 +24,6 @@ import de.craftlancer.buyskills.commands.SkillCommandHandler;
 
 /*
  * TODO extend Events + JavaDocs
- * TODO switch to UUID instead of playernames -> requires a getUUID(OfflinePlayer) method!
  */
 
 public class BuySkills extends JavaPlugin
@@ -37,7 +37,7 @@ public class BuySkills extends JavaPlugin
     private File rentedFile;
     private final Map<String, Skill> skills = new HashMap<String, Skill>();
     private final Map<String, Skill> skillsByKey = new HashMap<String, Skill>();
-    private final HashMap<String, SkillPlayer> playerMap = new HashMap<String, SkillPlayer>();
+    private final HashMap<UUID, SkillPlayer> playerMap = new HashMap<UUID, SkillPlayer>();
     private final Set<String> categories = new HashSet<String>();
     
     private int skillcap = 0;
@@ -48,7 +48,7 @@ public class BuySkills extends JavaPlugin
     {
         instance = this;
     }
-
+    
     @Override
     public void onEnable()
     {
@@ -87,34 +87,40 @@ public class BuySkills extends JavaPlugin
      * Get a SkillPlayer by his Player object
      * 
      * @param player
-     *            the player
+     *        the player
      * @return the SkillPlayer
      */
     public SkillPlayer getSkillPlayer(Player player)
     {
-        return getSkillPlayer(player.getName());
+        return getSkillPlayer(player.getUniqueId());
     }
     
     /**
      * Get a SkillPlayer by his name
      * 
      * @param name
-     *            the name
+     *        the name
      * @return the SkillPlayer
      */
+    @SuppressWarnings("deprecation")
     public SkillPlayer getSkillPlayer(String name)
     {
-        if (!playerMap.containsKey(name))
-            loadPlayer(name);
+        return getSkillPlayer(getServer().getOfflinePlayer(name).getUniqueId());
+    }
+    
+    public SkillPlayer getSkillPlayer(UUID uuid)
+    {
+        if (!playerMap.containsKey(uuid))
+            loadPlayer(uuid);
         
-        return playerMap.get(name);
+        return playerMap.get(uuid);
     }
     
     /**
      * Get the skill with the given name
      * 
      * @param name
-     *            the name of the skill
+     *        the name of the skill
      * @return the Skill object with the given name, null if no skill was found
      */
     public Skill getSkill(String name)
@@ -126,7 +132,7 @@ public class BuySkills extends JavaPlugin
      * Get the skill with the given key
      * 
      * @param key
-     *            the key of the skill
+     *        the key of the skill
      * @return the Skill object with the given key, null if no skill was found
      */
     public Skill getSkillByKey(String key)
@@ -138,7 +144,7 @@ public class BuySkills extends JavaPlugin
      * Check if a skill with the given name exists
      * 
      * @param name
-     *            the name of the skill
+     *        the name of the skill
      * @return true when the skill exists, false if not
      */
     public boolean hasSkill(String name)
@@ -226,6 +232,9 @@ public class BuySkills extends JavaPlugin
         sConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "skills.yml"));
         config = getConfig();
         
+        if (!config.getBoolean("general.uuidUpdated", false))
+            updateToUUID();
+        
         loadConfig();
         loadSkills();
         
@@ -233,7 +242,7 @@ public class BuySkills extends JavaPlugin
         if (!rentedFile.exists())
             try
             {
-                if(!rentedFile.createNewFile())
+                if (!rentedFile.createNewFile())
                     getLogger().info("Failed to load rentedFile");
             }
             catch (IOException e)
@@ -242,6 +251,27 @@ public class BuySkills extends JavaPlugin
             }
         
         rentedConfig = YamlConfiguration.loadConfiguration(rentedFile);
+    }
+    
+    private void updateToUUID()
+    {
+        for (File file : new File(getDataFolder(), "players").listFiles())
+        {
+            String name = file.getName();
+            name = name.substring(0, name.lastIndexOf("."));
+            
+            try
+            {
+                UUID.fromString(name);
+            }
+            catch (IllegalArgumentException e)
+            {
+                file.renameTo(new File(getDataFolder(), "players" + File.separator + getServer().getOfflinePlayer(name).getUniqueId().toString() + ".yml"));
+            }
+        }
+        
+        config.set("general.uuidUpdated", true);
+        saveConfig();
     }
     
     protected FileConfiguration getRentedConfig()
@@ -299,19 +329,19 @@ public class BuySkills extends JavaPlugin
         skillsperpage = Math.max(1, config.getInt("general.skillsperpage", 5));
     }
     
-    private void loadPlayer(String player)
+    private void loadPlayer(UUID uuid)
     {
-        File file = new File(getDataFolder(), "players" + File.separator + player + ".yml");
+        File file = new File(getDataFolder(), "players" + File.separator + uuid.toString() + ".yml");
         FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
         
         List<String> playerSkills = conf.getStringList("skills");
         int bonuscap = conf.getInt("bonuscap", 0);
         HashMap<String, Long> rent = new HashMap<String, Long>();
         
-        if (rentedConfig.getConfigurationSection(player) != null)
-            for (String key : rentedConfig.getConfigurationSection(player).getKeys(false))
-                rent.put(key, rentedConfig.getLong(player + "." + key));
+        if (rentedConfig.getConfigurationSection(uuid.toString()) != null)
+            for (String key : rentedConfig.getConfigurationSection(uuid.toString()).getKeys(false))
+                rent.put(key, rentedConfig.getLong(uuid.toString() + "." + key));
         
-        playerMap.put(player, new SkillPlayer(this, player, playerSkills, rent, bonuscap));
+        playerMap.put(uuid, new SkillPlayer(this, uuid, playerSkills, rent, bonuscap));
     }
 }

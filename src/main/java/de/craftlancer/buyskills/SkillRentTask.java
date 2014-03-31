@@ -24,15 +24,15 @@ public class SkillRentTask extends BukkitRunnable
     {
         long time = System.currentTimeMillis();
         
-        for (Player p : plugin.getServer().getOnlinePlayers())
+        for (Player player : plugin.getServer().getOnlinePlayers())
         {
-            SkillPlayer skillPlayer = plugin.getSkillPlayer(p);
+            SkillPlayer skillPlayer = plugin.getSkillPlayer(player);
             for (Entry<String, Long> set : skillPlayer.getRented().entrySet())
                 if (set.getValue() < time)
                 {
                     Skill skill = plugin.getSkillByKey(set.getKey());
                     skillPlayer.revokeRented(skill);
-                    p.sendMessage(SkillLanguage.RENT_EXPIRED.getString().replace("%skill%", set.getKey()));
+                    player.sendMessage(SkillLanguage.RENT_EXPIRED.getString().replace("%skill%", set.getKey()));
                     plugin.getServer().getPluginManager().callEvent(new BuySkillsRentExpireEvent(skill, skillPlayer));
                 }
         }

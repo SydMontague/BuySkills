@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,6 +18,7 @@ import de.craftlancer.currencyhandler.CurrencyHandler;
  */
 public class SkillPlayer
 {
+    private final UUID uuid;
     private boolean hasChanged = false;
     private final BuySkills plugin;
     private final String name;
@@ -26,14 +28,16 @@ public class SkillPlayer
     private final File file;
     private final FileConfiguration conf;
     
-    public SkillPlayer(BuySkills plugin, String name, List<String> skills, HashMap<String, Long> rented, int bonuscap)
+    @SuppressWarnings("deprecation")
+    public SkillPlayer(BuySkills plugin, UUID uuid, List<String> skills, HashMap<String, Long> rented, int bonuscap)
     {
         this.plugin = plugin;
-        this.name = name;
+        this.uuid = uuid;
         this.skills = skills;
         this.rented = rented;
         this.bonuscap = bonuscap;
-        this.file = new File(plugin.getDataFolder(), "players" + File.separator + getName() + ".yml");
+        this.name = plugin.getServer().getOfflinePlayer(uuid).getName();
+        this.file = new File(plugin.getDataFolder(), "players" + File.separator + getUUID().toString() + ".yml");
         this.conf = YamlConfiguration.loadConfiguration(file);
     }
     
@@ -119,6 +123,11 @@ public class SkillPlayer
         return name;
     }
     
+    public UUID getUUID()
+    {
+        return uuid;
+    }
+    
     /**
      * Check if a player has the needed permissions to buy this skill
      * 
@@ -128,7 +137,7 @@ public class SkillPlayer
      */
     public boolean hasPermNeed(Skill s)
     {
-        Player player = plugin.getServer().getPlayerExact(getName());
+        Player player = plugin.getServer().getPlayer(getUUID());
         
         if (player == null)
             return false;
@@ -149,7 +158,7 @@ public class SkillPlayer
      */
     public boolean hasGroupNeed(Skill skill)
     {
-        Player player = plugin.getServer().getPlayerExact(getName());
+        Player player = plugin.getServer().getPlayer(getUUID());
         
         if (player == null)
             return false;
@@ -331,7 +340,7 @@ public class SkillPlayer
                     plugin.getPermissions().playerAdd(world, getName(), perm);
             
             if (skill.isRegrantCost())
-                CurrencyHandler.giveCurrencies(plugin.getServer().getPlayerExact(getName()), skill.getRentCosts());
+                CurrencyHandler.giveCurrencies(plugin.getServer().getPlayer(getUUID()), skill.getRentCosts());
         }
     }
     
@@ -386,6 +395,6 @@ public class SkillPlayer
     
     protected void saveRented()
     {
-        plugin.getRentedConfig().set(getName(), getRented());
+        plugin.getRentedConfig().set(getUUID().toString(), getRented());
     }
 }
