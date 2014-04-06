@@ -253,6 +253,7 @@ public class BuySkills extends JavaPlugin
         rentedConfig = YamlConfiguration.loadConfiguration(rentedFile);
     }
     
+    @SuppressWarnings("deprecation")
     private void updateToUUID()
     {
         for (File file : new File(getDataFolder(), "players").listFiles())
