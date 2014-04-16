@@ -9,9 +9,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-    <scm>
-        <url>https://github.com/SydMontague/BuySkills</url>
-    </scm>
+  <scm>
+    <url>https://github.com/SydMontague/BuySkills</url>
+  </scm>
 
   <distributionManagement>
     <repository>
@@ -54,7 +54,7 @@
     <dependency>
       <groupId>de.craftlancer</groupId>
       <artifactId>currencyhandler</artifactId>
-      <version>RELEASE</version>
+      <version>1.0.0-RC3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>net.milkbowl.vault</groupId>

@@ -174,7 +174,6 @@ public class SkillUtils
         return result;
     }
     
-    @SuppressWarnings("unchecked")
     private static String getHandlerValues(Map<String, Object> map)
     {
         StringBuilder str = new StringBuilder();

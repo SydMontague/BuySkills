@@ -43,7 +43,7 @@ public class SkillBuyCommand extends SkillSubCommand
             return SkillLanguage.BUY_NOT_BUYABLE.getString();
         if (getPlugin().getSkillCap() != 0 && getPlugin().getSkillCap() <= skillPlayer.getSkills().size() - skillPlayer.getBonusCap())
             return SkillLanguage.BUYRENT_SKILLCAP_REACHED.getString();
-        if (getPlugin().getSkillPlayer(sender.getName()).getSkills().contains(args[1]))
+        if (getPlugin().getSkillPlayer(player).getSkills().contains(args[1]))
             return SkillLanguage.BUYRENT_ALREADY_OWN.getString();
         
         Skill skill = getPlugin().getSkill(args[1]);
