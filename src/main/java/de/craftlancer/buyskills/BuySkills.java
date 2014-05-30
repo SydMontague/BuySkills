@@ -256,20 +256,21 @@ public class BuySkills extends JavaPlugin
     @SuppressWarnings("deprecation")
     private void updateToUUID()
     {
-        for (File file : new File(getDataFolder(), "players").listFiles())
-        {
-            String name = file.getName();
-            name = name.substring(0, name.lastIndexOf("."));
-            
-            try
+        if (new File(getDataFolder(), "players").listFiles() != null)
+            for (File file : new File(getDataFolder(), "players").listFiles())
             {
-                UUID.fromString(name);
+                String name = file.getName();
+                name = name.substring(0, name.lastIndexOf("."));
+                
+                try
+                {
+                    UUID.fromString(name);
+                }
+                catch (IllegalArgumentException e)
+                {
+                    file.renameTo(new File(getDataFolder(), "players" + File.separator + getServer().getOfflinePlayer(name).getUniqueId().toString() + ".yml"));
+                }
             }
-            catch (IllegalArgumentException e)
-            {
-                file.renameTo(new File(getDataFolder(), "players" + File.separator + getServer().getOfflinePlayer(name).getUniqueId().toString() + ".yml"));
-            }
-        }
         
         config.set("general.uuidUpdated", true);
         saveConfig();

@@ -24,6 +24,7 @@ public class SkillGrantCommand extends SkillSubCommand
         super(perm, plugin);
     }
     
+    @SuppressWarnings("deprecation")
     @Override
     protected String execute(CommandSender sender, Command cmd, String label, String[] args)
     {

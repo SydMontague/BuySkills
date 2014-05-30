@@ -1,7 +1,7 @@
 testskill:
     name: Test
     description: "This is a test description"
-    info: "DThis is a test info"
+    info: "This is a test info"
     category:
     - testskill
     - foo
@@ -15,7 +15,7 @@ testskill:
     - barfoo
     skill_need:
     skill_illegal:
-    - nichttest
+    - nottest
     worlds:
     - world
     revoke_group: false

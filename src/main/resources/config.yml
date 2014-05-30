@@ -2,86 +2,87 @@ general:
     updatetime: 300
     skillcap: 0
     skillsperpage: 5
+    uuidUpdated: true
 string:
-    COMMAND_PERMISSION: "ง3You don't have enough permission to run this command."
-    COMMAND_PLAYERONLY: "ง3You can't run this command from console."
-    COMMAND_SKILL_NOT_EXIST: "ง3This skill does not exist."
-    COMMAND_PLAYER_NOT_EXIST: "ง3This player does not exist."
-    COMMAND_ARGUMENTS: "ง3You need to specify more arguments for this command."    
+    COMMAND_PERMISSION: "ยง3You don't have enough permission to run this command."
+    COMMAND_PLAYERONLY: "ยง3You can't run this command from console."
+    COMMAND_SKILL_NOT_EXIST: "ยง3This skill does not exist."
+    COMMAND_PLAYER_NOT_EXIST: "ยง3This player does not exist."
+    COMMAND_ARGUMENTS: "ยง3You need to specify more arguments for this command."    
     HELP_COMMAND_HELP: |
-            ง3/skill help [command] - get help for this plugin
-            ง3/skill list <page> <filter> - list available skills
-            ง3/skill info <skill> - get information to a specific skill
-            ง3/skill buy <skill> - buy a skill
-            ง3/skill rent <skill> - rent a skill
-            ง3/skill current [player] - shows bought skills
-            ง3/skill rented - show's your rented skills
+            ยง3/skill help [command] - get help for this plugin
+            ยง3/skill list <page> <filter> - list available skills
+            ยง3/skill info <skill> - get information to a specific skill
+            ยง3/skill buy <skill> - buy a skill
+            ยง3/skill rent <skill> - rent a skill
+            ยง3/skill current [player] - shows bought skills
+            ยง3/skill rented - show's your rented skills
     HELP_COMMAND_HELP_ADMIN: |
-            ง3/skill grant <player> <skill> [charge] [rent] - grant a skill
-            ง3/skill recalculate <player> - recalculate permissions
-            ง3/skill reload - reload config files
-            ง3/skill reset <player> - reset all skills of a player
-            ง3/skill revoke <player> <skill> - revoke a skill from a player
-    HELP_COMMAND_BUY: "ง3Buy a skill permanently. For list of available skills look at /skill list"
-    HELP_COMMAND_CURRENT: "ง3List of all currently owned skills of [player]"
+            ยง3/skill grant <player> <skill> [charge] [rent] - grant a skill
+            ยง3/skill recalculate <player> - recalculate permissions
+            ยง3/skill reload - reload config files
+            ยง3/skill reset <player> - reset all skills of a player
+            ยง3/skill revoke <player> <skill> - revoke a skill from a player
+    HELP_COMMAND_BUY: "ยง3Buy a skill permanently. For list of available skills look at /skill list"
+    HELP_COMMAND_CURRENT: "ยง3List of all currently owned skills of [player]"
     HELP_COMMAND_GRANT: |
-            ง3Grant a skill to a player. 
-            ง3Add 'rent' as argument to grant a rented skill.
-            ง3Add 'charge' as argument to let the player pay for this skill.
-    HELP_COMMAND_INFO: "ง3Shows more detailed information about the specified skill"
+            ยง3Grant a skill to a player. 
+            ยง3Add 'rent' as argument to grant a rented skill.
+            ยง3Add 'charge' as argument to let the player pay for this skill.
+    HELP_COMMAND_INFO: "ยง3Shows more detailed information about the specified skill"
     HELP_COMMAND_LIST: |
-            ง3List all skills. By default only available skills.
-            ง3Add 'buy' to show buyable skills.
-            ง3Add 'rent' to show rentable skills.
-            ง3Add 'all' to show all skills, despite their availability.
-            ง3Add a category to show only skills from this category.
-    HELP_COMMAND_RECALCULATE: "ง3Recalculates the permissions of the specified player."
-    HELP_COMMAND_RELOAD: "ง3Reloads all config files."
-    HELP_COMMAND_RENT: "ง3Rent a skill."
-    HELP_COMMAND_RENTED: "ง3Show all rented skills and their remaining time."
-    HELP_COMMAND_RESET: "ง3Reset all skills and their permission of the specified player."
-    HELP_COMMAND_REVOKE: "ง3Revoke a skill from the specified player."
-    BUYRENT_ALREADY_OWN: "ง3You already own this skill."
-    BUYRENT_NOT_PERMISSION: "ง3You don't have the needed permissions for this skill."
-    BUYRENT_NOT_GROUP: "ง3You don't have the needed groups for this skill."
-    BUYRENT_NOT_SKILLTREE: "ง3You don't follow the skilltree."
-    BUYRENT_NOT_AFFORD: "ง3You can't afford this skill."
-    BUYRENT_SKILLCAP_REACHED: "ง3You reached the maximum number of skills you can own."
-    BUYRENT_WRONG_WORLD: "ง3This skill is not available in this world."
-    BUYRENT_NOT_CURRENCYS: "ง3You don't have the needed currencies for this skill."    
-    BUYRENT_CANCELLED: "ง3This transaction was cancelled."
-    BUY_SUCCESS: "ง3You successfully bought this skill."
-    BUY_NOT_BUYABLE: "ง3This skill is not buyable"
-    RENT_SUCCESS: "ง3You successfully rented this skill."
-    RENT_NOT_RENTABLE: "ง3This skill is not rentable."
-    RENT_EXPIRED: "ง3Your rental of %skill% has expired."
-    RENTED_DEFAULT_STRING: "ง3Your rented skills:"
-    CURRENT_DEFAULT_STRING: "ง3%player%'s currently owned skills:"    
-    RESET_SUCCESS: "ง3Reset successful."
-    RESET_NOTIFY: "ง3Your skills were reseted."    
-    RECALC_SUCCESS: "ง3Recalculation successful."
-    RECALC_NOTIFY: "ง3Your permissions were recalculated."    
-    RELOAD_SUCCESS: "ง3Reload successful."    
-    REVOKE_SUCCESS: "ง3Revoke successful."
-    REVOKE_NOTIFY: "ง3Your skill %skill% was revoked by an admin."
-    REVOKE_NOT_OWN: "ง3This player don't own this skill."    
-    GRANT_ALREADY_OWN: "ง3This player already owns this skill."
-    GRANT_SUCCESS: "ง3Skill successfully granted."
-    GRANT_NOTIFY: "ง3You were granted the skill %skill% by an admin."
+            ยง3List all skills. By default only available skills.
+            ยง3Add 'buy' to show buyable skills.
+            ยง3Add 'rent' to show rentable skills.
+            ยง3Add 'all' to show all skills, despite their availability.
+            ยง3Add a category to show only skills from this category.
+    HELP_COMMAND_RECALCULATE: "ยง3Recalculates the permissions of the specified player."
+    HELP_COMMAND_RELOAD: "ยง3Reloads all config files."
+    HELP_COMMAND_RENT: "ยง3Rent a skill."
+    HELP_COMMAND_RENTED: "ยง3Show all rented skills and their remaining time."
+    HELP_COMMAND_RESET: "ยง3Reset all skills and their permission of the specified player."
+    HELP_COMMAND_REVOKE: "ยง3Revoke a skill from the specified player."
+    BUYRENT_ALREADY_OWN: "ยง3You already own this skill."
+    BUYRENT_NOT_PERMISSION: "ยง3You don't have the needed permissions for this skill."
+    BUYRENT_NOT_GROUP: "ยง3You don't have the needed groups for this skill."
+    BUYRENT_NOT_SKILLTREE: "ยง3You don't follow the skilltree."
+    BUYRENT_NOT_AFFORD: "ยง3You can't afford this skill."
+    BUYRENT_SKILLCAP_REACHED: "ยง3You reached the maximum number of skills you can own."
+    BUYRENT_WRONG_WORLD: "ยง3This skill is not available in this world."
+    BUYRENT_NOT_CURRENCYS: "ยง3You don't have the needed currencies for this skill."    
+    BUYRENT_CANCELLED: "ยง3This transaction was cancelled."
+    BUY_SUCCESS: "ยง3You successfully bought this skill."
+    BUY_NOT_BUYABLE: "ยง3This skill is not buyable"
+    RENT_SUCCESS: "ยง3You successfully rented this skill."
+    RENT_NOT_RENTABLE: "ยง3This skill is not rentable."
+    RENT_EXPIRED: "ยง3Your rental of %skill% has expired."
+    RENTED_DEFAULT_STRING: "ยง3Your rented skills:"
+    CURRENT_DEFAULT_STRING: "ยง3%player%'s currently owned skills:"    
+    RESET_SUCCESS: "ยง3Reset successful."
+    RESET_NOTIFY: "ยง3Your skills were reseted."    
+    RECALC_SUCCESS: "ยง3Recalculation successful."
+    RECALC_NOTIFY: "ยง3Your permissions were recalculated."    
+    RELOAD_SUCCESS: "ยง3Reload successful."    
+    REVOKE_SUCCESS: "ยง3Revoke successful."
+    REVOKE_NOTIFY: "ยง3Your skill %skill% was revoked by an admin."
+    REVOKE_NOT_OWN: "ยง3This player don't own this skill."    
+    GRANT_ALREADY_OWN: "ยง3This player already owns this skill."
+    GRANT_SUCCESS: "ยง3Skill successfully granted."
+    GRANT_NOTIFY: "ยง3You were granted the skill %skill% by an admin."
     LIST_DEFAULT_STRING: |
-                    ง3=====================================================
-                    ง3Name: %name% | Buyable: %buyable% | Rentable: %rentable%
-                    ง3Description: %desc%
+                    ยง3=====================================================
+                    ยง3Name: %name% | Buyable: %buyable% | Rentable: %rentable%
+                    ยง3Description: %desc%
     INFO_DEFAULT_STRING: |
-                    ง3Name:งr %name%
-                    ง3Info:งr %info%^
-                    ง3Buycosts:งr %buycost%^~
-                    ง3Rentcosts:งr %rentcost%~^
-                    ง3Needed to buy:งr %buyneed%^~
-                    ง3Needed to rent:งr %rentneed%
-                    ง3Renttime:งr %renttime%~
-                    ง3Skills needed:งr %skillneed%
-                    ง3Skills forbidden:งr %skillillegal%
-                    ง3# of skills needed:งr %skillsneeded%
-                    ง3Worlds:งr %worlds%
-                    ง3Categories:งr %categories%
+                    ยง3Name:ยงr %name%
+                    ยง3Info:ยงr %info%^
+                    ยง3Buycosts:ยงr %buycost%^~
+                    ยง3Rentcosts:ยงr %rentcost%~^
+                    ยง3Needed to buy:ยงr %buyneed%^~
+                    ยง3Needed to rent:ยงr %rentneed%
+                    ยง3Renttime:ยงr %renttime%~
+                    ยง3Skills needed:ยงr %skillneed%
+                    ยง3Skills forbidden:ยงr %skillillegal%
+                    ยง3# of skills needed:ยงr %skillsneeded%
+                    ยง3Worlds:ยงr %worlds%
+                    ยง3Categories:ยงr %categories%

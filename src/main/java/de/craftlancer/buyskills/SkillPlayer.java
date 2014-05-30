@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -18,6 +19,7 @@ import de.craftlancer.currencyhandler.CurrencyHandler;
  */
 public class SkillPlayer
 {
+    private final OfflinePlayer offlinePlayer;
     private final UUID uuid;
     private boolean hasChanged = false;
     private final BuySkills plugin;
@@ -32,11 +34,12 @@ public class SkillPlayer
     public SkillPlayer(BuySkills plugin, UUID uuid, List<String> skills, HashMap<String, Long> rented, int bonuscap)
     {
         this.plugin = plugin;
+        this.offlinePlayer = plugin.getServer().getOfflinePlayer(uuid);
         this.uuid = uuid;
         this.skills = skills;
         this.rented = rented;
         this.bonuscap = bonuscap;
-        this.name = plugin.getServer().getOfflinePlayer(uuid).getName();
+        this.name = offlinePlayer.getName();
         this.file = new File(plugin.getDataFolder(), "players" + File.separator + getUUID().toString() + ".yml");
         this.conf = YamlConfiguration.loadConfiguration(file);
     }
@@ -126,6 +129,11 @@ public class SkillPlayer
     public UUID getUUID()
     {
         return uuid;
+    }
+    
+    public OfflinePlayer getPlayer()
+    {
+        return offlinePlayer;
     }
     
     /**
@@ -291,21 +299,21 @@ public class SkillPlayer
         for (String world : worlds)
         {
             for (String permission : skill.getPermEarn())
-                plugin.getPermissions().playerAdd(world, getName(), permission);
+                plugin.getPermissions().playerAdd(world, getPlayer(), permission);
             
             for (String group : skill.getGroupEarn())
-                plugin.getPermissions().playerAddGroup(world, getName(), group);
+                plugin.getPermissions().playerAddGroup(world, getPlayer(), group);
             
             if (skill.isRevokeGroup())
                 for (String group : skill.getGroupNeed())
-                    plugin.getPermissions().playerRemoveGroup(world, getName(), group);
+                    plugin.getPermissions().playerRemoveGroup(world, getPlayer(), group);
             
             if (skill.isRevokePerm())
                 for (String perm : skill.getPermNeed())
-                    plugin.getPermissions().playerRemove(world, getName(), perm);
+                    plugin.getPermissions().playerRemove(world, getPlayer(), perm);
         }
     }
-    
+
     /**
      * Handle the permission side of revoking a skill
      *
@@ -326,18 +334,18 @@ public class SkillPlayer
         for (String world : worlds)
         {
             for (String permission : skill.getPermEarn())
-                plugin.getPermissions().playerRemove(world, getName(), permission);
+                plugin.getPermissions().playerRemove(world, getPlayer(), permission);
             
             for (String group : skill.getGroupEarn())
-                plugin.getPermissions().playerRemoveGroup(world, getName(), group);
+                plugin.getPermissions().playerRemoveGroup(world, getPlayer(), group);
             
             if (skill.isRegrantGroup())
                 for (String group : skill.getGroupNeed())
-                    plugin.getPermissions().playerAddGroup(world, getName(), group);
+                    plugin.getPermissions().playerAddGroup(world, getPlayer(), group);
             
             if (skill.isRegrantPerm())
                 for (String perm : skill.getPermNeed())
-                    plugin.getPermissions().playerAdd(world, getName(), perm);
+                    plugin.getPermissions().playerAdd(world, getPlayer(), perm);
             
             if (skill.isRegrantCost())
                 CurrencyHandler.giveCurrencies(plugin.getServer().getPlayer(getUUID()), skill.getRentCosts());

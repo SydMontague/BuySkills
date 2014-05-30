@@ -20,6 +20,7 @@ public class SkillRecalculateCommand extends SkillSubCommand
         super(perm, plugin);
     }
     
+    @SuppressWarnings("deprecation")
     @Override
     public String execute(CommandSender sender, Command cmd, String label, String[] args)
     {
