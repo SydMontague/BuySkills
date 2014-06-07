@@ -30,7 +30,6 @@ public class SkillPlayer
     private final File file;
     private final FileConfiguration conf;
     
-    @SuppressWarnings("deprecation")
     public SkillPlayer(BuySkills plugin, UUID uuid, List<String> skills, HashMap<String, Long> rented, int bonuscap)
     {
         this.plugin = plugin;
