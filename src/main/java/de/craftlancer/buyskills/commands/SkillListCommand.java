@@ -98,7 +98,7 @@ public class SkillListCommand extends SkillSubCommand
         
         for (Skill s : initList)
             if (cat == null || s.getCategories().contains(cat))
-                if ((all || getPlugin().getSkillPlayer(sender).skillAvaible(s)) || (buyable && s.isBuyable()) || (rentable && s.isRentable()))
+                if ((all || (getPlugin().getSkillPlayer(sender).skillAvaible(s)) && ((buyable && s.isBuyable()) || (rentable && s.isRentable()))))
                     returnList.add(s);
         
         return returnList;

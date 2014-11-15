@@ -220,7 +220,7 @@ public class SkillPlayer
         if (!followsSkilltree(skill))
             return false;
         
-        if (getSkills().contains(skill.getName()))
+        if (getSkills().contains(skill.getName().toLowerCase()))
             return false;
         
         return true;
