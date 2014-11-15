@@ -35,7 +35,7 @@ public class SkillRecalculateCommand extends SkillSubCommand
             return SkillLanguage.COMMAND_PLAYER_NOT_EXIST.getString();
         
         for (String s : skillPlayer.getSkills())
-            skillPlayer.handleSkillGrant(getPlugin().getSkillByKey(s));
+            skillPlayer.handleSkillGrant(getPlugin().getSkill(s.toLowerCase()));
         
         if (getPlugin().getServer().getPlayerExact(args[1]) != null)
             getPlugin().getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.RECALC_NOTIFY.getString());

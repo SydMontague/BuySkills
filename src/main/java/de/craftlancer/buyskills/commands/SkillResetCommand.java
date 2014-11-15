@@ -39,10 +39,10 @@ public class SkillResetCommand extends SkillSubCommand
         getPlugin().getServer().getPluginManager().callEvent(new BuySkillsResetEvent(skillPlayer));
         
         for (String s : skillPlayer.getRented().keySet())
-            skillPlayer.revokeRented(getPlugin().getSkillByKey(s));
+            skillPlayer.revokeRented(getPlugin().getSkill(s.toLowerCase()));
         
         for (String s : new ArrayList<String>(skillPlayer.getBoughtSkills()))
-            skillPlayer.revokeSkill(getPlugin().getSkillByKey(s));
+            skillPlayer.revokeSkill(getPlugin().getSkill(s.toLowerCase()));
         
         if (getPlugin().getServer().getPlayerExact(args[1]) != null)
             getPlugin().getServer().getPlayerExact(args[1]).sendMessage(SkillLanguage.RESET_NOTIFY.getString());
