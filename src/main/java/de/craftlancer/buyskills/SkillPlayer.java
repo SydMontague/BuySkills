@@ -359,13 +359,13 @@ public class SkillPlayer
     private void addSkill(String s)
     {
         hasChanged = true;
-        skills.add(s);
+        skills.add(s.toLowerCase());
     }
     
     private void removeSkill(String s)
     {
         hasChanged = true;
-        skills.remove(s);
+        skills.remove(s.toLowerCase());
     }
     
     private void addRentedSkill(String s, long l)
