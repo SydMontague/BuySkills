@@ -18,6 +18,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.mcstats.Metrics;
 
 import de.craftlancer.buyskills.commands.SkillCommandHandler;
@@ -293,15 +294,21 @@ public class BuySkills extends JavaPlugin
             skillPlayer.save();
             skillPlayer.saveRented();
         }
-        
-        try
+        new BukkitRunnable()
         {
-            getRentedConfig().save(getRentedFile());
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+            @Override
+            public void run()
+            {
+                try
+                {
+                    getRentedConfig().save(getRentedFile());
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskAsynchronously(this);
     }
     
     protected Permission getPermissions()

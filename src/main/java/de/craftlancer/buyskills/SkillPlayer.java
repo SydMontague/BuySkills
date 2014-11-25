@@ -11,6 +11,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import de.craftlancer.currencyhandler.CurrencyHandler;
 
@@ -220,7 +221,7 @@ public class SkillPlayer
         if (!followsSkilltree(skill))
             return false;
         
-        if (getSkills().contains(skill.getName().toLowerCase()))
+        if (hasSkill(skill.getKey()) || hasSkill(skill.getName())) // getSkills().contains(skill.getName().toLowerCase()))
             return false;
         
         return true;
@@ -312,7 +313,7 @@ public class SkillPlayer
                     plugin.getPermissions().playerRemove(world, getPlayer(), perm);
         }
     }
-
+    
     /**
      * Handle the permission side of revoking a skill
      *
@@ -388,15 +389,21 @@ public class SkillPlayer
         conf.set("skills", getBoughtSkills());
         conf.set("bonuscap", getBonusCap());
         
-        try
+        new BukkitRunnable()
         {
-            conf.save(file);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        
+            @Override
+            public void run()
+            {
+                try
+                {
+                    conf.save(file);
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskAsynchronously(plugin);
         hasChanged = false;
     }
     
