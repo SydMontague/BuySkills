@@ -14,7 +14,7 @@ public class SkillSaveTask extends BukkitRunnable
     @Override
     public void run()
     {
-        plugin.save();
+        plugin.save(false);
     }
     
 }

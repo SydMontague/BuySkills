@@ -81,7 +81,7 @@ public class BuySkills extends JavaPlugin
     public void onDisable()
     {
         getServer().getScheduler().cancelTasks(this);
-        save();
+        save(true);
     }
     
     /**
@@ -287,28 +287,39 @@ public class BuySkills extends JavaPlugin
         return rentedFile;
     }
     
-    protected void save()
+    protected void save(boolean shutdown)
     {
         for (SkillPlayer skillPlayer : getSkillPlayers())
         {
             skillPlayer.save();
             skillPlayer.saveRented();
         }
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
+        
+        if (!shutdown)
+            new BukkitRunnable()
             {
-                try
+                @Override
+                public void run()
                 {
-                    getRentedConfig().save(getRentedFile());
+                    try
+                    {
+                        getRentedConfig().save(getRentedFile());
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
+            }.runTaskAsynchronously(this);
+        else
+            try
+            {
+                getRentedConfig().save(getRentedFile());
             }
-        }.runTaskAsynchronously(this);
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
     }
     
     protected Permission getPermissions()
