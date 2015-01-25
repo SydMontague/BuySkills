@@ -107,7 +107,7 @@ public class SkillUtils
         string = string.replace("%worlds%", skill.getWorlds().toString().replace("[", "").replace("]", ""));
         string = string.replace("%rentable%", Boolean.toString(skill.isRentable()));
         string = string.replace("%buyable%", Boolean.toString(skill.isBuyable()));
-        string = string.replace("%renttime%", SkillUtils.getTimeDiffString(skill.getRenttime() / 1000));
+        string = string.replace("%renttime%", SkillUtils.getTimeString(skill.getRenttime() / 1000));
         string = string.replace("%skillneed%", skill.getSkillsNeed().toString().replace("[", "").replace("]", ""));
         string = string.replace("%skillillegal%", skill.getSkillsIllegal().toString().replace("[", "").replace("]", ""));
         string = string.replace("%skillsneeded%", Integer.toString(skill.getSkillsNeeded()));
@@ -127,6 +127,15 @@ public class SkillUtils
     {
         long time = (value - System.currentTimeMillis()) / 1000;
         
+        long h = time / 3600;
+        long min = (time - h * 3600) / 60;
+        long s = time - h * 3600 - min * 60;
+        
+        return h + "h " + min + "min " + s + "s";
+    }
+    
+    public static String getTimeString(long time)
+    {        
         long h = time / 3600;
         long min = (time - h * 3600) / 60;
         long s = time - h * 3600 - min * 60;

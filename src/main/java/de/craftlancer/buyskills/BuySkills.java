@@ -138,7 +138,7 @@ public class BuySkills extends JavaPlugin
      */
     public Skill getSkillByKey(String key)
     {
-        return skillsByKey.get(key);
+        return skillsByKey.get(key.toLowerCase());
     }
     
     /**
@@ -335,7 +335,7 @@ public class BuySkills extends JavaPlugin
         {
             Skill skill = new Skill(key, sConfig);
             skills.put(skill.getName().toLowerCase(), skill);
-            skillsByKey.put(key, skill);
+            skillsByKey.put(key.toLowerCase(), skill);
             for (String cat : skill.getCategories())
                 categories.add(cat);
         }
